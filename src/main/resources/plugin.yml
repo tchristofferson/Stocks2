@@ -1,0 +1,12 @@
+name: Stocks2
+version: '${project.version}'
+main: com.thedasmc.stocks2.Stocks2
+api-version: 1.14
+depend:
+  - Vault
+softdepend:
+  - Citizens
+  - PlaceholderAPI
+authors:
+  - tchristofferson
+website: thedasmc.com
