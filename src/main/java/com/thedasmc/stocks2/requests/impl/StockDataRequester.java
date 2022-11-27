@@ -1,7 +1,7 @@
 package com.thedasmc.stocks2.requests.impl;
 
 import com.google.common.reflect.TypeToken;
-import com.thedasmc.stocks2.Constants;
+import com.thedasmc.stocks2.Beans;
 import com.thedasmc.stocks2.requests.AbstractStockDataRequester;
 import com.thedasmc.stocks2.requests.models.StockData;
 
@@ -32,14 +32,13 @@ public class StockDataRequester extends AbstractStockDataRequester {
         String url = getQuoteUrl();
         HttpURLConnection connection = getConnection(url, "GET");
         String json = readJson(connection.getInputStream());
-        Set<StockData> stockDataSet = Constants.getGson().fromJson(json, new TypeToken<HashSet<StockData>>(){}.getType());
+        Set<StockData> stockDataSet = Beans.getGson().fromJson(json, new TypeToken<HashSet<StockData>>(){}.getType());
         Map<String, StockData> stockDataMap = stockDataSet.stream()
             .collect(Collectors.toMap(StockData::getSymbol, Function.identity()));
 
         symbols.forEach(symbol -> {
-            if (!stockDataMap.containsKey(symbol)) {
+            if (!stockDataMap.containsKey(symbol))
                 stockDataMap.put(symbol, null);
-            }
         });
 
         return stockDataMap;
