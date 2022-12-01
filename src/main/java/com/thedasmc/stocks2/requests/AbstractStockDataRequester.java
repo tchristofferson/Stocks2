@@ -1,37 +1,25 @@
 package com.thedasmc.stocks2.requests;
 
-import com.thedasmc.stocks2.requests.models.StockData;
+import com.google.gson.Gson;
+import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
-public abstract class AbstractStockDataRequester {
+public abstract class AbstractStockDataRequester extends DataRequester {
 
-    protected final List<String> symbols;
-    protected final String token;
-
-    protected AbstractStockDataRequester(List<String> symbols, String token) {
-        this.symbols = symbols;
-        this.token = token;
-    }
-
-    public List<String> getSymbols() {
-        return new ArrayList<>(symbols);
-    }
-
-    public String getToken() {
-        return token;
+    public AbstractStockDataRequester(String apiToken, Gson gson) {
+        super(apiToken, gson);
     }
 
     /**
      * Get quotes for the stocks for this instance
-     *
-     * @return A map where the key is the stock symbol (UpperCase) and the value is the {@link StockData} representing the quote.
+     * @param symbols Stock symbols to fetch
+     * @return A map where the key is the stock symbol (UpperCase) and the value is the {@link StockDataResponse} representing the quote.
      * If there was an error finding a symbol the value should be null.
      *
      * @throws IOException If an error occurs fetching the quotes.
      */
-    public abstract Map<String, StockData> getQuotes() throws IOException;
+    public abstract Map<String, StockDataResponse> getQuotes(Collection<String> symbols) throws IOException;
 }

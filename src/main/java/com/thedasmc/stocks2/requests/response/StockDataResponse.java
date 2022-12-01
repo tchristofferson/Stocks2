@@ -1,9 +1,9 @@
-package com.thedasmc.stocks2.requests.models;
+package com.thedasmc.stocks2.requests.response;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class StockData {
+public class StockDataResponse {
 
     private final String symbol;
     private final String companyName;
@@ -16,7 +16,7 @@ public class StockData {
     private final BigDecimal week52Low;
     private final Boolean isUSMarketOpen;
 
-    private StockData(StockDataBuilder builder) {
+    protected StockDataResponse(StockDataBuilder builder) {
         this.symbol = builder.symbol;
         this.companyName = builder.companyName;
         this.calculationPrice = builder.calculationPrice;
@@ -77,8 +77,8 @@ public class StockData {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StockData stockData = (StockData) o;
-        return Objects.equals(symbol, stockData.symbol) && Objects.equals(companyName, stockData.companyName) && Objects.equals(calculationPrice, stockData.calculationPrice) && Objects.equals(open, stockData.open) && Objects.equals(close, stockData.close) && Objects.equals(latestPrice, stockData.latestPrice) && Objects.equals(changePercent, stockData.changePercent) && Objects.equals(week52High, stockData.week52High) && Objects.equals(week52Low, stockData.week52Low) && Objects.equals(isUSMarketOpen, stockData.isUSMarketOpen);
+        StockDataResponse stockDataResponse = (StockDataResponse) o;
+        return Objects.equals(symbol, stockDataResponse.symbol) && Objects.equals(companyName, stockDataResponse.companyName) && Objects.equals(calculationPrice, stockDataResponse.calculationPrice) && Objects.equals(open, stockDataResponse.open) && Objects.equals(close, stockDataResponse.close) && Objects.equals(latestPrice, stockDataResponse.latestPrice) && Objects.equals(changePercent, stockDataResponse.changePercent) && Objects.equals(week52High, stockDataResponse.week52High) && Objects.equals(week52Low, stockDataResponse.week52Low) && Objects.equals(isUSMarketOpen, stockDataResponse.isUSMarketOpen);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class StockData {
         private BigDecimal week52Low;
         private Boolean isUSMarketOpen;
 
-        private StockDataBuilder() {}
+        protected StockDataBuilder() {}
 
         public String getSymbol() {
             return symbol;
@@ -221,8 +221,8 @@ public class StockData {
             return this;
         }
 
-        public StockData build() {
-            return new StockData(this);
+        public StockDataResponse build() {
+            return new StockDataResponse(this);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.thedasmc.stocks2.util;
+package com.thedasmc.stocks2.common;
 
 import com.google.gson.JsonElement;
 

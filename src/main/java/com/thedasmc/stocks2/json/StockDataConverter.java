@@ -1,16 +1,16 @@
 package com.thedasmc.stocks2.json;
 
 import com.google.gson.*;
-import com.thedasmc.stocks2.requests.models.StockData;
+import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
 import java.lang.reflect.Type;
 
-import static com.thedasmc.stocks2.util.JsonTools.*;
+import static com.thedasmc.stocks2.common.JsonTools.*;
 
-public class StockDataConverter implements JsonSerializer<StockData>, JsonDeserializer<StockData> {
+public class StockDataConverter implements JsonSerializer<StockDataResponse>, JsonDeserializer<StockDataResponse> {
 
     @Override
-    public JsonElement serialize(StockData src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(StockDataResponse src, Type typeOfSrc, JsonSerializationContext context) {
         if (src == null)
             return JsonNull.INSTANCE;
 
@@ -30,13 +30,13 @@ public class StockDataConverter implements JsonSerializer<StockData>, JsonDeseri
     }
 
     @Override
-    public StockData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public StockDataResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (isNull(json))
             return null;
 
         JsonObject obj = json.getAsJsonObject();
 
-        return StockData.newBuilder()
+        return StockDataResponse.newBuilder()
             .withSymbol(asString(obj.get("symbol")))
             .withCompanyName(asString(obj.get("companyName")))
             .withCalculationPrice(asString(obj.get("calculationPrice")))
