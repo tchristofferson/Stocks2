@@ -5,7 +5,7 @@ import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
 import java.lang.reflect.Type;
 
-import static com.thedasmc.stocks2.common.JsonTools.*;
+import static com.thedasmc.stocks2.common.Tools.*;
 
 public class StockDataConverter implements JsonSerializer<StockDataResponse>, JsonDeserializer<StockDataResponse> {
 

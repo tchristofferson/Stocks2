@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.thedasmc.stocks2.common.JsonTools.readJson;
+import static com.thedasmc.stocks2.common.Tools.readJson;
 
 public class StockDataRequester extends AbstractStockDataRequester {
 

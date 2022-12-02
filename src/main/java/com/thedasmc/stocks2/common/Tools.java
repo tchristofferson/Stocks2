@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 
-public class JsonTools {
+public class Tools {
 
     public static String asString(JsonElement element) {
         return isNull(element) ? null : element.getAsString();
@@ -36,6 +36,19 @@ public class JsonTools {
         }
 
         return jsonBuilder.toString();
+    }
+
+    public static String readInputStream(InputStream inputStream) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+
+        inputStream.close();
+        return builder.toString();
     }
 
 }
