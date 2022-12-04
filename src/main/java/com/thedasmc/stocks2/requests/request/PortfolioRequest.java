@@ -4,14 +4,14 @@ import java.util.UUID;
 
 public class PortfolioRequest extends PageRequest {
 
-    private final UUID uuid;
+    private final UUID playerId;
 
-    public PortfolioRequest(String apiToken, int page, UUID uuid) {
-        super(apiToken, page);
-        this.uuid = uuid;
+    public PortfolioRequest(String apiToken, int page, UUID playerId) {
+        super(apiToken, page, 45);//54 is max inventory size. Subtract bottom row for navigation, the most slots is now 45
+        this.playerId = playerId;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getPlayerId() {
+        return playerId;
     }
 }

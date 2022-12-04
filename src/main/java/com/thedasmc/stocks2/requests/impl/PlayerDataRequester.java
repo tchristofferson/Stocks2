@@ -34,14 +34,15 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
 
         PortfolioRequest request = new PortfolioRequest(this.apiToken, page, uuid);
         String requestJson = this.gson.toJson(request);
-        byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
+        byte[] requestBytes = requestJson.getBytes(StandardCharsets.UTF_8);
 
-        OutputStream outputStream = connection.getOutputStream();
-        outputStream.write(input);
-        outputStream.flush();
-        outputStream.close();
+        connection.setFixedLengthStreamingMode(requestBytes.length);
+        try(OutputStream os = connection.getOutputStream()) {
+            os.write(requestBytes);
+        }
+
         String responseJson = Tools.readInputStream(connection.getInputStream());
-        connection.disconnect();
+
         return this.gson.fromJson(responseJson, new TypeToken<ArrayList<StockResponse>>(){}.getType());
     }
 
