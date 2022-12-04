@@ -21,12 +21,4 @@ public abstract class AbstractPlayerDataRequester extends DataRequester {
      */
     public abstract List<StockResponse> getPortfolio(UUID uuid, int page) throws IOException;
 
-    /**
-     * Get a specific player's stock from their portfolio
-     * @param uuid The player's UUID
-     * @param symbol The stock symbol
-     * @return A {@link StockResponse}, or {@code null} if the player doesn't own the specified stock
-     */
-    public abstract StockResponse getStock(UUID uuid, String symbol);
-
 }

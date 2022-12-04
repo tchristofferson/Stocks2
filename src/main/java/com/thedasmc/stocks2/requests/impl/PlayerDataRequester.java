@@ -45,9 +45,4 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
 
         return this.gson.fromJson(responseJson, new TypeToken<ArrayList<StockResponse>>(){}.getType());
     }
-
-    @Override
-    public StockResponse getStock(UUID uuid, String symbol) {
-        return null;
-    }
 }
