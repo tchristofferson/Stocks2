@@ -30,11 +30,7 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
     public List<StockResponse> getPortfolio(UUID uuid, int page) throws IOException {
         String urlString = Constants.API_URL + PORTFOLIO_URI;
         URL url = new URL(urlString);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setDoOutput(true);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setRequestProperty("Content-Type", "application/json");
+        HttpURLConnection connection = Tools.getHttpPostConnection(url);
 
         PortfolioRequest request = new PortfolioRequest(this.apiToken, page, uuid);
         String requestJson = this.gson.toJson(request);

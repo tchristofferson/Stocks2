@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class Tools {
 
@@ -49,6 +51,29 @@ public class Tools {
 
         inputStream.close();
         return builder.toString();
+    }
+
+    public static HttpURLConnection getHttpConnection(URL url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("Accept", "application/json");
+
+        return connection;
+    }
+
+    public static HttpURLConnection getHttpGetConnection(URL url) throws IOException {
+        HttpURLConnection connection = getHttpConnection(url);
+        connection.setRequestMethod("GET");
+
+        return connection;
+    }
+
+    public static HttpURLConnection getHttpPostConnection(URL url) throws IOException {
+        HttpURLConnection connection = getHttpConnection(url);
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        return connection;
     }
 
 }

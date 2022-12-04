@@ -3,6 +3,7 @@ package com.thedasmc.stocks2.requests.impl;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.common.Constants;
+import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractStockDataRequester;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
@@ -27,8 +28,8 @@ public class StockDataRequester extends AbstractStockDataRequester {
     @Override
     @SuppressWarnings("UnstableApiUsage")
     public Map<String, StockDataResponse> getQuotes(Collection<String> symbols) throws IOException {
-        String url = getQuoteUrl(symbols);
-        HttpURLConnection connection = getConnection(url, "GET");
+        URL url = new URL(getQuoteUrl(symbols));
+        HttpURLConnection connection = Tools.getHttpGetConnection(url);
         String json = readJson(connection.getInputStream());
         Set<StockDataResponse> stockDataResponseSet = this.gson.fromJson(json, new TypeToken<HashSet<StockDataResponse>>(){}.getType());
         Map<String, StockDataResponse> stockDataMap = stockDataResponseSet.stream()
@@ -40,15 +41,6 @@ public class StockDataRequester extends AbstractStockDataRequester {
         });
 
         return stockDataMap;
-    }
-
-    private HttpURLConnection getConnection(String urlString, String method) throws IOException {
-        URL url = new URL(urlString);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod(method);
-        connection.setRequestProperty("Accept", "application/json");
-
-        return connection;
     }
 
     private String getQuoteUrl(Collection<String> symbols) {
