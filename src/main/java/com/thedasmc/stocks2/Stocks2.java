@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.thedasmc.stocks2.commands.PortfolioCommand;
 import com.thedasmc.stocks2.core.PortfolioTracker;
 import com.thedasmc.stocks2.json.StockDataConverter;
+import com.thedasmc.stocks2.listeners.InventoryListener;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
 import com.thedasmc.stocks2.requests.AbstractStockDataRequester;
 import com.thedasmc.stocks2.requests.impl.PlayerDataRequester;
@@ -38,6 +39,8 @@ public final class Stocks2 extends JavaPlugin {
         initPlayerDataRequester(apiToken);
         initCommandManager();
         initPortfolioTracker();
+
+        registerListeners();
     }
 
     @Override
@@ -86,5 +89,9 @@ public final class Stocks2 extends JavaPlugin {
 
     private void initPortfolioTracker() {
         portfolioTracker = new PortfolioTracker();
+    }
+
+    private void registerListeners() {
+        Bukkit.getPluginManager().registerEvents(new InventoryListener(this), this);
     }
 }
