@@ -7,12 +7,12 @@ import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.thedasmc.stocks2.Stocks2;
-import com.thedasmc.stocks2.core.PortfolioFactory;
+import com.thedasmc.stocks2.common.Texts;
+import com.thedasmc.stocks2.core.GuiFactory;
 import com.thedasmc.stocks2.core.PortfolioViewer;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -42,11 +42,11 @@ public class PortfolioCommand extends BaseCommand {
             try {
                 portfolioResponse = playerDataRequester.getPortfolio(player.getUniqueId(), 0);
             } catch (IOException e) {
-                player.sendMessage(ChatColor.RED + "[Stocks]There was an error fetching your portfolio: " + e.getMessage() + "!");
+                player.sendMessage(plugin.getTexts().getErrorText(Texts.Types.ERROR_FETCHING_PORTFOLIO, e.getMessage()));
                 return;
             }
 
-            final Inventory portfolio = PortfolioFactory.createPortfolioPage(portfolioResponse);
+            final Inventory portfolio = GuiFactory.createPortfolioPage(portfolioResponse);
 
             Bukkit.getScheduler().runTask(plugin, () -> {
                 plugin.getPortfolioTracker().track(new PortfolioViewer(player.getUniqueId(), player.getUniqueId(), portfolio, 0, portfolioResponse.getPages()));

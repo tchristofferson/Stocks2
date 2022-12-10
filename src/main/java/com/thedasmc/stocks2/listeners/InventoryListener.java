@@ -1,12 +1,12 @@
 package com.thedasmc.stocks2.listeners;
 
 import com.thedasmc.stocks2.Stocks2;
-import com.thedasmc.stocks2.core.PortfolioFactory;
+import com.thedasmc.stocks2.common.Texts;
+import com.thedasmc.stocks2.core.GuiFactory;
 import com.thedasmc.stocks2.core.PortfolioTracker;
 import com.thedasmc.stocks2.core.PortfolioViewer;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,7 +27,7 @@ public class InventoryListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClick(InventoryClickEvent event) {
+    public void onInventoryClickForPortfolio(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
         PortfolioTracker tracker = plugin.getPortfolioTracker();
         PortfolioViewer portfolioViewer = tracker.getViewer(clicker.getUniqueId());
@@ -40,6 +40,7 @@ public class InventoryListener implements Listener {
         if (event.getCursor() == null || event.getClick() != ClickType.LEFT)
             return;
 
+        Texts texts = plugin.getTexts();
         int slot = event.getSlot();
 
         if (slot == 45) {//previous button
@@ -52,7 +53,7 @@ public class InventoryListener implements Listener {
                 try {
                     portfolioResponse = plugin.getPlayerDataRequester().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() - 1);
                 } catch (IOException e) {
-                    clicker.sendMessage(ChatColor.RED + "Error retrieving previous portfolio page!");
+                    clicker.sendMessage(texts.getErrorText(Texts.Types.ERROR_FETCHING_PORTFOLIO, e.getMessage()));
                     closeInventory(clicker);
                     return;
                 }
@@ -69,7 +70,7 @@ public class InventoryListener implements Listener {
                 try {
                     portfolioResponse = plugin.getPlayerDataRequester().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() + 1);
                 } catch (IOException e) {
-                    clicker.sendMessage(ChatColor.RED + "Error retrieving next portfolio page!");
+                    clicker.sendMessage(texts.getErrorText(Texts.Types.ERROR_FETCHING_PORTFOLIO, e.getMessage()));
                     closeInventory(clicker);
                     return;
                 }
@@ -78,9 +79,14 @@ public class InventoryListener implements Listener {
             });
         } else if (slot == 49) {//close button
             Bukkit.getScheduler().runTask(plugin, clicker::closeInventory);
-        } else {
+        } else if (event.getCursor().getType() == GuiFactory.STOCK_ITEM_MATERIAL) {
             //TODO: Handle stock item click
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onInventoryClickForSellMenu(InventoryClickEvent event) {
+        //TODO: Handle inventory click for sell menu
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -96,7 +102,7 @@ public class InventoryListener implements Listener {
     }
 
     private void openFetchedPortfolioPage(Player clicker, PortfolioViewer portfolioViewer, PortfolioResponse portfolioResponse) {
-        Inventory inventory = PortfolioFactory.createPortfolioPage(portfolioResponse);
+        Inventory inventory = GuiFactory.createPortfolioPage(portfolioResponse);
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (clicker.isOnline()) {
                 clicker.closeInventory();

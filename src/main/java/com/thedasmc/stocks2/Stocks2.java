@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thedasmc.stocks2.commands.PortfolioCommand;
+import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.core.PortfolioTracker;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
@@ -13,7 +14,11 @@ import com.thedasmc.stocks2.requests.impl.PlayerDataRequester;
 import com.thedasmc.stocks2.requests.impl.StockDataRequester;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public final class Stocks2 extends JavaPlugin {
 
@@ -22,9 +27,12 @@ public final class Stocks2 extends JavaPlugin {
     private AbstractPlayerDataRequester playerDataRequester;
     private PaperCommandManager commandManager;
     private PortfolioTracker portfolioTracker;
+    private FileConfiguration textsConfig;
+    private Texts texts;
 
     @Override
     public void onEnable() {
+        saveResource("texts.yml", false);
         saveDefaultConfig();
         final String apiToken = getConfig().getString("api-token");
 
@@ -39,6 +47,8 @@ public final class Stocks2 extends JavaPlugin {
         initPlayerDataRequester(apiToken);
         initCommandManager();
         initPortfolioTracker();
+        initTextsConfig();
+        initTexts();
 
         registerListeners();
     }
@@ -68,6 +78,14 @@ public final class Stocks2 extends JavaPlugin {
         return portfolioTracker;
     }
 
+    public FileConfiguration getTextsConfig() {
+        return textsConfig;
+    }
+
+    public Texts getTexts() {
+        return texts;
+    }
+
     private void initGson() {
         gson = new GsonBuilder()
             .registerTypeAdapter(StockDataResponse.class, new StockDataConverter())
@@ -89,6 +107,15 @@ public final class Stocks2 extends JavaPlugin {
 
     private void initPortfolioTracker() {
         portfolioTracker = new PortfolioTracker();
+    }
+
+    private void initTextsConfig() {
+        File file = new File(getDataFolder(), "texts.yml");
+        textsConfig = YamlConfiguration.loadConfiguration(file);
+    }
+
+    private void initTexts() {
+        texts = new Texts(this);
     }
 
     private void registerListeners() {

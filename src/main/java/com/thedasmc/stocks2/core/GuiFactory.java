@@ -16,7 +16,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class PortfolioFactory {
+//TODO: Use Texts for strings
+public class GuiFactory {
+
+    public static final Material STOCK_ITEM_MATERIAL = Material.EMERALD;
 
     public static Inventory createPortfolioPage(PortfolioResponse portfolioResponse) {
         List<StockResponse> stocks = portfolioResponse.getStocks();
@@ -36,7 +39,7 @@ public class PortfolioFactory {
     }
 
     private static ItemStack getStockItem(StockResponse stock) {
-        ItemStack itemStack = new ItemStack(Material.EMERALD, 1);
+        ItemStack itemStack = new ItemStack(STOCK_ITEM_MATERIAL, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + stock.getCompanyName());
 
