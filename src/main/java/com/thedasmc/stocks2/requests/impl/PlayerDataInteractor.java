@@ -23,10 +23,12 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
 
     private static final String PLAYER_ID_PLACEHOLDER = "%playerId%";
     private static final String SYMBOL_PLACEHOLDER = "%symbol%";
+    private static final String RECORD_ID_PLACEHOLDER = "%recordId%";
 
     private static final String PORTFOLIO_URI = "/v1/player/portfolio";
     private static final String GET_STOCK_URI = "/v1/player/" + PLAYER_ID_PLACEHOLDER + "/" + SYMBOL_PLACEHOLDER + "?token=" + Constants.TOKEN_PLACEHOLDER;
     private static final String TRANSACT_URI = "/v1/player/transact";
+    private static final String CANCEL_TRANSACTION_URI = "/v1/records/" + RECORD_ID_PLACEHOLDER + "/cancel";
 
     public PlayerDataInteractor(String apiToken, Gson gson) {
         super(apiToken, gson);
@@ -67,6 +69,20 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
         String responseJson = readInputStream(connection.getInputStream());
 
         return this.gson.fromJson(responseJson, RecordResponse.class);
+    }
+
+    @Override
+    public Boolean cancelTransaction(Long recordId) throws IOException {
+        URL url = new URL(getCancelTransactionUrl(recordId));
+        HttpURLConnection connection = Tools.getHttpDeleteConnection(url);
+        String responseJson = readInputStream(connection.getInputStream());
+
+        return this.gson.fromJson(responseJson, Boolean.class);
+    }
+
+    private String getCancelTransactionUrl(Long recordId) {
+        return Constants.API_URL + CANCEL_TRANSACTION_URI
+            .replace(RECORD_ID_PLACEHOLDER, String.valueOf(recordId));
     }
 
     private String getStockUrl(UUID uuid, String symbol) {

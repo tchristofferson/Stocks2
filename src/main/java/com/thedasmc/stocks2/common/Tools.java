@@ -57,6 +57,15 @@ public class Tools {
         return connection;
     }
 
+    public static HttpURLConnection getHttpDeleteConnection(URL url) throws IOException {
+        HttpURLConnection connection = getHttpConnection(url);
+        connection.setDoOutput(true);
+        connection.setRequestMethod("DELETE");
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        return connection;
+    }
+
     public static HttpURLConnection getHttpGetConnection(URL url) throws IOException {
         HttpURLConnection connection = getHttpConnection(url);
         connection.setRequestMethod("GET");
