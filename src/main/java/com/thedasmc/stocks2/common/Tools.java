@@ -76,4 +76,8 @@ public class Tools {
         return connection;
     }
 
+    public static boolean canConvertToDouble(BigDecimal bigDecimal) {
+        return bigDecimal.compareTo(BigDecimal.valueOf(Double.MAX_VALUE)) <= 0;
+    }
+
 }

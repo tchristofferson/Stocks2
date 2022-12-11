@@ -6,17 +6,23 @@ import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
 import com.thedasmc.stocks2.requests.request.PortfolioRequest;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
+import com.thedasmc.stocks2.requests.response.StockResponse;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class PlayerDataRequester extends AbstractPlayerDataRequester {
 
+    private static final String PLAYER_ID_PLACEHOLDER = "%playerId%";
+    private static final String SYMBOL_PLACEHOLDER = "%symbol%";
+
     private static final String PORTFOLIO_URI = "/v1/player/portfolio";
+    private static final String GET_STOCK_URI = "/v1/player/" + PLAYER_ID_PLACEHOLDER + "/" + SYMBOL_PLACEHOLDER + "?token=" + Constants.TOKEN_PLACEHOLDER;
 
     public PlayerDataRequester(String apiToken, Gson gson) {
         super(apiToken, gson);
@@ -24,8 +30,7 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
 
     @Override
     public PortfolioResponse getPortfolio(UUID uuid, int page) throws IOException {
-        String urlString = Constants.API_URL + PORTFOLIO_URI;
-        URL url = new URL(urlString);
+        URL url = new URL(Constants.API_URL + PORTFOLIO_URI);
         HttpURLConnection connection = Tools.getHttpPostConnection(url);
 
         PortfolioRequest request = new PortfolioRequest(this.apiToken, page, uuid);
@@ -40,5 +45,21 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
         String responseJson = Tools.readInputStream(connection.getInputStream());
 
         return this.gson.fromJson(responseJson, PortfolioResponse.class);
+    }
+
+    @Override
+    public StockResponse getStock(UUID uuid, String symbol) throws IOException {
+        URL url = new URL(getStockUrl(uuid, symbol));
+        HttpURLConnection connection = Tools.getHttpGetConnection(url);
+        String responseJson = Tools.readJson(connection.getInputStream());
+
+        return this.gson.fromJson(responseJson, StockResponse.class);
+    }
+
+    private String getStockUrl(UUID uuid, String symbol) {
+        return Constants.API_URL + GET_STOCK_URI
+            .replace(PLAYER_ID_PLACEHOLDER, uuid.toString())
+            .replace(SYMBOL_PLACEHOLDER, symbol)
+            .replace(Constants.TOKEN_PLACEHOLDER, this.apiToken);
     }
 }

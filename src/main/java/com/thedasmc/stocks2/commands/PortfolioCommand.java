@@ -42,7 +42,7 @@ public class PortfolioCommand extends BaseCommand {
             try {
                 portfolioResponse = playerDataRequester.getPortfolio(player.getUniqueId(), 0);
             } catch (IOException e) {
-                player.sendMessage(plugin.getTexts().getErrorText(Texts.Types.ERROR_FETCHING_PORTFOLIO, e.getMessage()));
+                player.sendMessage(plugin.getTexts().getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
                 return;
             }
 

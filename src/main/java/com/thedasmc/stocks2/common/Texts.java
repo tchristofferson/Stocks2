@@ -23,7 +23,11 @@ public class Texts {
     }
 
     public enum Types {
-        ERROR_FETCHING_PORTFOLIO("portfolio-error");
+        FETCH_PORTFOLIO_ERROR("portfolio-error"),
+        STOCK_FETCH_ERROR("stock-error"),
+        NOT_ENOUGH_SHARES("not-enough-shares"),
+        SALE_TOO_LARGE("sale-too-large"),
+        DEPOSIT_FUNDS_FAILED("deposit-funds-failed");
 
         //The key in texts.yml
         private final String key;
