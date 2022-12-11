@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -20,24 +23,18 @@ public class Tools {
         return isNull(element) ? null : element.getAsBigDecimal();
     }
 
+    public static BigInteger toCents(BigDecimal value) {
+        return value
+            .multiply(BigDecimal.valueOf(100), new MathContext(0, RoundingMode.DOWN))
+            .toBigInteger();
+    }
+
     public static Boolean asBoolean(JsonElement element) {
         return isNull(element) ? null : element.getAsBoolean();
     }
 
     public static boolean isNull(JsonElement element) {
         return element == null || element.isJsonNull();
-    }
-
-    public static String readJson(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder jsonBuilder = new StringBuilder();
-
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            jsonBuilder.append(line);
-        }
-
-        return jsonBuilder.toString();
     }
 
     public static String readInputStream(InputStream inputStream) throws IOException {

@@ -27,7 +27,8 @@ public class Texts {
         STOCK_FETCH_ERROR("stock-error"),
         NOT_ENOUGH_SHARES("not-enough-shares"),
         SALE_TOO_LARGE("sale-too-large"),
-        DEPOSIT_FUNDS_FAILED("deposit-funds-failed");
+        DEPOSIT_FUNDS_ERROR("deposit-funds-error"),
+        TRANSACTION_ERROR("transaction-error");
 
         //The key in texts.yml
         private final String key;

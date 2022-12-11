@@ -1,6 +1,7 @@
 portfolio-error: '&c&l[Stocks]Error fetching portfolio page: %error%!'
 stock-error: '&c&l[Stocks]Error fetching stock: %error%!'
+deposit-funds-error: '&c&l[Stocks]Failed to deposit funds: %error%!'
+transaction-error: '&c&l[Stocks]Failed to complete stock transaction: %error%!'
 
 not-enough-shares: '&c&l[Stocks]You don''t own enough shares!'
 sale-too-large: '&c&l[Stocks]Sale too large!'
-deposit-funds-failed: '&c&l[Stocks]Failed to deposit funds: %error%!'

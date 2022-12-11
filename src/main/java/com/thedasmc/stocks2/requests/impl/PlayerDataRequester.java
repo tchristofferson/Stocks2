@@ -5,16 +5,19 @@ import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
 import com.thedasmc.stocks2.requests.request.PortfolioRequest;
+import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
+import com.thedasmc.stocks2.requests.response.RecordResponse;
 import com.thedasmc.stocks2.requests.response.StockResponse;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+
+import static com.thedasmc.stocks2.common.Tools.readInputStream;
 
 public class PlayerDataRequester extends AbstractPlayerDataRequester {
 
@@ -23,6 +26,7 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
 
     private static final String PORTFOLIO_URI = "/v1/player/portfolio";
     private static final String GET_STOCK_URI = "/v1/player/" + PLAYER_ID_PLACEHOLDER + "/" + SYMBOL_PLACEHOLDER + "?token=" + Constants.TOKEN_PLACEHOLDER;
+    private static final String TRANSACT_URI = "/v1/player/transact";
 
     public PlayerDataRequester(String apiToken, Gson gson) {
         super(apiToken, gson);
@@ -42,7 +46,7 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
             os.write(requestBytes);
         }
 
-        String responseJson = Tools.readInputStream(connection.getInputStream());
+        String responseJson = readInputStream(connection.getInputStream());
 
         return this.gson.fromJson(responseJson, PortfolioResponse.class);
     }
@@ -51,9 +55,18 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
     public StockResponse getStock(UUID uuid, String symbol) throws IOException {
         URL url = new URL(getStockUrl(uuid, symbol));
         HttpURLConnection connection = Tools.getHttpGetConnection(url);
-        String responseJson = Tools.readJson(connection.getInputStream());
+        String responseJson = readInputStream(connection.getInputStream());
 
         return this.gson.fromJson(responseJson, StockResponse.class);
+    }
+
+    @Override
+    public RecordResponse transact(RecordRequest recordRequest) throws IOException {
+        URL url = new URL(Constants.API_URL + TRANSACT_URI);
+        HttpURLConnection connection = Tools.getHttpPostConnection(url);
+        String responseJson = readInputStream(connection.getInputStream());
+
+        return this.gson.fromJson(responseJson, RecordResponse.class);
     }
 
     private String getStockUrl(UUID uuid, String symbol) {

@@ -9,9 +9,8 @@ import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
-import com.thedasmc.stocks2.requests.AbstractStockDataRequester;
+import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.StockResponse;
-import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -63,7 +62,14 @@ public class SellCommand extends BaseCommand {
                 return;
             }
 
-            //TODO: Call transact method
+            RecordRequest recordRequest = new RecordRequest(uuid, symbol, Tools.toCents(value), BigDecimal.valueOf(shares));
+
+            try {
+                playerDataRequester.transact(recordRequest);
+            } catch (IOException e) {
+                player.sendMessage(texts.getErrorText(Texts.Types.TRANSACTION_ERROR, e.getMessage()));
+                return;
+            }
 
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (!player.isOnline())
@@ -72,7 +78,7 @@ public class SellCommand extends BaseCommand {
                 EconomyResponse response = plugin.getEconomy().depositPlayer(player, value.doubleValue());
 
                 if (!response.transactionSuccess()) {
-                    player.sendMessage(texts.getErrorText(Texts.Types.DEPOSIT_FUNDS_FAILED, response.errorMessage));
+                    player.sendMessage(texts.getErrorText(Texts.Types.DEPOSIT_FUNDS_ERROR, response.errorMessage));
 
                     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                         //TODO: Call cancel transaction/record endpoint to take back the shares

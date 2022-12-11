@@ -1,11 +1,12 @@
 package com.thedasmc.stocks2.requests;
 
 import com.google.gson.Gson;
+import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
+import com.thedasmc.stocks2.requests.response.RecordResponse;
 import com.thedasmc.stocks2.requests.response.StockResponse;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.UUID;
 
 public abstract class AbstractPlayerDataRequester extends DataRequester {
@@ -31,5 +32,13 @@ public abstract class AbstractPlayerDataRequester extends DataRequester {
      * @throws IOException If an IO error occurs
      */
     public abstract StockResponse getStock(UUID uuid, String symbol) throws IOException;
+
+    /**
+     * Add a record. A record is added when buying, selling, giving, and taking shares
+     * @param recordRequest The request
+     * @return A {@link RecordResponse} of the inserted record
+     * @throws IOException If an IO error occurs
+     */
+    public abstract RecordResponse transact(RecordRequest recordRequest) throws IOException;
 
 }

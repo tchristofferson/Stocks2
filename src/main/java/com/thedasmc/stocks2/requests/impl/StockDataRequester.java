@@ -10,11 +10,14 @@ import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.thedasmc.stocks2.common.Tools.readJson;
+import static com.thedasmc.stocks2.common.Tools.readInputStream;
 
 public class StockDataRequester extends AbstractStockDataRequester {
 
@@ -30,7 +33,7 @@ public class StockDataRequester extends AbstractStockDataRequester {
     public Map<String, StockDataResponse> getQuotes(Collection<String> symbols) throws IOException {
         URL url = new URL(getQuoteUrl(symbols));
         HttpURLConnection connection = Tools.getHttpGetConnection(url);
-        String json = readJson(connection.getInputStream());
+        String json = readInputStream(connection.getInputStream());
         Set<StockDataResponse> stockDataResponseSet = this.gson.fromJson(json, new TypeToken<HashSet<StockDataResponse>>(){}.getType());
         Map<String, StockDataResponse> stockDataMap = stockDataResponseSet.stream()
             .collect(Collectors.toMap(StockDataResponse::getSymbol, Function.identity()));
