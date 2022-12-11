@@ -8,10 +8,10 @@ import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.core.PortfolioTracker;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
-import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
-import com.thedasmc.stocks2.requests.AbstractStockDataRequester;
-import com.thedasmc.stocks2.requests.impl.PlayerDataRequester;
-import com.thedasmc.stocks2.requests.impl.StockDataRequester;
+import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
+import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
+import com.thedasmc.stocks2.requests.impl.PlayerDataInteractor;
+import com.thedasmc.stocks2.requests.impl.StockDataRequestor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -25,8 +25,8 @@ import java.io.File;
 public final class Stocks2 extends JavaPlugin {
 
     private Gson gson;
-    private AbstractStockDataRequester stockDataRequester;
-    private AbstractPlayerDataRequester playerDataRequester;
+    private AbstractStockDataRequestor stockDataRequester;
+    private AbstractPlayerDataInteractor playerDataRequester;
     private PaperCommandManager commandManager;
     private PortfolioTracker portfolioTracker;
     private FileConfiguration textsConfig;
@@ -71,11 +71,11 @@ public final class Stocks2 extends JavaPlugin {
         return gson;
     }
 
-    public AbstractStockDataRequester getStockDataRequester() {
+    public AbstractStockDataRequestor getStockDataRequester() {
         return stockDataRequester;
     }
 
-    public AbstractPlayerDataRequester getPlayerDataRequester() {
+    public AbstractPlayerDataInteractor getPlayerDataRequester() {
         return playerDataRequester;
     }
 
@@ -106,11 +106,11 @@ public final class Stocks2 extends JavaPlugin {
     }
 
     private void initStockDataRequester(String apiToken) {
-        stockDataRequester = new StockDataRequester(apiToken, gson);
+        stockDataRequester = new StockDataRequestor(apiToken, gson);
     }
 
     private void initPlayerDataRequester(String apiToken) {
-        playerDataRequester = new PlayerDataRequester(apiToken, gson);
+        playerDataRequester = new PlayerDataInteractor(apiToken, gson);
     }
 
     private void initCommandManager() {

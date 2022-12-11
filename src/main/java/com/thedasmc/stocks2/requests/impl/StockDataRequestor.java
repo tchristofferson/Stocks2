@@ -4,7 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Tools;
-import com.thedasmc.stocks2.requests.AbstractStockDataRequester;
+import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
 import java.io.IOException;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 
 import static com.thedasmc.stocks2.common.Tools.readInputStream;
 
-public class StockDataRequester extends AbstractStockDataRequester {
+public class StockDataRequestor extends AbstractStockDataRequestor {
 
     private static final String SYMBOLS_PLACEHOLDER = "%symbols%";
     private static final String QUOTE_URI = "/v1/quotes?symbols=" + SYMBOLS_PLACEHOLDER + "&token=" + Constants.TOKEN_PLACEHOLDER;
 
-    public StockDataRequester(String apiToken, Gson gson) {
+    public StockDataRequestor(String apiToken, Gson gson) {
         super(apiToken, gson);
     }
 

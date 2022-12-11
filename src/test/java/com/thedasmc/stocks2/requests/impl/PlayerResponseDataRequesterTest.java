@@ -20,7 +20,7 @@ public class PlayerResponseDataRequesterTest {
 
     @Test
     public void ensureNoErrorsWhenFetchingPortfolio() throws IOException {
-        PlayerDataRequester playerDataRequester = new PlayerDataRequester(TOKEN, gson);
+        PlayerDataInteractor playerDataRequester = new PlayerDataInteractor(TOKEN, gson);
         PortfolioResponse response = playerDataRequester.getPortfolio(UUID.fromString("7c8fa59e-4999-4da0-bb57-faf78e7cbf84"), 0);
         System.out.println("Page: " + response.getPage());
         System.out.println("Pages: " + response.getPages());

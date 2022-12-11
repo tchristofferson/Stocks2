@@ -3,7 +3,7 @@ package com.thedasmc.stocks2.requests.impl;
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Tools;
-import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
+import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.request.PortfolioRequest;
 import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import static com.thedasmc.stocks2.common.Tools.readInputStream;
 
-public class PlayerDataRequester extends AbstractPlayerDataRequester {
+public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
 
     private static final String PLAYER_ID_PLACEHOLDER = "%playerId%";
     private static final String SYMBOL_PLACEHOLDER = "%symbol%";
@@ -28,7 +28,7 @@ public class PlayerDataRequester extends AbstractPlayerDataRequester {
     private static final String GET_STOCK_URI = "/v1/player/" + PLAYER_ID_PLACEHOLDER + "/" + SYMBOL_PLACEHOLDER + "?token=" + Constants.TOKEN_PLACEHOLDER;
     private static final String TRANSACT_URI = "/v1/player/transact";
 
-    public PlayerDataRequester(String apiToken, Gson gson) {
+    public PlayerDataInteractor(String apiToken, Gson gson) {
         super(apiToken, gson);
     }
 

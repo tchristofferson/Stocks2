@@ -10,7 +10,7 @@ import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.core.GuiFactory;
 import com.thedasmc.stocks2.core.PortfolioViewer;
-import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
+import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ public class PortfolioCommand extends BaseCommand {
     @CommandPermission(PORTFOLIO_PERMISSION)
     @Description("View your portfolio")
     public void onPortfolio(Player player) {
-        AbstractPlayerDataRequester playerDataRequester = plugin.getPlayerDataRequester();
+        AbstractPlayerDataInteractor playerDataRequester = plugin.getPlayerDataRequester();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             PortfolioResponse portfolioResponse;

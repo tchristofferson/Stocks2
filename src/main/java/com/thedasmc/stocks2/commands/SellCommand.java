@@ -8,7 +8,7 @@ import co.aikar.commands.annotation.Subcommand;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.common.Tools;
-import com.thedasmc.stocks2.requests.AbstractPlayerDataRequester;
+import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.StockResponse;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -36,7 +36,7 @@ public class SellCommand extends BaseCommand {
     @Description("Sell shares of a stock")
     public void onSell(Player player, String symbol, double shares) {
         final Texts texts = plugin.getTexts();
-        final AbstractPlayerDataRequester playerDataRequester = plugin.getPlayerDataRequester();
+        final AbstractPlayerDataInteractor playerDataRequester = plugin.getPlayerDataRequester();
         final UUID uuid = player.getUniqueId();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {

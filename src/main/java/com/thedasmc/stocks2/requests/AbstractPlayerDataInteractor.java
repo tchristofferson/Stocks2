@@ -9,9 +9,9 @@ import com.thedasmc.stocks2.requests.response.StockResponse;
 import java.io.IOException;
 import java.util.UUID;
 
-public abstract class AbstractPlayerDataRequester extends DataRequester {
+public abstract class AbstractPlayerDataInteractor extends DataRequester {
 
-    public AbstractPlayerDataRequester(String apiToken, Gson gson) {
+    public AbstractPlayerDataInteractor(String apiToken, Gson gson) {
         super(apiToken, gson);
     }
 

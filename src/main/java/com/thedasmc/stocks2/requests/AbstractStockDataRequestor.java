@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-public abstract class AbstractStockDataRequester extends DataRequester {
+public abstract class AbstractStockDataRequestor extends DataRequester {
 
-    public AbstractStockDataRequester(String apiToken, Gson gson) {
+    public AbstractStockDataRequestor(String apiToken, Gson gson) {
         super(apiToken, gson);
     }
 
