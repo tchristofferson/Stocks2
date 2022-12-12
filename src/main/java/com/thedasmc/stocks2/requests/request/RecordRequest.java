@@ -4,15 +4,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.UUID;
 
-public class RecordRequest {
+public class RecordRequest extends BaseRequest {
 
     private UUID playerId;
     private String symbol;
     private BigInteger cents;
     private BigDecimal shares;
-
-    public RecordRequest() {
-    }
 
     public RecordRequest(UUID playerId, String symbol, BigInteger cents, BigDecimal shares) {
         this.playerId = playerId;

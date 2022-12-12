@@ -2,16 +2,14 @@ package com.thedasmc.stocks2.common;
 
 import com.google.gson.JsonElement;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class Tools {
 
@@ -80,6 +78,15 @@ public class Tools {
         connection.setRequestProperty("Content-Type", "application/json");
 
         return connection;
+    }
+
+    public static void writeBody(HttpURLConnection connection, String body) throws IOException {
+        byte[] bodyBytes = body.getBytes(StandardCharsets.UTF_8);
+        connection.setFixedLengthStreamingMode(bodyBytes.length);
+
+        try (OutputStream os =  connection.getOutputStream()) {
+            os.write(bodyBytes);
+        }
     }
 
     public static boolean canConvertToDouble(BigDecimal bigDecimal) {

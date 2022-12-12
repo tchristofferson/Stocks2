@@ -11,13 +11,12 @@ import com.thedasmc.stocks2.requests.response.RecordResponse;
 import com.thedasmc.stocks2.requests.response.StockResponse;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import static com.thedasmc.stocks2.common.Tools.readInputStream;
+import static com.thedasmc.stocks2.common.Tools.writeBody;
 
 public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
 
@@ -41,13 +40,7 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
 
         PortfolioRequest request = new PortfolioRequest(this.apiToken, page, uuid);
         String requestJson = this.gson.toJson(request);
-        byte[] requestBytes = requestJson.getBytes(StandardCharsets.UTF_8);
-
-        connection.setFixedLengthStreamingMode(requestBytes.length);
-        try(OutputStream os = connection.getOutputStream()) {
-            os.write(requestBytes);
-        }
-
+        writeBody(connection, requestJson);
         String responseJson = readInputStream(connection.getInputStream());
 
         return this.gson.fromJson(responseJson, PortfolioResponse.class);
@@ -64,8 +57,10 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
 
     @Override
     public RecordResponse transact(RecordRequest recordRequest) throws IOException {
+        recordRequest.setApiToken(this.apiToken);
         URL url = new URL(Constants.API_URL + TRANSACT_URI);
         HttpURLConnection connection = Tools.getHttpPostConnection(url);
+        writeBody(connection, this.gson.toJson(recordRequest));
         String responseJson = readInputStream(connection.getInputStream());
 
         return this.gson.fromJson(responseJson, RecordResponse.class);

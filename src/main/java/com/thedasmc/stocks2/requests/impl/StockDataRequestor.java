@@ -3,7 +3,6 @@ package com.thedasmc.stocks2.requests.impl;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.common.Constants;
-import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
@@ -17,6 +16,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.thedasmc.stocks2.common.Tools.getHttpGetConnection;
 import static com.thedasmc.stocks2.common.Tools.readInputStream;
 
 public class StockDataRequestor extends AbstractStockDataRequestor {
@@ -32,7 +32,7 @@ public class StockDataRequestor extends AbstractStockDataRequestor {
     @SuppressWarnings("UnstableApiUsage")
     public Map<String, StockDataResponse> getQuotes(Collection<String> symbols) throws IOException {
         URL url = new URL(getQuoteUrl(symbols));
-        HttpURLConnection connection = Tools.getHttpGetConnection(url);
+        HttpURLConnection connection = getHttpGetConnection(url);
         String json = readInputStream(connection.getInputStream());
         Set<StockDataResponse> stockDataResponseSet = this.gson.fromJson(json, new TypeToken<HashSet<StockDataResponse>>(){}.getType());
         Map<String, StockDataResponse> stockDataMap = stockDataResponseSet.stream()

@@ -4,14 +4,18 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thedasmc.stocks2.commands.PortfolioCommand;
+import com.thedasmc.stocks2.commands.SellCommand;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.core.PortfolioTracker;
+import com.thedasmc.stocks2.json.LocalDateTimeConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
 import com.thedasmc.stocks2.requests.impl.PlayerDataInteractor;
 import com.thedasmc.stocks2.requests.impl.StockDataRequestor;
+import com.thedasmc.stocks2.requests.request.RecordRequest;
+import com.thedasmc.stocks2.requests.response.RecordResponse;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -21,6 +25,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.time.LocalDateTime;
 
 public final class Stocks2 extends JavaPlugin {
 
@@ -102,6 +107,7 @@ public final class Stocks2 extends JavaPlugin {
     private void initGson() {
         gson = new GsonBuilder()
             .registerTypeAdapter(StockDataResponse.class, new StockDataConverter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeConverter())
             .create();
     }
 
@@ -116,6 +122,7 @@ public final class Stocks2 extends JavaPlugin {
     private void initCommandManager() {
         commandManager = new PaperCommandManager(this);
         commandManager.registerCommand(new PortfolioCommand(this));
+        commandManager.registerCommand(new SellCommand(this));
     }
 
     private void initPortfolioTracker() {
