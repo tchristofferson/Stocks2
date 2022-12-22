@@ -35,11 +35,14 @@ public class Texts {
         FETCH_PORTFOLIO_ERROR("portfolio-error"),
         STOCK_FETCH_ERROR("stock-error"),
         NOT_ENOUGH_SHARES("not-enough-shares"),
+        NOT_ENOUGH_MONEY("not-enough-money"),
         SALE_TOO_LARGE("sale-too-large"),
         DEPOSIT_FUNDS_ERROR("deposit-funds-error"),
+        WITHDRAW_FUNDS_ERROR("withdraw-funds-error"),
         TRANSACTION_ERROR("transaction-error"),
         TRANSACTION_CANCEL_ERROR("transaction-cancel-error"),
-        SOLD_SHARES_SUCCESS("sold-shares-success");
+        SOLD_SHARES_SUCCESS("sold-shares-success"),
+        BOUGHT_SHARES_SUCCESS("bought-shares-success");
 
         //The key in texts.yml
         private final String key;

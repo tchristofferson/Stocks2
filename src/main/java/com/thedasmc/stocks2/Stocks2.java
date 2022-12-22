@@ -3,6 +3,7 @@ package com.thedasmc.stocks2;
 import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.thedasmc.stocks2.commands.BuyCommand;
 import com.thedasmc.stocks2.commands.PortfolioCommand;
 import com.thedasmc.stocks2.commands.SellCommand;
 import com.thedasmc.stocks2.common.Texts;
@@ -14,8 +15,6 @@ import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
 import com.thedasmc.stocks2.requests.impl.PlayerDataInteractor;
 import com.thedasmc.stocks2.requests.impl.StockDataRequestor;
-import com.thedasmc.stocks2.requests.request.RecordRequest;
-import com.thedasmc.stocks2.requests.response.RecordResponse;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -26,10 +25,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public final class Stocks2 extends JavaPlugin {
 
     private Gson gson;
+    private ExecutorService executorService;
     private AbstractStockDataRequestor stockDataRequester;
     private AbstractPlayerDataInteractor playerDataRequester;
     private PaperCommandManager commandManager;
@@ -57,6 +59,7 @@ public final class Stocks2 extends JavaPlugin {
         }
 
         initGson();
+        initExecutorService();
         initStockDataRequester(apiToken);
         initPlayerDataRequester(apiToken);
         initCommandManager();
@@ -74,6 +77,10 @@ public final class Stocks2 extends JavaPlugin {
 
     public Gson getGson() {
         return gson;
+    }
+
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 
     public AbstractStockDataRequestor getStockDataRequester() {
@@ -111,6 +118,10 @@ public final class Stocks2 extends JavaPlugin {
             .create();
     }
 
+    private void initExecutorService() {
+        this.executorService = Executors.newCachedThreadPool();
+    }
+
     private void initStockDataRequester(String apiToken) {
         stockDataRequester = new StockDataRequestor(apiToken, gson);
     }
@@ -123,6 +134,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager = new PaperCommandManager(this);
         commandManager.registerCommand(new PortfolioCommand(this));
         commandManager.registerCommand(new SellCommand(this));
+        commandManager.registerCommand(new BuyCommand(this));
     }
 
     private void initPortfolioTracker() {

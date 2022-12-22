@@ -37,14 +37,14 @@ public class SellCommand extends BaseCommand {
     @Description("Sell shares of a stock")
     public void onSell(Player player, String symbol, double shares) {
         final Texts texts = plugin.getTexts();
-        final AbstractPlayerDataInteractor playerDataRequester = plugin.getPlayerDataRequester();
+        final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataRequester();
         final UUID uuid = player.getUniqueId();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             StockResponse stock;
 
             try {
-                stock = playerDataRequester.getStock(uuid, symbol);
+                stock = playerDataInteractor.getStock(uuid, symbol);
             } catch (IOException e) {
                 player.sendMessage(texts.getErrorText(Texts.Types.STOCK_FETCH_ERROR, e.getMessage()));
                 return;
@@ -63,11 +63,11 @@ public class SellCommand extends BaseCommand {
                 return;
             }
 
-            RecordRequest recordRequest = new RecordRequest(uuid, symbol, Tools.toCents(value), BigDecimal.valueOf(shares));
+            RecordRequest recordRequest = new RecordRequest(uuid, symbol, Tools.toCents(value).negate(), BigDecimal.valueOf(shares).negate());
             RecordResponse recordResponse;
 
             try {
-                recordResponse = playerDataRequester.transact(recordRequest);
+                recordResponse = playerDataInteractor.transact(recordRequest);
             } catch (IOException e) {
                 player.sendMessage(texts.getErrorText(Texts.Types.TRANSACTION_ERROR, e.getMessage()));
                 return;
@@ -84,7 +84,7 @@ public class SellCommand extends BaseCommand {
 
                     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                         try {
-                            playerDataRequester.cancelTransaction(recordResponse.getRecordId());
+                            playerDataInteractor.cancelTransaction(recordResponse.getRecordId());
                         } catch (IOException e) {
                             Bukkit.getLogger().severe("[Stocks2]Failed to add funds to player with UUID " + uuid + " and failed to cancel transaction: " + e.getMessage() + ". The amount was for " + value.toPlainString() + " and should be given to the player.");
                             player.sendMessage(texts.getErrorText(Texts.Types.TRANSACTION_CANCEL_ERROR, e.getMessage()));
