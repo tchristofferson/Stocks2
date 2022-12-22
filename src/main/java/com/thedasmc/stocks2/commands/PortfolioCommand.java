@@ -34,32 +34,36 @@ public class PortfolioCommand extends BaseCommand {
     @CommandPermission(PORTFOLIO_PERMISSION)
     @Description("View your portfolio")
     public void onPortfolio(Player player) {
-        AbstractPlayerDataInteractor playerDataRequester = plugin.getPlayerDataRequester();
-
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            PortfolioResponse portfolioResponse;
-
-            try {
-                portfolioResponse = playerDataRequester.getPortfolio(player.getUniqueId(), 0);
-            } catch (IOException e) {
-                player.sendMessage(plugin.getTexts().getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
-                return;
-            }
-
-            final Inventory portfolio = GuiFactory.createPortfolioPage(portfolioResponse);
-
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                plugin.getPortfolioTracker().track(new PortfolioViewer(player.getUniqueId(), player.getUniqueId(), portfolio, 0, portfolioResponse.getPages()));
-                player.openInventory(portfolio);
-            });
-        });
+        openPortfolio(player, player);
     }
 
     @Subcommand("portfolio")
     @CommandPermission(PORTFOLIO_OTHERS_PERMISSION)
     @Description("View another player's portfolio")
     public void onOtherPortfolio(Player player, OnlinePlayer other) {
+        openPortfolio(player, other.getPlayer());
+    }
 
+    private void openPortfolio(Player viewer, Player owner) {
+        AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataRequester();
+
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            PortfolioResponse portfolioResponse;
+
+            try {
+                portfolioResponse = playerDataInteractor.getPortfolio(owner.getUniqueId(), 0);
+            } catch (IOException e) {
+                viewer.sendMessage(plugin.getTexts().getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
+                return;
+            }
+
+            final Inventory portfolio = GuiFactory.createPortfolioPage(portfolioResponse);
+
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                plugin.getPortfolioTracker().track(new PortfolioViewer(viewer.getUniqueId(), owner.getUniqueId(), portfolio, 0, portfolioResponse.getPages()));
+                viewer.openInventory(portfolio);
+            });
+        });
     }
 
 }
