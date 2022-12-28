@@ -6,7 +6,7 @@
 
     <groupId>com.thedasmc</groupId>
     <artifactId>Stocks2</artifactId>
-    <version>1.0</version>
+    <version>0.1-b</version>
     <packaging>jar</packaging>
 
     <name>Stocks2</name>
