@@ -38,6 +38,62 @@ public class GuiFactory {
         return portfolio;
     }
 
+    public static Inventory createSellInventory(BigDecimal startingShares) {
+        Inventory inventory = Bukkit.createInventory(null, 27, ChatColor.GOLD + "Sell Shares");
+        List<Integer> buttonAmounts = Arrays.asList(1000, 100, 50, 10, 1);
+
+        int addSlot = 11;
+        int subSlot = 20;
+        //Adding the Add/Subtract x shares buttons to the sell inventory
+        for (Integer amount : buttonAmounts) {
+            inventory.setItem(addSlot++, getPlusButton(amount));
+            inventory.setItem(subSlot++, getSubButton(amount));
+        }
+
+        //Adding the emerald item stack that displays the number of shares they want to sell
+        ItemStack sharesItem = new ItemStack(Material.EMERALD, 1);
+        ItemMeta sharesItemMeta = sharesItem.getItemMeta();
+        sharesItemMeta.setDisplayName(ChatColor.GREEN + startingShares.toPlainString());
+        sharesItem.setItemMeta(sharesItemMeta);
+        inventory.setItem(4, sharesItem);
+
+        //Adding confirm button to sell inventory
+        ItemStack confirmButton = new ItemStack(Material.GREEN_STAINED_GLASS_PANE, 1);
+        ItemMeta confirmMeta = confirmButton.getItemMeta();
+        confirmMeta.setDisplayName(ChatColor.GREEN + "Confirm Sale");
+        confirmButton.setItemMeta(confirmMeta);
+        inventory.setItem(18, confirmButton);
+
+        //Adding cancel button to sell inventory
+        ItemStack cancelButton = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
+        ItemMeta cancelMeta = cancelButton.getItemMeta();
+        cancelMeta.setDisplayName(ChatColor.RED + "Cancel Sale");
+        cancelButton.setItemMeta(cancelMeta);
+        inventory.setItem(26, cancelButton);
+
+        return inventory;
+    }
+
+    //Used for the sell menu. Gets a green glass pane
+    private static ItemStack getPlusButton(int amount) {
+        ItemStack itemStack = new ItemStack(Material.GREEN_STAINED_GLASS_PANE, 1);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.GREEN + "Add " + amount + " shares");
+        itemStack.setItemMeta(itemMeta);
+
+        return itemStack;
+    }
+
+    //Used for the sell menu. Gets a red glass pane
+    private static ItemStack getSubButton(int amount) {
+        ItemStack itemStack = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.RED + "Subtract " + amount + " shares");
+        itemStack.setItemMeta(itemMeta);
+
+        return itemStack;
+    }
+
     private static ItemStack getStockItem(StockResponse stock) {
         ItemStack itemStack = new ItemStack(STOCK_ITEM_MATERIAL, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
