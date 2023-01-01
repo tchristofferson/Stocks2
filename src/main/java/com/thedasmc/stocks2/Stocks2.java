@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thedasmc.stocks2.commands.BuyCommand;
+import com.thedasmc.stocks2.commands.CheckCommand;
 import com.thedasmc.stocks2.commands.PortfolioCommand;
 import com.thedasmc.stocks2.commands.SellCommand;
 import com.thedasmc.stocks2.common.Texts;
@@ -135,6 +136,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new PortfolioCommand(this));
         commandManager.registerCommand(new SellCommand(this));
         commandManager.registerCommand(new BuyCommand(this));
+        commandManager.registerCommand(new CheckCommand(this));
     }
 
     private void initPortfolioTracker() {

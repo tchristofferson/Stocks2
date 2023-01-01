@@ -8,6 +8,8 @@ transaction-cancel-error: '&c&l[Stocks]Failed to cancel transaction: %error%. Yo
 not-enough-shares: '&c&l[Stocks]You don''t own enough shares!'
 not-enough-money: '&c&l[Stocks]You don''t have %money% to purchase the shares!'
 sale-too-large: '&c&l[Stocks]Sale too large!'
+stock-symbol-not-found: '&c&l[Stocks]Stock symbol not found!'
 
 sold-shares-success: '&2&l[Stocks]Successfully sold shares for %money%!'
 bought-shares-success: '&2&l[Stocks]Successfully bought shares for %money%!'
+check-price-success: '&2&l[Stocks]The price of %symbol% is %money%'

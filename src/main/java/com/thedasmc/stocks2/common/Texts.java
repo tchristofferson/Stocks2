@@ -20,7 +20,11 @@ public class Texts {
     }
 
     public String getText(Types type, BigDecimal money) {
-        return getText(type).replace("%money%", money.toPlainString());
+        return getText(type).replace("%money%", getMoneySymbol() + money.toPlainString());
+    }
+
+    public String getText(Types type, BigDecimal money, String symbol) {
+        return getText(type, money).replace("%symbol%", symbol.trim().toUpperCase());
     }
 
     public String getErrorText(Types type, String error) {
@@ -37,12 +41,14 @@ public class Texts {
         NOT_ENOUGH_SHARES("not-enough-shares"),
         NOT_ENOUGH_MONEY("not-enough-money"),
         SALE_TOO_LARGE("sale-too-large"),
+        STOCK_SYMBOL_NOT_FOUND("stock-symbol-not-found"),
         DEPOSIT_FUNDS_ERROR("deposit-funds-error"),
         WITHDRAW_FUNDS_ERROR("withdraw-funds-error"),
         TRANSACTION_ERROR("transaction-error"),
         TRANSACTION_CANCEL_ERROR("transaction-cancel-error"),
         SOLD_SHARES_SUCCESS("sold-shares-success"),
-        BOUGHT_SHARES_SUCCESS("bought-shares-success");
+        BOUGHT_SHARES_SUCCESS("bought-shares-success"),
+        CHECK_PRICE_SUCCESS("check-price-success");
 
         //The key in texts.yml
         private final String key;
