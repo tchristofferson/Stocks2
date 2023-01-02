@@ -16,7 +16,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class PlayerResponseDataRequesterTest {
+public class PlayerDataInteractorTest {
 
     private static final String TOKEN = "cd07fac8c7434fa2987185e0f14e17ef";
 
