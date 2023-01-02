@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -34,5 +35,14 @@ public class StockDataRequestorTest {
         assertEquals(1, response.size());
         assertTrue(response.containsKey(symbol));
         assertNotNull(response.get(symbol));
+    }
+
+    @Test
+    public void ensureCorrectResponseWithInvalidSymbol() {
+        final String symbol = "AAPLLLL";
+        AbstractStockDataRequestor stockDataRequestor = new StockDataRequestor(TOKEN, gson);
+        IOException exception = assertThrows(IOException.class, () -> stockDataRequestor.getQuotes(Collections.singletonList(symbol)));
+
+        assertEquals("invalid stock symbol!", exception.getMessage().toLowerCase());
     }
 }

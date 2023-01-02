@@ -41,7 +41,13 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
         PortfolioRequest request = new PortfolioRequest(this.apiToken, page, uuid);
         String requestJson = this.gson.toJson(request);
         writeBody(connection, requestJson);
-        String responseJson = readInputStream(connection.getInputStream());
+        String responseJson;
+
+        try {
+            responseJson = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
+        }
 
         return this.gson.fromJson(responseJson, PortfolioResponse.class);
     }
@@ -50,7 +56,13 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
     public StockResponse getStock(UUID uuid, String symbol) throws IOException {
         URL url = new URL(getStockUrl(uuid, symbol));
         HttpURLConnection connection = Tools.getHttpGetConnection(url);
-        String responseJson = readInputStream(connection.getInputStream());
+        String responseJson;
+
+        try {
+            responseJson = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
+        }
 
         return this.gson.fromJson(responseJson, StockResponse.class);
     }
@@ -61,7 +73,13 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
         URL url = new URL(Constants.API_URL + TRANSACT_URI);
         HttpURLConnection connection = Tools.getHttpPostConnection(url);
         writeBody(connection, this.gson.toJson(recordRequest));
-        String responseJson = readInputStream(connection.getInputStream());
+        String responseJson;
+
+        try {
+            responseJson = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
+        }
 
         return this.gson.fromJson(responseJson, RecordResponse.class);
     }
@@ -70,7 +88,13 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
     public Boolean cancelTransaction(Long recordId) throws IOException {
         URL url = new URL(getCancelTransactionUrl(recordId));
         HttpURLConnection connection = Tools.getHttpDeleteConnection(url);
-        String responseJson = readInputStream(connection.getInputStream());
+        String responseJson;
+
+        try {
+            responseJson = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
+        }
 
         return this.gson.fromJson(responseJson, Boolean.class);
     }

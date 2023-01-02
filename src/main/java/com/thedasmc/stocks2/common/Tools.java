@@ -1,6 +1,6 @@
 package com.thedasmc.stocks2.common;
 
-import com.google.gson.JsonElement;
+import com.google.gson.*;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -48,9 +48,35 @@ public class Tools {
         return builder.toString();
     }
 
+    public static String readErrorStream(InputStream errorStream) throws IOException {
+        String jsonError = readInputStream(errorStream);
+        JsonElement jsonElement;
+
+        try {
+            jsonElement = new JsonParser().parse(jsonError);
+        } catch (JsonParseException e) {
+            return jsonError;
+        }
+
+        if (!jsonElement.isJsonObject())
+            return jsonError;
+
+        JsonObject obj = jsonElement.getAsJsonObject();
+
+        if (obj.has("message"))
+            return obj.get("message").getAsString();
+
+        if (obj.has("error"))
+            return obj.get("error").getAsString();
+
+        return jsonError;
+    }
+
     public static HttpURLConnection getHttpConnection(URL url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Accept", "application/json");
+        connection.setConnectTimeout(3000);
+        connection.setReadTimeout(5000);
 
         return connection;
     }

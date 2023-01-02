@@ -3,6 +3,7 @@ package com.thedasmc.stocks2.requests.impl;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.common.Constants;
+import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
@@ -33,7 +34,14 @@ public class StockDataRequestor extends AbstractStockDataRequestor {
     public Map<String, StockDataResponse> getQuotes(Collection<String> symbols) throws IOException {
         URL url = new URL(getQuoteUrl(symbols));
         HttpURLConnection connection = getHttpGetConnection(url);
-        String json = readInputStream(connection.getInputStream());
+        String json;
+
+        try {
+            json = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
+        }
+
         Set<StockDataResponse> stockDataResponseSet = this.gson.fromJson(json, new TypeToken<HashSet<StockDataResponse>>(){}.getType());
         Map<String, StockDataResponse> stockDataMap = stockDataResponseSet.stream()
             .collect(Collectors.toMap(StockDataResponse::getSymbol, Function.identity()));
