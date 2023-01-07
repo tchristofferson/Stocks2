@@ -34,7 +34,7 @@ public class PlayerDataInteractorTest {
     }
 
     @Test
-    public void ensureNoErrorsWhenSelling() throws IOException {
+    public void ensureNoErrorsWhenBuying() throws IOException {
         PlayerDataInteractor playerDataInteractor = new PlayerDataInteractor(TOKEN, gson);
         RecordRequest recordRequest = new RecordRequest(UUID.fromString("b5a3e507-e849-4f1e-86d6-1b2b5b6f0d78"), "AAPL", BigInteger.valueOf(10000), BigDecimal.ONE);
         RecordResponse response = playerDataInteractor.transact(recordRequest);
