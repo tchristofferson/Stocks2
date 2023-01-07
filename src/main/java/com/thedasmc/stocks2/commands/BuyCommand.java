@@ -54,6 +54,11 @@ public class BuyCommand extends BaseCommand {
                 return;
             }
 
+            if (stock == null) {
+                player.sendMessage(texts.getText(Texts.Types.STOCK_SYMBOL_NOT_FOUND));
+                return;
+            }
+
             final BigDecimal value = stock.getLatestPrice().multiply(BigDecimal.valueOf(shares).setScale(2, RoundingMode.DOWN));
 
             if (!Tools.canConvertToDouble(value)) {

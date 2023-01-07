@@ -28,7 +28,7 @@ public abstract class AbstractPlayerDataInteractor extends DataRequester {
      * Get a specific stock from the player's portfolio
      * @param uuid The player's UUID
      * @param symbol The stock symbol
-     * @return A {@link StockResponse} representing the player's stock
+     * @return A {@link StockResponse} representing the player's stock, or {@code null} if the symbol is invalid
      * @throws IOException If an IO error occurs
      */
     public abstract StockResponse getStock(UUID uuid, String symbol) throws IOException;

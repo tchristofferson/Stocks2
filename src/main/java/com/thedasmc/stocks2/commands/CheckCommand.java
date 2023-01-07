@@ -42,7 +42,7 @@ public class CheckCommand extends BaseCommand {
                 return;
             }
 
-            if (!stockData.containsKey(finalSymbol)) {
+            if (stockData.get(finalSymbol) == null) {
                 commandSender.sendMessage(texts.getText(Texts.Types.STOCK_SYMBOL_NOT_FOUND));
                 return;
             }

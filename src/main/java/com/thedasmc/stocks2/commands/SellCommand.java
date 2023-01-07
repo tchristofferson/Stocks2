@@ -50,6 +50,11 @@ public class SellCommand extends BaseCommand {
                 return;
             }
 
+            if (stock == null) {
+                player.sendMessage(texts.getText(Texts.Types.STOCK_SYMBOL_NOT_FOUND));
+                return;
+            }
+
             if (stock.getShares().compareTo(BigDecimal.valueOf(shares)) < 0) {
                 player.sendMessage(texts.getText(Texts.Types.NOT_ENOUGH_SHARES));
                 return;

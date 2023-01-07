@@ -17,7 +17,7 @@ public abstract class AbstractStockDataRequestor extends DataRequester {
      * Get quotes for the stocks for this instance
      * @param symbols Stock symbols to fetch
      * @return A map where the key is the stock symbol (UpperCase) and the value is the {@link StockDataResponse} representing the quote.
-     * If there was an error finding a symbol the value should be null.
+     * If the symbol is invalid the value should be null.
      *
      * @throws IOException If an error occurs fetching the quotes.
      */

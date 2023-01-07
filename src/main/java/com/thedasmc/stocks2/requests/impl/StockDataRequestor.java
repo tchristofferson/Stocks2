@@ -46,10 +46,10 @@ public class StockDataRequestor extends AbstractStockDataRequestor {
         Map<String, StockDataResponse> stockDataMap = stockDataResponseSet.stream()
             .collect(Collectors.toMap(StockDataResponse::getSymbol, Function.identity()));
 
-        symbols.forEach(symbol -> {
-            if (!stockDataMap.containsKey(symbol))
-                stockDataMap.put(symbol, null);
-        });
+        symbols.stream()
+            .map(symbol -> symbol.trim().toUpperCase())
+            .filter(symbol -> !stockDataMap.containsKey(symbol))
+            .forEach(symbol -> stockDataMap.put(symbol, null));
 
         return stockDataMap;
     }
