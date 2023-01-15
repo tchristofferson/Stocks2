@@ -51,7 +51,7 @@ public class InventoryListener implements Listener {
                 PortfolioResponse portfolioResponse;
 
                 try {
-                    portfolioResponse = plugin.getPlayerDataRequester().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() - 1);
+                    portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() - 1);
                 } catch (IOException e) {
                     clicker.sendMessage(texts.getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
                     closeInventory(clicker);
@@ -68,7 +68,7 @@ public class InventoryListener implements Listener {
                 PortfolioResponse portfolioResponse;
 
                 try {
-                    portfolioResponse = plugin.getPlayerDataRequester().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() + 1);
+                    portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() + 1);
                 } catch (IOException e) {
                     clicker.sendMessage(texts.getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
                     closeInventory(clicker);

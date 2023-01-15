@@ -46,9 +46,11 @@ public class Texts {
         WITHDRAW_FUNDS_ERROR("withdraw-funds-error"),
         TRANSACTION_ERROR("transaction-error"),
         TRANSACTION_CANCEL_ERROR("transaction-cancel-error"),
+        ACCOUNT_REGISTRATION_ERROR("account-registration-error"),
         SOLD_SHARES_SUCCESS("sold-shares-success"),
         BOUGHT_SHARES_SUCCESS("bought-shares-success"),
-        CHECK_PRICE_SUCCESS("check-price-success");
+        CHECK_PRICE_SUCCESS("check-price-success"),
+        ACCOUNT_REGISTRATION_SUCCESS("account-registration-success");
 
         //The key in texts.yml
         private final String key;

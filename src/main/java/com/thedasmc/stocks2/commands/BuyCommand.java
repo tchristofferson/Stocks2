@@ -41,7 +41,7 @@ public class BuyCommand extends BaseCommand {
     @Description("Buy shares of a stock")
     public void onBuy(Player player, String symbol, double shares) {
         final Texts texts = plugin.getTexts();
-        final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataRequester();
+        final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
         final UUID uuid = player.getUniqueId();
 
         plugin.getExecutorService().submit(() -> {

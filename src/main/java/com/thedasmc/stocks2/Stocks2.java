@@ -3,17 +3,16 @@ package com.thedasmc.stocks2;
 import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.thedasmc.stocks2.commands.BuyCommand;
-import com.thedasmc.stocks2.commands.CheckCommand;
-import com.thedasmc.stocks2.commands.PortfolioCommand;
-import com.thedasmc.stocks2.commands.SellCommand;
+import com.thedasmc.stocks2.commands.*;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.core.PortfolioTracker;
 import com.thedasmc.stocks2.json.LocalDateTimeConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
+import com.thedasmc.stocks2.requests.AbstractAccountInteractor;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
+import com.thedasmc.stocks2.requests.impl.AccountInteractor;
 import com.thedasmc.stocks2.requests.impl.PlayerDataInteractor;
 import com.thedasmc.stocks2.requests.impl.StockDataRequestor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
@@ -34,7 +33,8 @@ public final class Stocks2 extends JavaPlugin {
     private Gson gson;
     private ExecutorService executorService;
     private AbstractStockDataRequestor stockDataRequester;
-    private AbstractPlayerDataInteractor playerDataRequester;
+    private AbstractPlayerDataInteractor playerDataInteractor;
+    private AbstractAccountInteractor accountInteractor;
     private PaperCommandManager commandManager;
     private PortfolioTracker portfolioTracker;
     private FileConfiguration textsConfig;
@@ -47,11 +47,8 @@ public final class Stocks2 extends JavaPlugin {
         saveDefaultConfig();
         final String apiToken = getConfig().getString("api-token");
 
-        if (apiToken == null || apiToken.replace(" ", "").isEmpty()) {
-            Bukkit.getLogger().warning("No api-token specified in config! Disabling . . .");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
+        if (apiToken == null || apiToken.replace(" ", "").isEmpty())
+            Bukkit.getLogger().warning("No api-token specified in config! Use the register commands to register and account and server.");
 
         if (!initEconomy()) {
             Bukkit.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found! Make sure you installed an economy plugin as well as Vault.", getDescription().getName()));
@@ -63,6 +60,7 @@ public final class Stocks2 extends JavaPlugin {
         initExecutorService();
         initStockDataRequester(apiToken);
         initPlayerDataRequester(apiToken);
+        initAccountInteractor(apiToken);
         initCommandManager();
         initPortfolioTracker();
         initTextsConfig();
@@ -89,8 +87,12 @@ public final class Stocks2 extends JavaPlugin {
         return stockDataRequester;
     }
 
-    public AbstractPlayerDataInteractor getPlayerDataRequester() {
-        return playerDataRequester;
+    public AbstractPlayerDataInteractor getPlayerDataInteractor() {
+        return playerDataInteractor;
+    }
+
+    public AbstractAccountInteractor getAccountInteractor() {
+        return accountInteractor;
     }
 
     public PaperCommandManager getCommandManager() {
@@ -129,7 +131,11 @@ public final class Stocks2 extends JavaPlugin {
     }
 
     private void initPlayerDataRequester(String apiToken) {
-        playerDataRequester = new PlayerDataInteractor(apiToken, gson);
+        playerDataInteractor = new PlayerDataInteractor(apiToken, gson);
+    }
+
+    private void initAccountInteractor(String apiToken) {
+        accountInteractor = new AccountInteractor(apiToken, gson);
     }
 
     private void initCommandManager() {
@@ -138,6 +144,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new SellCommand(this));
         commandManager.registerCommand(new BuyCommand(this));
         commandManager.registerCommand(new CheckCommand(this));
+        commandManager.registerCommand(new RegisterAccountCommand(this));
     }
 
     private void initPortfolioTracker() {

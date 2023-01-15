@@ -37,7 +37,7 @@ public class SellCommand extends BaseCommand {
     @Description("Sell shares of a stock")
     public void onSell(Player player, String symbol, double shares) {
         final Texts texts = plugin.getTexts();
-        final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataRequester();
+        final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
         final UUID uuid = player.getUniqueId();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {

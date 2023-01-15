@@ -45,7 +45,7 @@ public class PortfolioCommand extends BaseCommand {
     }
 
     private void openPortfolio(Player viewer, Player owner) {
-        AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataRequester();
+        AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             PortfolioResponse portfolioResponse;
