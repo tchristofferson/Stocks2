@@ -32,11 +32,11 @@ public class CheckCommand extends BaseCommand {
         final String finalSymbol = symbol.trim().toUpperCase();
         final Texts texts = plugin.getTexts();
 
-        plugin.getExecutorService().submit(() -> {
+        plugin.getExecutorService().execute(() -> {
             Map<String, StockDataResponse> stockData;
 
             try {
-                stockData = plugin.getStockDataRequester().getQuotes(Collections.singletonList(finalSymbol));
+                stockData = plugin.getStockDataInteractor().getQuotes(Collections.singletonList(finalSymbol));
             } catch (IOException e) {
                 commandSender.sendMessage(texts.getErrorText(Texts.Types.STOCK_FETCH_ERROR, e.getMessage()));
                 return;

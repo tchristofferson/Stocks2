@@ -13,32 +13,32 @@ import org.bukkit.command.CommandSender;
 import java.io.IOException;
 
 @CommandAlias("stocks")
-public class RegisterAccountCommand extends BaseCommand {
+public class RegisterServerCommand extends BaseCommand {
 
-    private static final String REGISTER_ACCOUNT_PERMISSION = "stocks.admin.account.register";
+    private static final String REGISTER_SERVER_PERMISSION = "stocks.admin.account.register";
 
     private final Stocks2 plugin;
 
-    public RegisterAccountCommand(Stocks2 plugin) {
+    public RegisterServerCommand(Stocks2 plugin) {
         this.plugin = plugin;
     }
 
-    @Subcommand("regacc|ra")
-    @CommandPermission(REGISTER_ACCOUNT_PERMISSION)
-    @Description("Register an account")
+    @Subcommand("regser|rs")
+    @CommandPermission(REGISTER_SERVER_PERMISSION)
+    @Description("Register a server")
     public void onRegister(CommandSender commandSender, String email, String password) {
         final Texts texts = plugin.getTexts();
         final AccountRequest request = new AccountRequest(email, password);
 
         plugin.getExecutorService().execute(() -> {
             try {
-                plugin.getAccountInteractor().registerAccount(request);
+                plugin.getServerInteractor().registerServer(request);
             } catch (IOException e) {
-                commandSender.sendMessage(texts.getErrorText(Texts.Types.ACCOUNT_REGISTRATION_ERROR, e.getMessage()));
+                commandSender.sendMessage(texts.getErrorText(Texts.Types.SERVER_REGISTRATION_ERROR, e.getMessage()));
                 return;
             }
 
-            commandSender.sendMessage(texts.getText(Texts.Types.ACCOUNT_REGISTRATION_SUCCESS));
+            commandSender.sendMessage(texts.getText(Texts.Types.SERVER_REGISTRATION_SUCCESS));
         });
     }
 

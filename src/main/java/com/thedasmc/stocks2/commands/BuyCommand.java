@@ -44,7 +44,7 @@ public class BuyCommand extends BaseCommand {
         final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
         final UUID uuid = player.getUniqueId();
 
-        plugin.getExecutorService().submit(() -> {
+        plugin.getExecutorService().execute(() -> {
             StockResponse stock;
 
             try {
