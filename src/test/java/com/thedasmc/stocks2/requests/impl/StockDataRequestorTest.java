@@ -4,13 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thedasmc.stocks2.json.LocalDateTimeConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
-import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
+import com.thedasmc.stocks2.requests.AbstractStockDataInteractor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ public class StockDataRequestorTest {
     @Test
     public void ensureNoErrorsWhenFetchingQuote() throws IOException {
         final String symbol = "AAPL";
-        AbstractStockDataRequestor stockDataRequestor = new StockDataRequestor(TOKEN, gson);
+        AbstractStockDataInteractor stockDataRequestor = new StockDataInteractor(TOKEN, gson);
         Map<String, StockDataResponse> response = stockDataRequestor.getQuotes(Collections.singletonList(symbol));
 
         assertNotNull(response);
@@ -40,7 +39,7 @@ public class StockDataRequestorTest {
     @Test
     public void ensureCorrectResponseWithInvalidSymbol() {
         final String symbol = "AAPLLLL";
-        AbstractStockDataRequestor stockDataRequestor = new StockDataRequestor(TOKEN, gson);
+        AbstractStockDataInteractor stockDataRequestor = new StockDataInteractor(TOKEN, gson);
         IOException exception = assertThrows(IOException.class, () -> stockDataRequestor.getQuotes(Collections.singletonList(symbol)));
 
         assertEquals("invalid stock symbol!", exception.getMessage().toLowerCase());

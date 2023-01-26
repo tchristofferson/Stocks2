@@ -1,10 +1,7 @@
 package com.thedasmc.stocks2.commands;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.common.Tools;
@@ -35,9 +32,10 @@ public class SellCommand extends BaseCommand {
     @Subcommand("sell")
     @CommandPermission(SELL_PERMISSION)
     @Description("Sell shares of a stock")
+    @Syntax("[symbol] [shares]")
     public void onSell(Player player, String symbol, double shares) {
         final Texts texts = plugin.getTexts();
-        final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataRequester();
+        final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
         final UUID uuid = player.getUniqueId();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {

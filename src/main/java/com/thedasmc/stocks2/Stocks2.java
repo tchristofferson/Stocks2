@@ -3,19 +3,20 @@ package com.thedasmc.stocks2;
 import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.thedasmc.stocks2.commands.BuyCommand;
-import com.thedasmc.stocks2.commands.CheckCommand;
-import com.thedasmc.stocks2.commands.PortfolioCommand;
-import com.thedasmc.stocks2.commands.SellCommand;
+import com.thedasmc.stocks2.commands.*;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.core.PortfolioTracker;
 import com.thedasmc.stocks2.json.LocalDateTimeConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
+import com.thedasmc.stocks2.requests.AbstractAccountInteractor;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
-import com.thedasmc.stocks2.requests.AbstractStockDataRequestor;
+import com.thedasmc.stocks2.requests.AbstractServerInteractor;
+import com.thedasmc.stocks2.requests.AbstractStockDataInteractor;
+import com.thedasmc.stocks2.requests.impl.AccountInteractor;
 import com.thedasmc.stocks2.requests.impl.PlayerDataInteractor;
-import com.thedasmc.stocks2.requests.impl.StockDataRequestor;
+import com.thedasmc.stocks2.requests.impl.ServerInteractor;
+import com.thedasmc.stocks2.requests.impl.StockDataInteractor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -33,9 +34,10 @@ public final class Stocks2 extends JavaPlugin {
 
     private Gson gson;
     private ExecutorService executorService;
-    private AbstractStockDataRequestor stockDataRequester;
-    private AbstractPlayerDataInteractor playerDataRequester;
-    private PaperCommandManager commandManager;
+    private AbstractStockDataInteractor stockDataInteractor;
+    private AbstractPlayerDataInteractor playerDataInteractor;
+    private AbstractAccountInteractor accountInteractor;
+    private AbstractServerInteractor serverInteractor;
     private PortfolioTracker portfolioTracker;
     private FileConfiguration textsConfig;
     private Texts texts;
@@ -47,11 +49,8 @@ public final class Stocks2 extends JavaPlugin {
         saveDefaultConfig();
         final String apiToken = getConfig().getString("api-token");
 
-        if (apiToken == null || apiToken.replace(" ", "").isEmpty()) {
-            Bukkit.getLogger().warning("No api-token specified in config! Disabling . . .");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
+        if (apiToken == null || apiToken.replace(" ", "").isEmpty())
+            Bukkit.getLogger().warning("No api-token specified in config! Use the register commands to register and account and server.");
 
         if (!initEconomy()) {
             Bukkit.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found! Make sure you installed an economy plugin as well as Vault.", getDescription().getName()));
@@ -61,8 +60,7 @@ public final class Stocks2 extends JavaPlugin {
 
         initGson();
         initExecutorService();
-        initStockDataRequester(apiToken);
-        initPlayerDataRequester(apiToken);
+        initInteractors(apiToken);
         initCommandManager();
         initPortfolioTracker();
         initTextsConfig();
@@ -85,16 +83,20 @@ public final class Stocks2 extends JavaPlugin {
         return executorService;
     }
 
-    public AbstractStockDataRequestor getStockDataRequester() {
-        return stockDataRequester;
+    public AbstractStockDataInteractor getStockDataInteractor() {
+        return stockDataInteractor;
     }
 
-    public AbstractPlayerDataInteractor getPlayerDataRequester() {
-        return playerDataRequester;
+    public AbstractPlayerDataInteractor getPlayerDataInteractor() {
+        return playerDataInteractor;
     }
 
-    public PaperCommandManager getCommandManager() {
-        return commandManager;
+    public AbstractAccountInteractor getAccountInteractor() {
+        return accountInteractor;
+    }
+
+    public AbstractServerInteractor getServerInteractor() {
+        return serverInteractor;
     }
 
     public PortfolioTracker getPortfolioTracker() {
@@ -124,20 +126,24 @@ public final class Stocks2 extends JavaPlugin {
         this.executorService = Executors.newCachedThreadPool();
     }
 
-    private void initStockDataRequester(String apiToken) {
-        stockDataRequester = new StockDataRequestor(apiToken, gson);
-    }
-
-    private void initPlayerDataRequester(String apiToken) {
-        playerDataRequester = new PlayerDataInteractor(apiToken, gson);
+    private void initInteractors(String apiToken) {
+        stockDataInteractor = new StockDataInteractor(apiToken, gson);
+        playerDataInteractor = new PlayerDataInteractor(apiToken, gson);
+        accountInteractor = new AccountInteractor(apiToken, gson);
+        serverInteractor = new ServerInteractor(apiToken, gson);
     }
 
     private void initCommandManager() {
-        commandManager = new PaperCommandManager(this);
+        PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.enableUnstableAPI("help");
+
+        commandManager.registerCommand(new HelpCommand());
         commandManager.registerCommand(new PortfolioCommand(this));
         commandManager.registerCommand(new SellCommand(this));
         commandManager.registerCommand(new BuyCommand(this));
         commandManager.registerCommand(new CheckCommand(this));
+        commandManager.registerCommand(new RegisterAccountCommand(this));
+        commandManager.registerCommand(new RegisterServerCommand(this));
     }
 
     private void initPortfolioTracker() {

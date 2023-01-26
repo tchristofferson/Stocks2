@@ -1,10 +1,7 @@
 package com.thedasmc.stocks2.commands;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
@@ -28,15 +25,16 @@ public class CheckCommand extends BaseCommand {
     @Subcommand("check")
     @CommandPermission(CHECK_PERMISSION)
     @Description("Check the price of a stock")
+    @Syntax("[symbol]")
     public void onCheck(CommandSender commandSender, String symbol) {
         final String finalSymbol = symbol.trim().toUpperCase();
         final Texts texts = plugin.getTexts();
 
-        plugin.getExecutorService().submit(() -> {
+        plugin.getExecutorService().execute(() -> {
             Map<String, StockDataResponse> stockData;
 
             try {
-                stockData = plugin.getStockDataRequester().getQuotes(Collections.singletonList(finalSymbol));
+                stockData = plugin.getStockDataInteractor().getQuotes(Collections.singletonList(finalSymbol));
             } catch (IOException e) {
                 commandSender.sendMessage(texts.getErrorText(Texts.Types.STOCK_FETCH_ERROR, e.getMessage()));
                 return;
