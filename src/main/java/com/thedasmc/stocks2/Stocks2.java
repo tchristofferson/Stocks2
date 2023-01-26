@@ -135,6 +135,9 @@ public final class Stocks2 extends JavaPlugin {
 
     private void initCommandManager() {
         PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.enableUnstableAPI("help");
+
+        commandManager.registerCommand(new HelpCommand());
         commandManager.registerCommand(new PortfolioCommand(this));
         commandManager.registerCommand(new SellCommand(this));
         commandManager.registerCommand(new BuyCommand(this));

@@ -1,10 +1,7 @@
 package com.thedasmc.stocks2.commands;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.requests.request.AccountRequest;
@@ -26,6 +23,7 @@ public class RegisterServerCommand extends BaseCommand {
     @Subcommand("regser|rs")
     @CommandPermission(REGISTER_SERVER_PERMISSION)
     @Description("Register a server")
+    @Syntax("[email] [password]")
     public void onRegister(CommandSender commandSender, String email, String password) {
         final Texts texts = plugin.getTexts();
         final AccountRequest request = new AccountRequest(email, password);

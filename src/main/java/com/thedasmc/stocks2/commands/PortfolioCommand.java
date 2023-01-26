@@ -1,10 +1,7 @@
 package com.thedasmc.stocks2.commands;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
@@ -40,6 +37,7 @@ public class PortfolioCommand extends BaseCommand {
     @Subcommand("portfolio")
     @CommandPermission(PORTFOLIO_OTHERS_PERMISSION)
     @Description("View another player's portfolio")
+    @Syntax("[player]")
     public void onOtherPortfolio(Player player, OnlinePlayer other) {
         openPortfolio(player, other.getPlayer());
     }
