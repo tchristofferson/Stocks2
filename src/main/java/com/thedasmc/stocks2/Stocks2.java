@@ -9,6 +9,7 @@ import com.thedasmc.stocks2.core.PortfolioTracker;
 import com.thedasmc.stocks2.json.LocalDateTimeConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
+import com.thedasmc.stocks2.logging.Log4JFilter;
 import com.thedasmc.stocks2.requests.AbstractAccountInteractor;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.AbstractServerInteractor;
@@ -19,6 +20,11 @@ import com.thedasmc.stocks2.requests.impl.ServerInteractor;
 import com.thedasmc.stocks2.requests.impl.StockDataInteractor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import net.milkbowl.vault.economy.Economy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -58,6 +64,7 @@ public final class Stocks2 extends JavaPlugin {
             return;
         }
 
+        initLogFilter();
         initGson();
         initExecutorService();
         initInteractors(apiToken);
@@ -170,6 +177,11 @@ public final class Stocks2 extends JavaPlugin {
 
         economy = rsp.getProvider();
         return economy != null;
+    }
+
+    private void initLogFilter() {
+        Logger logger = (Logger) LogManager.getRootLogger();
+        logger.addFilter(new Log4JFilter());
     }
 
     private void registerListeners() {

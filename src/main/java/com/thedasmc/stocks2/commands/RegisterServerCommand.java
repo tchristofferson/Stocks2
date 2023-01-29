@@ -5,6 +5,8 @@ import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.requests.request.AccountRequest;
+import com.thedasmc.stocks2.requests.response.ServerRegistrationResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
@@ -29,14 +31,20 @@ public class RegisterServerCommand extends BaseCommand {
         final AccountRequest request = new AccountRequest(email, password);
 
         plugin.getExecutorService().execute(() -> {
+            ServerRegistrationResponse response;
+
             try {
-                plugin.getServerInteractor().registerServer(request);
+                response = plugin.getServerInteractor().registerServer(request);
             } catch (IOException e) {
                 commandSender.sendMessage(texts.getErrorText(Texts.Types.SERVER_REGISTRATION_ERROR, e.getMessage()));
                 return;
             }
 
-            commandSender.sendMessage(texts.getText(Texts.Types.SERVER_REGISTRATION_SUCCESS));
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                plugin.getConfig().set("api-token", response.getApiToken());
+                plugin.saveConfig();
+                commandSender.sendMessage(texts.getText(Texts.Types.SERVER_REGISTRATION_SUCCESS));
+            });
         });
     }
 
