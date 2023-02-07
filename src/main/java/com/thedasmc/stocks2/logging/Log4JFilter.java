@@ -1,5 +1,7 @@
 package com.thedasmc.stocks2.logging;
 
+import com.thedasmc.stocks2.commands.RegisterAccountCommand;
+import com.thedasmc.stocks2.commands.RegisterServerCommand;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.LogEvent;
@@ -13,10 +15,10 @@ public class Log4JFilter extends AbstractFilter {
 
     private static final String ISSUED_COMMAND_TEXT = "issued server command:";
     private static final String[] COMMANDS_TO_SKIP = {
-        "stocks regacc",
-        "stocks ra",
-        "stocks regser",
-        "stocks rs"
+        "stocks " + RegisterAccountCommand.COMMAND,
+        "stocks " + RegisterAccountCommand.COMMAND_ALIAS,
+        "stocks " + RegisterServerCommand.COMMAND,
+        "stocks " + RegisterServerCommand.COMMAND_ALIAS
     };
 
     @Override

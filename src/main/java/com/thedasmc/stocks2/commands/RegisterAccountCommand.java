@@ -12,6 +12,8 @@ import java.io.IOException;
 @CommandAlias("stocks")
 public class RegisterAccountCommand extends BaseCommand {
 
+    public static final String COMMAND = "regacc";
+    public static final String COMMAND_ALIAS = "ra";
     private static final String REGISTER_ACCOUNT_PERMISSION = "stocks.admin.account.register";
 
     private final Stocks2 plugin;
@@ -20,7 +22,7 @@ public class RegisterAccountCommand extends BaseCommand {
         this.plugin = plugin;
     }
 
-    @Subcommand("regacc|ra")
+    @Subcommand(COMMAND + "|" + COMMAND_ALIAS)
     @CommandPermission(REGISTER_ACCOUNT_PERMISSION)
     @Description("Register an account")
     @Syntax("[email] [password]")
