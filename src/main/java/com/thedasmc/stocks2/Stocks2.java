@@ -1,9 +1,10 @@
 package com.thedasmc.stocks2;
 
-import co.aikar.commands.PaperCommandManager;
+import co.aikar.commands.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thedasmc.stocks2.commands.*;
+import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.core.PortfolioTracker;
 import com.thedasmc.stocks2.json.LocalDateTimeConverter;
@@ -140,6 +141,12 @@ public final class Stocks2 extends JavaPlugin {
     private void initCommandManager() {
         PaperCommandManager commandManager = new PaperCommandManager(this);
         commandManager.enableUnstableAPI("help");
+
+        CommandConditions<BukkitCommandIssuer, BukkitCommandExecutionContext, BukkitConditionContext> commandConditions = commandManager.getCommandConditions();
+        commandConditions.addCondition(Double.class, Constants.POSITIVE_SHARE_LIMITS_CONDITION, (c, exec, value) -> {
+            if (value <= 0)
+                throw new ConditionFailedException(texts.getText(Texts.Types.GIVE_SHARES_TOO_LOW));
+        });
 
         commandManager.registerCommand(new HelpCommand());
         commandManager.registerCommand(new PortfolioCommand(this));
