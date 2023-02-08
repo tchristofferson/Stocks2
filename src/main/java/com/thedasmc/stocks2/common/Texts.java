@@ -27,8 +27,8 @@ public class Texts {
         return getText(type, money).replace("%symbol%", symbol.trim().toUpperCase());
     }
 
-    public String getText(Types types, String playerName, BigDecimal shares, String symbol) {
-        return getText(types)
+    public String getText(Types type, String playerName, BigDecimal shares, String symbol) {
+        return getText(type)
             .replace("%player%", playerName)
             .replace("%shares%", String.valueOf(shares))
             .replace("%symbol%", symbol);
@@ -61,7 +61,8 @@ public class Texts {
         CHECK_PRICE_SUCCESS("check-price-success"),
         ACCOUNT_REGISTRATION_SUCCESS("account-registration-success"),
         SERVER_REGISTRATION_SUCCESS("server-registration-success"),
-        GAVE_SHARES("gave-shares");
+        GAVE_SHARES("gave-shares"),
+        RECEIVED_SHARES("received-shares");
 
         //The key in texts.yml
         private final String key;

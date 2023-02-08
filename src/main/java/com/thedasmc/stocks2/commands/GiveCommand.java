@@ -51,6 +51,9 @@ public class GiveCommand extends BaseCommand {
                 texts.getText(Texts.Types.GAVE_SHARES, player.getPlayer().getName(),
                     recordResponse.getShares(), recordResponse.getSymbol())
             );
+
+            player.getPlayer().sendMessage(
+                texts.getText(Texts.Types.RECEIVED_SHARES, "", recordResponse.getShares(), recordResponse.getSymbol()));
         });
     }
 
