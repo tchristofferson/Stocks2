@@ -3,6 +3,7 @@ package com.thedasmc.stocks2.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
+import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
@@ -33,7 +34,7 @@ public class SellCommand extends BaseCommand {
     @CommandPermission(SELL_PERMISSION)
     @Description("Sell shares of a stock")
     @Syntax("[symbol] [shares]")
-    public void onSell(Player player, String symbol, double shares) {
+    public void onSell(Player player, String symbol, @Conditions(Constants.POSITIVE_SHARE_LIMITS_CONDITION) Double shares) {
         final Texts texts = plugin.getTexts();
         final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
         final UUID uuid = player.getUniqueId();
@@ -82,7 +83,9 @@ public class SellCommand extends BaseCommand {
 
                 EconomyResponse response = plugin.getEconomy().depositPlayer(player, value.doubleValue());
 
-                if (!response.transactionSuccess()) {
+                if (response.transactionSuccess()) {
+                    player.sendMessage(texts.getText(Texts.Types.SOLD_SHARES_SUCCESS, value));
+                } else {
                     player.sendMessage(texts.getErrorText(Texts.Types.DEPOSIT_FUNDS_ERROR, response.errorMessage));
 
                     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -91,10 +94,7 @@ public class SellCommand extends BaseCommand {
                         } catch (IOException e) {
                             Bukkit.getLogger().severe("[Stocks2]Failed to add funds to player with UUID " + uuid + " and failed to cancel transaction: " + e.getMessage() + ". The amount was for " + value.toPlainString() + " and should be given to the player.");
                             player.sendMessage(texts.getErrorText(Texts.Types.TRANSACTION_CANCEL_ERROR, e.getMessage()));
-                            return;
                         }
-
-                        player.sendMessage(texts.getText(Texts.Types.SOLD_SHARES_SUCCESS, value));
                     });
                 }
             });

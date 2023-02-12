@@ -3,6 +3,7 @@ package com.thedasmc.stocks2.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
+import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
@@ -37,7 +38,7 @@ public class BuyCommand extends BaseCommand {
     @CommandPermission(BUY_PERMISSION)
     @Description("Buy shares of a stock")
     @Syntax("[symbol] [shares]")
-    public void onBuy(Player player, String symbol, double shares) {
+    public void onBuy(Player player, String symbol, @Conditions(Constants.POSITIVE_SHARE_LIMITS_CONDITION) Double shares) {
         final Texts texts = plugin.getTexts();
         final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
         final UUID uuid = player.getUniqueId();

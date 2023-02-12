@@ -14,6 +14,8 @@ import java.io.IOException;
 @CommandAlias("stocks")
 public class RegisterServerCommand extends BaseCommand {
 
+    public static final String COMMAND = "regser";
+    public static final String COMMAND_ALIAS = "rs";
     private static final String REGISTER_SERVER_PERMISSION = "stocks.admin.account.register";
 
     private final Stocks2 plugin;
@@ -22,7 +24,7 @@ public class RegisterServerCommand extends BaseCommand {
         this.plugin = plugin;
     }
 
-    @Subcommand("regser|rs")
+    @Subcommand(COMMAND + "|" + COMMAND_ALIAS)
     @CommandPermission(REGISTER_SERVER_PERMISSION)
     @Description("Register a server")
     @Syntax("[email] [password]")
