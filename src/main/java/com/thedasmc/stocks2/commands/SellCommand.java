@@ -83,7 +83,9 @@ public class SellCommand extends BaseCommand {
 
                 EconomyResponse response = plugin.getEconomy().depositPlayer(player, value.doubleValue());
 
-                if (!response.transactionSuccess()) {
+                if (response.transactionSuccess()) {
+                    player.sendMessage(texts.getText(Texts.Types.SOLD_SHARES_SUCCESS, value));
+                } else {
                     player.sendMessage(texts.getErrorText(Texts.Types.DEPOSIT_FUNDS_ERROR, response.errorMessage));
 
                     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -92,10 +94,7 @@ public class SellCommand extends BaseCommand {
                         } catch (IOException e) {
                             Bukkit.getLogger().severe("[Stocks2]Failed to add funds to player with UUID " + uuid + " and failed to cancel transaction: " + e.getMessage() + ". The amount was for " + value.toPlainString() + " and should be given to the player.");
                             player.sendMessage(texts.getErrorText(Texts.Types.TRANSACTION_CANCEL_ERROR, e.getMessage()));
-                            return;
                         }
-
-                        player.sendMessage(texts.getText(Texts.Types.SOLD_SHARES_SUCCESS, value));
                     });
                 }
             });
