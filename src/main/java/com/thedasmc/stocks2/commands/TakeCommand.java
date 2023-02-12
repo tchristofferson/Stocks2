@@ -31,6 +31,7 @@ public class TakeCommand extends BaseCommand {
     @Subcommand("take")
     @CommandPermission(TAKE_PERMISSION)
     @Description("Take a player's shares of a stock")
+    @Syntax("[player] [symbol] [shares]")
     public void onTake(CommandSender commandSender, OnlinePlayer onlinePlayer, String symbol, @Conditions(Constants.POSITIVE_SHARE_LIMITS_CONDITION) Double shares) {
         final Texts texts = plugin.getTexts();
         final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
