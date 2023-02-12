@@ -62,7 +62,9 @@ public class Texts {
         ACCOUNT_REGISTRATION_SUCCESS("account-registration-success"),
         SERVER_REGISTRATION_SUCCESS("server-registration-success"),
         GAVE_SHARES("gave-shares"),
-        RECEIVED_SHARES("received-shares");
+        RECEIVED_SHARES("received-shares"),
+        TOOK_SHARES("took-shares"),
+        SHARES_TAKEN("shares-taken");
 
         //The key in texts.yml
         private final String key;

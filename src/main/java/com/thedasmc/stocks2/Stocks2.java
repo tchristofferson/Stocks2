@@ -156,6 +156,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new RegisterAccountCommand(this));
         commandManager.registerCommand(new RegisterServerCommand(this));
         commandManager.registerCommand(new GiveCommand(this));
+        commandManager.registerCommand(new TakeCommand(this));
     }
 
     private void initPortfolioTracker() {
