@@ -8,9 +8,7 @@ import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.request.RecordRequest;
-import com.thedasmc.stocks2.requests.response.RecordResponse;
 import com.thedasmc.stocks2.requests.response.StockResponse;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -18,6 +16,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @CommandAlias("stocks")
 public class SellCommand extends BaseCommand {
@@ -67,37 +67,40 @@ public class SellCommand extends BaseCommand {
                 return;
             }
 
-            RecordRequest recordRequest = new RecordRequest(uuid, symbol, Tools.toCents(value).negate(), BigDecimal.valueOf(shares).negate());
-            RecordResponse recordResponse;
+            Future<Boolean> futureSuccessDeposit = Bukkit.getScheduler().callSyncMethod(plugin, () ->
+                plugin.getEconomy().depositPlayer(player, value.doubleValue()).transactionSuccess());
+
+            boolean depositedFunds = false;
+            String errorMessage = null;
 
             try {
-                recordResponse = playerDataInteractor.transact(recordRequest);
-            } catch (IOException e) {
-                player.sendMessage(texts.getErrorText(Texts.Types.TRANSACTION_ERROR, e.getMessage()));
+                depositedFunds = futureSuccessDeposit.get();
+            } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof ExecutionException) {
+                    errorMessage = e.getCause().getMessage();
+                } else {
+                    errorMessage = e.getMessage();
+                }
+            }
+
+            if (!depositedFunds) {
+                player.sendMessage(texts.getErrorText(Texts.Types.DEPOSIT_FUNDS_ERROR, errorMessage));
                 return;
             }
 
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                if (!player.isOnline())
-                    return;
+            RecordRequest recordRequest = new RecordRequest(uuid, symbol, Tools.toCents(value).negate(), BigDecimal.valueOf(shares).negate());
 
-                EconomyResponse response = plugin.getEconomy().depositPlayer(player, value.doubleValue());
+            try {
+                playerDataInteractor.transact(recordRequest);
+            } catch (IOException e) {
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    plugin.getEconomy().withdrawPlayer(player, value.doubleValue());
+                    player.sendMessage(texts.getErrorText(Texts.Types.TRANSACTION_ERROR, e.getMessage()));
+                });
+                return;
+            }
 
-                if (response.transactionSuccess()) {
-                    player.sendMessage(texts.getText(Texts.Types.SOLD_SHARES_SUCCESS, value));
-                } else {
-                    player.sendMessage(texts.getErrorText(Texts.Types.DEPOSIT_FUNDS_ERROR, response.errorMessage));
-
-                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                        try {
-                            playerDataInteractor.cancelTransaction(recordResponse.getRecordId());
-                        } catch (IOException e) {
-                            Bukkit.getLogger().severe("[Stocks2]Failed to add funds to player with UUID " + uuid + " and failed to cancel transaction: " + e.getMessage() + ". The amount was for " + value.toPlainString() + " and should be given to the player.");
-                            player.sendMessage(texts.getErrorText(Texts.Types.TRANSACTION_CANCEL_ERROR, e.getMessage()));
-                        }
-                    });
-                }
-            });
+            player.sendMessage(texts.getText(Texts.Types.SOLD_SHARES_SUCCESS, value));
         });
     }
 }

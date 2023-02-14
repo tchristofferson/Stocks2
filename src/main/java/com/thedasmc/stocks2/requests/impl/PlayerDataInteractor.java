@@ -84,26 +84,6 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
         return this.gson.fromJson(responseJson, RecordResponse.class);
     }
 
-    @Override
-    public Boolean cancelTransaction(Long recordId) throws IOException {
-        URL url = new URL(getCancelTransactionUrl(recordId));
-        HttpURLConnection connection = Tools.getHttpDeleteConnection(url);
-        String responseJson;
-
-        try {
-            responseJson = readInputStream(connection.getInputStream());
-        } catch (IOException e) {
-            throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
-        }
-
-        return this.gson.fromJson(responseJson, Boolean.class);
-    }
-
-    private String getCancelTransactionUrl(Long recordId) {
-        return Constants.API_URL + CANCEL_TRANSACTION_URI
-            .replace(RECORD_ID_PLACEHOLDER, String.valueOf(recordId));
-    }
-
     private String getStockUrl(UUID uuid, String symbol) {
         return Constants.API_URL + GET_STOCK_URI
             .replace(PLAYER_ID_PLACEHOLDER, uuid.toString())

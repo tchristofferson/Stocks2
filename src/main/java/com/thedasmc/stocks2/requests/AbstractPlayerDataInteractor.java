@@ -41,12 +41,4 @@ public abstract class AbstractPlayerDataInteractor extends DataInteractor {
      */
     public abstract RecordResponse transact(RecordRequest recordRequest) throws IOException;
 
-    /**
-     * Undoes a record insert (delete)
-     * @param recordId The recordId of the inserted record
-     * @return {@code true} if the record was deleted, otherwise {@code false}. If {@code false} is returned it means the record wasn't found and nothing was deleted.
-     * @throws IOException If an IO error occurs
-     */
-    public abstract Boolean cancelTransaction(Long recordId) throws IOException;
-
 }
