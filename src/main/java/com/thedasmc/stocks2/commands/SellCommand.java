@@ -9,6 +9,7 @@ import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.StockResponse;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,7 @@ public class SellCommand extends BaseCommand {
         final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
         final UUID uuid = player.getUniqueId();
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        plugin.getExecutorService().submit(() -> {
             StockResponse stock;
 
             try {
@@ -67,24 +68,29 @@ public class SellCommand extends BaseCommand {
                 return;
             }
 
-            Future<Boolean> futureSuccessDeposit = Bukkit.getScheduler().callSyncMethod(plugin, () ->
-                plugin.getEconomy().depositPlayer(player, value.doubleValue()).transactionSuccess());
+            Future<EconomyResponse> futureEconomyResponse = Bukkit.getScheduler().callSyncMethod(plugin, () ->
+                plugin.getEconomy().depositPlayer(player, value.doubleValue()));
 
-            boolean depositedFunds = false;
-            String errorMessage = null;
+            EconomyResponse economyResponse = null;
+            boolean depositedFunds;
+            String errorMessage;
 
             try {
-                depositedFunds = futureSuccessDeposit.get();
+                economyResponse = futureEconomyResponse.get();
+                depositedFunds = economyResponse.transactionSuccess();
+                errorMessage = economyResponse.errorMessage;
             } catch (InterruptedException | ExecutionException e) {
                 if (e instanceof ExecutionException) {
                     errorMessage = e.getCause().getMessage();
                 } else {
                     errorMessage = e.getMessage();
                 }
+
+                depositedFunds = false;
             }
 
             if (!depositedFunds) {
-                player.sendMessage(texts.getErrorText(Texts.Types.DEPOSIT_FUNDS_ERROR, errorMessage));
+                player.sendMessage(texts.getErrorText(Texts.Types.DEPOSIT_FUNDS_ERROR, economyResponse == null ? errorMessage : economyResponse.errorMessage));
                 return;
             }
 
