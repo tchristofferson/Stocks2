@@ -1,12 +1,15 @@
 package com.thedasmc.stocks2.requests;
 
 import com.google.gson.Gson;
+import com.thedasmc.stocks2.requests.request.DeleteRecordsRequest;
 import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import com.thedasmc.stocks2.requests.response.RecordResponse;
+import com.thedasmc.stocks2.requests.response.ShareSummaryResponse;
 import com.thedasmc.stocks2.requests.response.StockResponse;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public abstract class AbstractPlayerDataInteractor extends DataInteractor {
@@ -40,5 +43,21 @@ public abstract class AbstractPlayerDataInteractor extends DataInteractor {
      * @throws IOException If an IO error occurs
      */
     public abstract RecordResponse transact(RecordRequest recordRequest) throws IOException;
+
+    /**
+     * Get the player's ENTIRE portfolio which includes symbol, shares, and value
+     * @param playerId The player's UUID
+     * @return A list of {@link ShareSummaryResponse}'s representing the player's portfolio
+     * @throws IOException If an IO error occurs
+     */
+    public abstract List<ShareSummaryResponse> getShareSummaries(UUID playerId) throws IOException;
+
+    /**
+     * Delete the specified number of shares for the specified stocks.
+     * @param request The request
+     * @return {@code true} if successful, otherwise {@code false}
+     * @throws IOException If an IO error occurs
+     */
+    public abstract boolean deleteRecords(DeleteRecordsRequest request) throws IOException;
 
 }

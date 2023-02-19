@@ -83,9 +83,7 @@ public class Tools {
 
     public static HttpURLConnection getHttpDeleteConnection(URL url) throws IOException {
         HttpURLConnection connection = getHttpConnection(url);
-        connection.setDoOutput(true);
         connection.setRequestMethod("DELETE");
-        connection.setRequestProperty("Content-Type", "application/json");
 
         return connection;
     }
