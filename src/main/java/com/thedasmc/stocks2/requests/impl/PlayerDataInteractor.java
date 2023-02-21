@@ -112,6 +112,7 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
         request.setApiToken(this.apiToken);
         URL url = new URL(Constants.API_URL + DELETE_RECORDS_URI);
         HttpURLConnection connection = Tools.getHttpPostConnection(url);
+        writeBody(connection, this.gson.toJson(request));
 
         int responseCode;
 
