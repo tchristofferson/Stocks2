@@ -57,6 +57,7 @@ public class Texts {
         ACCOUNT_REGISTRATION_ERROR("account-registration-error"),
         SERVER_REGISTRATION_ERROR("server-registration-error"),
         SOLD_SHARES_SUCCESS("sold-shares-success"),
+        SOLD_ALL_SHARES_SUCCESS("sold-all-shares-success"),
         BOUGHT_SHARES_SUCCESS("bought-shares-success"),
         CHECK_PRICE_SUCCESS("check-price-success"),
         ACCOUNT_REGISTRATION_SUCCESS("account-registration-success"),
