@@ -53,6 +53,11 @@ public class SellAllCommand extends BaseCommand {
                 return;
             }
 
+            if (shareSummaries.isEmpty()) {
+                player.sendMessage(texts.getText(Texts.Types.NOT_ENOUGH_SHARES));
+                return;
+            }
+
             final BigInteger centsValue = shareSummaries.stream()
                 .map(ShareSummaryResponse::getCentsValue)
                 .reduce(BigInteger.ZERO, BigInteger::add);
