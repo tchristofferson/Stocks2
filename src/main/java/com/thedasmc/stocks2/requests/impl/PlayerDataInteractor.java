@@ -15,7 +15,6 @@ import com.thedasmc.stocks2.requests.response.StockResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
