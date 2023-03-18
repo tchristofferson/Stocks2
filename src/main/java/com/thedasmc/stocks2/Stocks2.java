@@ -7,7 +7,7 @@ import com.thedasmc.stocks2.commands.*;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.core.PortfolioTracker;
-import com.thedasmc.stocks2.json.LocalDateTimeConverter;
+import com.thedasmc.stocks2.json.InstantConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
 import com.thedasmc.stocks2.logging.Log4JFilter;
@@ -30,7 +30,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -123,7 +123,7 @@ public final class Stocks2 extends JavaPlugin {
     private void initGson() {
         gson = new GsonBuilder()
             .registerTypeAdapter(StockDataResponse.class, new StockDataConverter())
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeConverter())
+            .registerTypeAdapter(Instant.class, new InstantConverter())
             .create();
     }
 

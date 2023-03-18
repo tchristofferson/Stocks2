@@ -2,7 +2,7 @@ package com.thedasmc.stocks2.requests.response;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class RecordResponse {
@@ -10,7 +10,7 @@ public class RecordResponse {
     private Long recordId;
     private UUID playerId;
     private String symbol;
-    private LocalDateTime purchaseTime;
+    private Instant purchaseTime;
     private BigInteger cents;
     private BigDecimal shares;
 
@@ -38,11 +38,11 @@ public class RecordResponse {
         this.symbol = symbol;
     }
 
-    public LocalDateTime getPurchaseTime() {
+    public Instant getPurchaseTime() {
         return purchaseTime;
     }
 
-    public void setPurchaseTime(LocalDateTime purchaseTime) {
+    public void setPurchaseTime(Instant purchaseTime) {
         this.purchaseTime = purchaseTime;
     }
 

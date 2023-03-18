@@ -2,7 +2,7 @@ package com.thedasmc.stocks2.requests.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.thedasmc.stocks2.json.LocalDateTimeConverter;
+import com.thedasmc.stocks2.json.InstantConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class PlayerDataInteractorTest {
 
     private static final Gson gson = new GsonBuilder()
         .registerTypeAdapter(StockDataResponse.class, new StockDataConverter())
-        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeConverter())
+        .registerTypeAdapter(Instant.class, new InstantConverter())
         .create();
 
     @Test
