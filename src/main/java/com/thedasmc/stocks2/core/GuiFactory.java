@@ -13,8 +13,11 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import static com.thedasmc.stocks2.common.Constants.*;
 
 //TODO: Use Texts for strings
 public class GuiFactory {
@@ -23,18 +26,43 @@ public class GuiFactory {
 
     public static Inventory createPortfolioPage(PortfolioResponse portfolioResponse) {
         List<StockResponse> stocks = portfolioResponse.getStocks();
-        //Only 45 per page, bottom row reserved for navigation
-        stocks = stocks.subList(0, Math.min(45, stocks.size()));
-        Inventory portfolio = Bukkit.createInventory(null, 54, ChatColor.GOLD + "Stock Portfolio");
-        stocks.forEach(stock -> portfolio.addItem(getStockItem(stock)));
+        //Only 20 per page, bottom row reserved for navigation
+        stocks = stocks.subList(0, Math.min(PORTFOLIO_STOCKS, stocks.size()));
+        Inventory portfolio = Bukkit.createInventory(null, PORTFOLIO_SIZE, ChatColor.GOLD + "Stock Portfolio");
+
+        Iterator<StockResponse> stockIterator = stocks.iterator();
+        //1 empty row above, 1 empty row below, one row for navigation
+        int rows = (PORTFOLIO_SIZE / 9) - 3;
+
+        rowLoop:
+        for (int row = 0; row < rows; row++) {
+            //row * 9 gets the first slot of the row.
+            //Add 2 to get 2 slots in from the left for padding
+            //Add 9 to leave the first row empty
+            int startSlot = (row * 9) + 2 + 9;
+            int endSlot = startSlot + 4;
+
+            for (int slot = startSlot; slot <= endSlot; slot++) {
+                if (!stockIterator.hasNext())
+                    break rowLoop;
+
+                StockResponse stock = stockIterator.next();
+                portfolio.setItem(slot, getStockItem(stock));
+            }
+        }
+
+        for (int i = 0; i < portfolio.getSize() - 9; i++) {
+            if (portfolio.getItem(i) == null)
+                portfolio.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+        }
 
         if (portfolioResponse.getPage() > 0)
-            portfolio.setItem(45, getPreviousButton());
+            portfolio.setItem(PORTFOLIO_PREVIOUS_BUTTON, getPreviousButton());
 
         if (portfolioResponse.getPage() < portfolioResponse.getPages() - 1)
-            portfolio.setItem(53, getNextButton());
+            portfolio.setItem(PORTFOLIO_NEXT_BUTTON, getNextButton());
 
-        portfolio.setItem(49, getCloseButton());
+        portfolio.setItem(PORTFOLIO_CLOSE_BUTTON, getCloseButton());
         return portfolio;
     }
 
