@@ -39,7 +39,7 @@ public class InventoryListener implements Listener {
 
         event.setCancelled(true);
 
-        if (event.getCursor() == null || event.getClick() != ClickType.LEFT)
+        if (event.getCursor() == null || !event.isLeftClick() || event.getClick() == ClickType.DOUBLE_CLICK)
             return;
 
         Texts texts = plugin.getTexts();

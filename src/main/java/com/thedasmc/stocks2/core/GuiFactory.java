@@ -15,7 +15,6 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import static com.thedasmc.stocks2.common.Constants.*;
 
@@ -43,11 +42,12 @@ public class GuiFactory {
             int endSlot = startSlot + 4;
 
             for (int slot = startSlot; slot <= endSlot; slot++) {
-                if (!stockIterator.hasNext())
-                    break rowLoop;
-
-                StockResponse stock = stockIterator.next();
-                portfolio.setItem(slot, getStockItem(stock));
+                if (stockIterator.hasNext()) {
+                    StockResponse stock = stockIterator.next();
+                    portfolio.setItem(slot, getStockItem(stock));
+                } else {
+                    portfolio.setItem(slot, new ItemStack(Material.STICK, 1));
+                }
             }
         }
 
@@ -149,8 +149,7 @@ public class GuiFactory {
     private static ItemStack getNextButton() {
         ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
-        //MHF_ArrowRight
-        itemMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString("50c8510b-5ea0-4d60-be9a-7d542d6cd156")));
+        itemMeta.setOwner("MHF_ArrowRight");
         itemMeta.setDisplayName(ChatColor.GRAY + "Next Page -->");
         itemStack.setItemMeta(itemMeta);
 
@@ -160,8 +159,7 @@ public class GuiFactory {
     private static ItemStack getPreviousButton() {
         ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
-        //MHF_ArrowLeft
-        itemMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString("a68f0b64-8d14-4000-a95f-4b9ba14f8df9")));
+        itemMeta.setOwner("MHF_ArrowLeft");
         itemMeta.setDisplayName(ChatColor.GRAY + "<-- Previous Page");
         itemStack.setItemMeta(itemMeta);
 
