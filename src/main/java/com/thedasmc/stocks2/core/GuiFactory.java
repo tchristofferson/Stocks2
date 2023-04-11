@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.thedasmc.stocks2.common.Constants.*;
@@ -46,14 +47,25 @@ public class GuiFactory {
                     StockResponse stock = stockIterator.next();
                     portfolio.setItem(slot, getStockItem(stock));
                 } else {
-                    portfolio.setItem(slot, new ItemStack(Material.STICK, 1));
+                    ItemStack itemStack = new ItemStack(Material.STICK, 1);
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    itemMeta.setDisplayName("Empty");
+                    itemStack.setItemMeta(itemMeta);
+
+                    portfolio.setItem(slot, itemStack);
                 }
             }
         }
 
         for (int i = 0; i < portfolio.getSize() - 9; i++) {
-            if (portfolio.getItem(i) == null)
-                portfolio.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+            if (portfolio.getItem(i) == null) {
+                ItemStack itemStack = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setDisplayName("N/A");
+                itemStack.setItemMeta(itemMeta);
+
+                portfolio.setItem(i, itemStack);
+            }
         }
 
         if (portfolioResponse.getPage() > 0)
@@ -125,15 +137,29 @@ public class GuiFactory {
     private static ItemStack getStockItem(StockResponse stock) {
         ItemStack itemStack = new ItemStack(STOCK_ITEM_MATERIAL, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + stock.getCompanyName());
+        itemMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + stock.getSymbol());
 
-        itemMeta.setLore(Arrays.asList(
-            ChatColor.GREEN + "Shares: " + stock.getShares().toPlainString(),
-            ChatColor.GREEN + "Invested: " + new BigDecimal(stock.getCentsInvested()).divide(BigDecimal.valueOf(100), 2, RoundingMode.DOWN).toPlainString(),
-            ChatColor.GREEN + "Value: " + stock.getShares().multiply(stock.getLatestPrice()).setScale(6, RoundingMode.DOWN).toPlainString()
+        BigDecimal invested = new BigDecimal(stock.getCentsInvested()).divide(BigDecimal.valueOf(100), 2, RoundingMode.DOWN);
+        BigDecimal value = stock.getShares().multiply(stock.getLatestPrice()).setScale(6, RoundingMode.DOWN);
+
+        List<String> lore = new LinkedList<>(Arrays.asList(
+            ChatColor.GREEN + "Company Name: " + ChatColor.GRAY + stock.getCompanyName(),
+            ChatColor.GREEN + "Shares: " + ChatColor.GRAY + stock.getShares().toPlainString(),
+            ChatColor.GREEN + "Invested: " + ChatColor.GRAY + invested.toPlainString()
         ));
 
+        String valueLore = ChatColor.GREEN + "Value: " + ChatColor.GRAY + value.toPlainString();
+
+        if (value.compareTo(invested) < 0) {
+            valueLore += ChatColor.RED + "⌄";
+        } else if (value.compareTo(invested) > 0) {
+            valueLore += ChatColor.GREEN + "⌃";
+        }
+
+        lore.add(valueLore);
+        itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
+
         return itemStack;
     }
 
