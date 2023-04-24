@@ -8,8 +8,6 @@ public class Constants {
 
     public static final String POSITIVE_SHARE_LIMITS_CONDITION = "share-limits";
 
-    //Portfolio Inventory constants
-    public static final int[] PORTFOLIO_STOCK_SLOTS = {};
     public static final int PORTFOLIO_STOCKS = 10;
     public static final int PORTFOLIO_SIZE = 45;
     public static final int PORTFOLIO_PREVIOUS_BUTTON = PORTFOLIO_SIZE - 9;
