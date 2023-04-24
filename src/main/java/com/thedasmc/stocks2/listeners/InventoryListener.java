@@ -18,6 +18,8 @@ import org.bukkit.inventory.Inventory;
 
 import java.io.IOException;
 
+import static com.thedasmc.stocks2.common.Constants.*;
+
 public class InventoryListener implements Listener {
 
     private final Stocks2 plugin;
@@ -37,13 +39,13 @@ public class InventoryListener implements Listener {
 
         event.setCancelled(true);
 
-        if (event.getCursor() == null || event.getClick() != ClickType.LEFT)
+        if (event.getCursor() == null || !event.isLeftClick() || event.getClick() == ClickType.DOUBLE_CLICK)
             return;
 
         Texts texts = plugin.getTexts();
         int slot = event.getSlot();
 
-        if (slot == 45) {//previous button
+        if (slot == PORTFOLIO_PREVIOUS_BUTTON) {//previous button
             if (portfolioViewer.getPage() == 0)
                 return;
 
@@ -60,7 +62,7 @@ public class InventoryListener implements Listener {
 
                 openFetchedPortfolioPage(clicker, portfolioViewer, portfolioResponse);
             });
-        } else if (slot == 53) {//next button
+        } else if (slot == PORTFOLIO_NEXT_BUTTON) {//next button
             if (portfolioViewer.getPage() == portfolioViewer.getPages() - 1)
                 return;
 
@@ -77,7 +79,7 @@ public class InventoryListener implements Listener {
 
                 openFetchedPortfolioPage(clicker, portfolioViewer, portfolioResponse);
             });
-        } else if (slot == 49) {//close button
+        } else if (slot == PORTFOLIO_CLOSE_BUTTON) {//close button
             Bukkit.getScheduler().runTask(plugin, clicker::closeInventory);
         } else if (event.getCursor().getType() == GuiFactory.STOCK_ITEM_MATERIAL) {
             //TODO: Handle stock item click

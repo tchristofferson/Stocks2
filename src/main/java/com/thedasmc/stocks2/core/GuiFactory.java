@@ -13,8 +13,11 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
+
+import static com.thedasmc.stocks2.common.Constants.*;
 
 //TODO: Use Texts for strings
 public class GuiFactory {
@@ -23,18 +26,55 @@ public class GuiFactory {
 
     public static Inventory createPortfolioPage(PortfolioResponse portfolioResponse) {
         List<StockResponse> stocks = portfolioResponse.getStocks();
-        //Only 45 per page, bottom row reserved for navigation
-        stocks = stocks.subList(0, Math.min(45, stocks.size()));
-        Inventory portfolio = Bukkit.createInventory(null, 54, ChatColor.GOLD + "Stock Portfolio");
-        stocks.forEach(stock -> portfolio.addItem(getStockItem(stock)));
+        //Only 20 per page, bottom row reserved for navigation
+        stocks = stocks.subList(0, Math.min(PORTFOLIO_STOCKS, stocks.size()));
+        Inventory portfolio = Bukkit.createInventory(null, PORTFOLIO_SIZE, ChatColor.GOLD + "Stock Portfolio");
+
+        Iterator<StockResponse> stockIterator = stocks.iterator();
+        //1 empty row above, 1 empty row below, one row for navigation
+        int rows = (PORTFOLIO_SIZE / 9) - 3;
+
+        rowLoop:
+        for (int row = 0; row < rows; row++) {
+            //row * 9 gets the first slot of the row.
+            //Add 2 to get 2 slots in from the left for padding
+            //Add 9 to leave the first row empty
+            int startSlot = (row * 9) + 2 + 9;
+            int endSlot = startSlot + 4;
+
+            for (int slot = startSlot; slot <= endSlot; slot++) {
+                if (stockIterator.hasNext()) {
+                    StockResponse stock = stockIterator.next();
+                    portfolio.setItem(slot, getStockItem(stock));
+                } else {
+                    ItemStack itemStack = new ItemStack(Material.STICK, 1);
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    itemMeta.setDisplayName("Empty");
+                    itemStack.setItemMeta(itemMeta);
+
+                    portfolio.setItem(slot, itemStack);
+                }
+            }
+        }
+
+        for (int i = 0; i < portfolio.getSize() - 9; i++) {
+            if (portfolio.getItem(i) == null) {
+                ItemStack itemStack = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setDisplayName("N/A");
+                itemStack.setItemMeta(itemMeta);
+
+                portfolio.setItem(i, itemStack);
+            }
+        }
 
         if (portfolioResponse.getPage() > 0)
-            portfolio.setItem(45, getPreviousButton());
+            portfolio.setItem(PORTFOLIO_PREVIOUS_BUTTON, getPreviousButton());
 
         if (portfolioResponse.getPage() < portfolioResponse.getPages() - 1)
-            portfolio.setItem(53, getNextButton());
+            portfolio.setItem(PORTFOLIO_NEXT_BUTTON, getNextButton());
 
-        portfolio.setItem(49, getCloseButton());
+        portfolio.setItem(PORTFOLIO_CLOSE_BUTTON, getCloseButton());
         return portfolio;
     }
 
@@ -97,15 +137,29 @@ public class GuiFactory {
     private static ItemStack getStockItem(StockResponse stock) {
         ItemStack itemStack = new ItemStack(STOCK_ITEM_MATERIAL, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + stock.getCompanyName());
+        itemMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + stock.getSymbol());
 
-        itemMeta.setLore(Arrays.asList(
-            ChatColor.GREEN + "Shares: " + stock.getShares().toPlainString(),
-            ChatColor.GREEN + "Invested: " + new BigDecimal(stock.getCentsInvested()).divide(BigDecimal.valueOf(100), 2, RoundingMode.DOWN).toPlainString(),
-            ChatColor.GREEN + "Value: " + stock.getShares().multiply(stock.getLatestPrice()).setScale(6, RoundingMode.DOWN).toPlainString()
+        BigDecimal invested = new BigDecimal(stock.getCentsInvested()).divide(BigDecimal.valueOf(100), 2, RoundingMode.DOWN);
+        BigDecimal value = stock.getShares().multiply(stock.getLatestPrice()).setScale(6, RoundingMode.DOWN);
+
+        List<String> lore = new LinkedList<>(Arrays.asList(
+            ChatColor.GREEN + "Company Name: " + ChatColor.GRAY + stock.getCompanyName(),
+            ChatColor.GREEN + "Shares: " + ChatColor.GRAY + stock.getShares().toPlainString(),
+            ChatColor.GREEN + "Invested: " + ChatColor.GRAY + invested.toPlainString()
         ));
 
+        String valueLore = ChatColor.GREEN + "Value: " + ChatColor.GRAY + value.toPlainString();
+
+        if (value.compareTo(invested) < 0) {
+            valueLore += ChatColor.RED + "⌄";
+        } else if (value.compareTo(invested) > 0) {
+            valueLore += ChatColor.GREEN + "⌃";
+        }
+
+        lore.add(valueLore);
+        itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
+
         return itemStack;
     }
 
@@ -121,8 +175,7 @@ public class GuiFactory {
     private static ItemStack getNextButton() {
         ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
-        //MHF_ArrowRight
-        itemMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString("50c8510b-5ea0-4d60-be9a-7d542d6cd156")));
+        itemMeta.setOwner("MHF_ArrowRight");
         itemMeta.setDisplayName(ChatColor.GRAY + "Next Page -->");
         itemStack.setItemMeta(itemMeta);
 
@@ -132,8 +185,7 @@ public class GuiFactory {
     private static ItemStack getPreviousButton() {
         ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
-        //MHF_ArrowLeft
-        itemMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString("a68f0b64-8d14-4000-a95f-4b9ba14f8df9")));
+        itemMeta.setOwner("MHF_ArrowLeft");
         itemMeta.setDisplayName(ChatColor.GRAY + "<-- Previous Page");
         itemStack.setItemMeta(itemMeta);
 

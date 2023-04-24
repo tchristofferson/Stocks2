@@ -6,7 +6,7 @@
 
     <groupId>com.thedasmc</groupId>
     <artifactId>Stocks2</artifactId>
-    <version>0.5.1-b</version>
+    <version>0.5.2-b</version>
     <packaging>jar</packaging>
 
     <name>Stocks2</name>
@@ -48,6 +48,10 @@
                                 <relocation>
                                     <pattern>co.aikar.locales</pattern>
                                     <shadedPattern>com.thedasmc.stocks2.locales</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.tchristofferson.configupdater</pattern>
+                                    <shadedPattern>com.thedasmc.stocks2.configupdater</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -99,6 +103,11 @@
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tchristofferson</groupId>
+            <artifactId>ConfigUpdater</artifactId>
+            <version>2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

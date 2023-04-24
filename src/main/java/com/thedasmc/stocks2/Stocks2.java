@@ -3,6 +3,7 @@ package com.thedasmc.stocks2;
 import co.aikar.commands.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.tchristofferson.configupdater.ConfigUpdater;
 import com.thedasmc.stocks2.commands.*;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
@@ -30,6 +31,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -51,6 +53,10 @@ public final class Stocks2 extends JavaPlugin {
     public void onEnable() {
         saveResource("texts.yml", false);
         saveDefaultConfig();
+
+        updateTexts();
+        updateConfig();
+
         final String apiToken = getConfig().getString("api-token");
 
         if (apiToken == null || apiToken.replace(" ", "").isEmpty())
@@ -193,5 +199,23 @@ public final class Stocks2 extends JavaPlugin {
 
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new InventoryListener(this), this);
+    }
+
+    private void updateConfig() {
+        try {
+            ConfigUpdater.update(this, "config.yml", new File(getDataFolder(), "config.yml"));
+        } catch (IOException e) {
+            Bukkit.getLogger().severe("Failed to update config.yml!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void updateTexts() {
+        try {
+            ConfigUpdater.update(this, "texts.yml", new File(getDataFolder(), "texts.yml"));
+        } catch (IOException e) {
+            Bukkit.getLogger().severe("Failed to update texts.yml!");
+            throw new RuntimeException(e);
+        }
     }
 }
