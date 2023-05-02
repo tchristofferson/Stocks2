@@ -5,25 +5,24 @@ import com.google.gson.Gson;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.AbstractStockDataInteractor;
+import com.thedasmc.stocks2.requests.request.PageRequest;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.thedasmc.stocks2.common.Tools.getHttpGetConnection;
-import static com.thedasmc.stocks2.common.Tools.readInputStream;
+import static com.thedasmc.stocks2.common.Tools.*;
 
 public class StockDataInteractor extends AbstractStockDataInteractor {
 
     private static final String SYMBOLS_PLACEHOLDER = "%symbols%";
     private static final String QUOTE_URI = "/v1/quotes?symbols=" + SYMBOLS_PLACEHOLDER + "&token=" + Constants.TOKEN_PLACEHOLDER;
+    private static final String POPULAR_URI = "/v1/stocks/popular";
 
     public StockDataInteractor(String apiToken, Gson gson) {
         super(apiToken, gson);
@@ -52,6 +51,26 @@ public class StockDataInteractor extends AbstractStockDataInteractor {
             .forEach(symbol -> stockDataMap.put(symbol, null));
 
         return stockDataMap;
+    }
+
+    @Override
+    @SuppressWarnings("UnstableApiUsage")
+    public List<StockDataResponse> getPopularStocks() throws IOException {
+        URL url = new URL(Constants.API_URL + POPULAR_URI);
+        HttpURLConnection connection = getHttpPostConnection(url);
+
+        PageRequest request = new PageRequest(this.apiToken, 0, Constants.STOCK_GUI_MAX);
+        String requestJson = this.gson.toJson(request);
+        writeBody(connection, requestJson);
+        String json;
+
+        try {
+            json = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
+        }
+
+        return this.gson.fromJson(json, new TypeToken<LinkedList<StockDataResponse>>(){}.getType());
     }
 
     private String getQuoteUrl(Collection<String> symbols) {

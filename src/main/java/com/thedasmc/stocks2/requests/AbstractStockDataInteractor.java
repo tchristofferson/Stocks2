@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractStockDataInteractor extends DataInteractor {
@@ -22,4 +24,12 @@ public abstract class AbstractStockDataInteractor extends DataInteractor {
      * @throws IOException If an error occurs fetching the quotes.
      */
     public abstract Map<String, StockDataResponse> getQuotes(Collection<String> symbols) throws IOException;
+
+    /**
+     * Get the most popular stocks across all servers
+     * @return A list of popular stocks
+     *
+     * @throws IOException If an error fetching popular stocks
+     */
+    public abstract List<StockDataResponse> getPopularStocks() throws IOException;
 }

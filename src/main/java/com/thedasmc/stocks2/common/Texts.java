@@ -38,7 +38,7 @@ public class Texts {
         return getText(type).replace("%error%", error);
     }
 
-    private char getMoneySymbol() {
+    public char getMoneySymbol() {
         return plugin.getConfig().getString("money-symbol", "$").charAt(0);
     }
 
@@ -56,6 +56,7 @@ public class Texts {
         TRANSACTION_CANCEL_ERROR("transaction-cancel-error"),
         ACCOUNT_REGISTRATION_ERROR("account-registration-error"),
         SERVER_REGISTRATION_ERROR("server-registration-error"),
+        POPULAR_STOCKS_ERROR("popular-stocks-error"),
         SOLD_SHARES_SUCCESS("sold-shares-success"),
         SOLD_ALL_SHARES_SUCCESS("sold-all-shares-success"),
         BOUGHT_SHARES_SUCCESS("bought-shares-success"),

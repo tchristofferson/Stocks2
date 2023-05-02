@@ -6,6 +6,7 @@ transaction-error: '&c&l[Stocks]Failed to complete stock transaction: %error%!'
 transaction-cancel-error: '&c&l[Stocks]Failed to cancel transaction: %error%. You should reach out to staff.'
 account-registration-error: '&c&l[Stocks]Failed to register account: %error%'
 server-registration-error: '&c&l[Stocks]Failed to register server: %error%'
+popular-stocks-error: '&c&l[Stocks]Failed to fetch popular stocks: %error%'
 
 not-enough-shares: '&c&l[Stocks]You don''t own enough shares!'
 not-enough-money: '&c&l[Stocks]You don''t have %money% to purchase the shares!'

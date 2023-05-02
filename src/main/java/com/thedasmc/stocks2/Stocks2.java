@@ -7,7 +7,8 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import com.thedasmc.stocks2.commands.*;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
-import com.thedasmc.stocks2.core.PortfolioTracker;
+import com.thedasmc.stocks2.core.GuiTracker;
+import com.thedasmc.stocks2.core.PortfolioViewer;
 import com.thedasmc.stocks2.json.InstantConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
@@ -27,24 +28,27 @@ import org.apache.logging.log4j.core.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class Stocks2 extends JavaPlugin {
 
     private Gson gson;
-    private ExecutorService executorService;
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final GuiTracker<UUID, PortfolioViewer> portfolioTracker = new GuiTracker<>();
+    private final GuiTracker<UUID, Inventory> popularTracker = new GuiTracker<>();
     private AbstractStockDataInteractor stockDataInteractor;
     private AbstractPlayerDataInteractor playerDataInteractor;
     private AbstractAccountInteractor accountInteractor;
     private AbstractServerInteractor serverInteractor;
-    private PortfolioTracker portfolioTracker;
     private FileConfiguration textsConfig;
     private Texts texts;
     private Economy economy;
@@ -70,10 +74,8 @@ public final class Stocks2 extends JavaPlugin {
 
         initLogFilter();
         initGson();
-        initExecutorService();
         initInteractors(apiToken);
         initCommandManager();
-        initPortfolioTracker();
         initTextsConfig();
         initTexts();
 
@@ -94,6 +96,14 @@ public final class Stocks2 extends JavaPlugin {
         return executorService;
     }
 
+    public GuiTracker<UUID, PortfolioViewer> getPortfolioTracker() {
+        return portfolioTracker;
+    }
+
+    public GuiTracker<UUID, Inventory> getPopularTracker() {
+        return popularTracker;
+    }
+
     public AbstractStockDataInteractor getStockDataInteractor() {
         return stockDataInteractor;
     }
@@ -108,10 +118,6 @@ public final class Stocks2 extends JavaPlugin {
 
     public AbstractServerInteractor getServerInteractor() {
         return serverInteractor;
-    }
-
-    public PortfolioTracker getPortfolioTracker() {
-        return portfolioTracker;
     }
 
     public FileConfiguration getTextsConfig() {
@@ -131,10 +137,6 @@ public final class Stocks2 extends JavaPlugin {
             .registerTypeAdapter(StockDataResponse.class, new StockDataConverter())
             .registerTypeAdapter(Instant.class, new InstantConverter())
             .create();
-    }
-
-    private void initExecutorService() {
-        this.executorService = Executors.newCachedThreadPool();
     }
 
     private void initInteractors(String apiToken) {
@@ -164,10 +166,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new RegisterServerCommand(this));
         commandManager.registerCommand(new GiveCommand(this));
         commandManager.registerCommand(new TakeCommand(this));
-    }
-
-    private void initPortfolioTracker() {
-        portfolioTracker = new PortfolioTracker();
+        commandManager.registerCommand(new PopularCommand(this));
     }
 
     private void initTextsConfig() {

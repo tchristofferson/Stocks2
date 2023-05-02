@@ -55,10 +55,10 @@ public class PortfolioCommand extends BaseCommand {
                 return;
             }
 
-            final Inventory portfolio = GuiFactory.createPortfolioPage(portfolioResponse);
+            final Inventory portfolio = GuiFactory.createPortfolioPage(portfolioResponse, plugin.getTexts());
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                plugin.getPortfolioTracker().track(new PortfolioViewer(viewer.getUniqueId(), owner.getUniqueId(), portfolio, 0, portfolioResponse.getPages()));
+                plugin.getPortfolioTracker().track(viewer.getUniqueId(), new PortfolioViewer(viewer.getUniqueId(), owner.getUniqueId(), portfolio, 0, portfolioResponse.getPages()));
                 viewer.openInventory(portfolio);
             });
         });
