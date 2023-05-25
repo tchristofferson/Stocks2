@@ -9,12 +9,14 @@ public class StockResponse extends StockDataResponse {
     private final BigDecimal shares;
     private final BigInteger centsInvested;
     private final BigInteger centsValue;
+    private final Long lastPurchaseTime;
 
     protected StockResponse(StockBuilder builder) {
         super(builder);
         this.shares = builder.shares;
         this.centsInvested = builder.centsInvested;
         this.centsValue = builder.centsValue;
+        this.lastPurchaseTime = builder.lastPurchaseTime;
     }
 
     public BigDecimal getShares() {
@@ -27,6 +29,10 @@ public class StockResponse extends StockDataResponse {
 
     public BigInteger getCentsValue() {
         return centsValue;
+    }
+
+    public Long getLastPurchaseTime() {
+        return lastPurchaseTime;
     }
 
     @Override
@@ -48,6 +54,7 @@ public class StockResponse extends StockDataResponse {
         private BigDecimal shares;
         private BigInteger centsInvested;
         private BigInteger centsValue;
+        private Long lastPurchaseTime;
 
         public BigDecimal getShares() {
             return shares;
@@ -82,6 +89,18 @@ public class StockResponse extends StockDataResponse {
                 throw new IllegalStateException("centsValue already set!");
 
             this.centsValue = centsValue;
+            return this;
+        }
+
+        public Long getLastPurchaseTime() {
+            return lastPurchaseTime;
+        }
+
+        public StockBuilder withLastPurchaseTime(Long lastPurchaseTime) {
+            if (this.lastPurchaseTime != null)
+                throw new IllegalStateException("lastPurchaseTime already set!");
+
+            this.lastPurchaseTime = lastPurchaseTime;
             return this;
         }
 

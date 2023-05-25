@@ -16,6 +16,9 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -58,6 +61,20 @@ public class SellCommand extends BaseCommand {
             if (stock.getShares().compareTo(BigDecimal.valueOf(shares)) < 0) {
                 player.sendMessage(texts.getText(Texts.Types.NOT_ENOUGH_SHARES));
                 return;
+            }
+
+            if (stock.getLastPurchaseTime() != null) {
+                Instant now = Instant.now();
+                Instant lastPurchaseTime = Instant.ofEpochMilli(stock.getLastPurchaseTime());
+                Instant expire = lastPurchaseTime.plus(plugin.getTradeCooldown(), ChronoUnit.SECONDS);
+
+                Duration duration = Duration.between(now, lastPurchaseTime);
+                long seconds = duration.getSeconds();
+
+                if (seconds < plugin.getTradeCooldown()) {
+                    player.sendMessage(texts.getDurationText(Texts.Types.COOLDOWN, Duration.between(now, expire)));
+                    return;
+                }
             }
 
             BigDecimal value = stock.getLatestPrice().multiply(BigDecimal.valueOf(shares)).setScale(2, RoundingMode.DOWN);

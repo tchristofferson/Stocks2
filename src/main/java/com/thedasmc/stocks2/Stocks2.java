@@ -132,6 +132,12 @@ public final class Stocks2 extends JavaPlugin {
         return economy;
     }
 
+    //Seconds
+    public long getTradeCooldown() {
+        //default 900 = 15 minutes
+        return getConfig().getLong("trade-cooldown", 900);
+    }
+
     private void initGson() {
         gson = new GsonBuilder()
             .registerTypeAdapter(StockDataResponse.class, new StockDataConverter())

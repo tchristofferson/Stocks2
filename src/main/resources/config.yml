@@ -1,2 +1,6 @@
 api-token: ''
 money-symbol: '$'
+# How long you have to wait after buying shares of a stock to sell it (seconds)
+# 900 = 15 minutes
+# 15 minutes is recommended to prevent players from cheating by monitoring other sources
+trade-cooldown: 900

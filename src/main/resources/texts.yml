@@ -13,6 +13,7 @@ not-enough-money: '&c&l[Stocks]You don''t have %money% to purchase the shares!'
 sale-too-large: '&c&l[Stocks]Sale too large!'
 stock-symbol-not-found: '&c&l[Stocks]Stock symbol not found!'
 give-shares-too-low: '&c&l[Stocks]Shares must be > 0!'
+cooldown: '&c&l[Stocks]You must wait %duration% to sell this stock!'
 
 sold-shares-success: '&2&l[Stocks]Successfully sold shares for %money%!'
 sold-all-shares-success: '&2&l[Stocks]Sold all shares for %money%!'

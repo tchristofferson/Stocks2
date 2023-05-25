@@ -4,6 +4,7 @@ import com.thedasmc.stocks2.Stocks2;
 import org.bukkit.ChatColor;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Objects;
 
 public class Texts {
@@ -34,6 +35,18 @@ public class Texts {
             .replace("%symbol%", symbol);
     }
 
+    public String getDurationText(Types type, Duration duration) {
+        long totalSeconds = duration.getSeconds();
+
+        long hours = totalSeconds / 3600;
+        totalSeconds -= hours * 3600;
+        long minutes = totalSeconds / 60;
+        totalSeconds -= minutes * 60;
+
+        String durationString = String.format("%dh%dm%ds", hours, minutes, totalSeconds);
+        return getText(type).replace("%duration%", durationString);
+    }
+
     public String getErrorText(Types type, String error) {
         return getText(type).replace("%error%", error);
     }
@@ -50,6 +63,7 @@ public class Texts {
         SALE_TOO_LARGE("sale-too-large"),
         STOCK_SYMBOL_NOT_FOUND("stock-symbol-not-found"),
         GIVE_SHARES_TOO_LOW("give-shares-too-low"),
+        COOLDOWN("cooldown"),
         DEPOSIT_FUNDS_ERROR("deposit-funds-error"),
         WITHDRAW_FUNDS_ERROR("withdraw-funds-error"),
         TRANSACTION_ERROR("transaction-error"),

@@ -13,6 +13,10 @@ import java.nio.charset.StandardCharsets;
 
 public class Tools {
 
+    public static String formatStockSymbol(String symbol) {
+        return symbol.trim().toUpperCase();
+    }
+
     public static String asString(JsonElement element) {
         return isNull(element) ? null : element.getAsString();
     }
