@@ -63,18 +63,10 @@ public class SellCommand extends BaseCommand {
                 return;
             }
 
-            if (stock.getLastPurchaseTime() != null) {
-                Instant now = Instant.now();
-                Instant lastPurchaseTime = Instant.ofEpochMilli(stock.getLastPurchaseTime());
-                Instant expire = lastPurchaseTime.plus(plugin.getTradeCooldown(), ChronoUnit.SECONDS);
-
-                Duration duration = Duration.between(now, lastPurchaseTime);
-                long seconds = duration.getSeconds();
-
-                if (seconds < plugin.getTradeCooldown()) {
-                    player.sendMessage(texts.getDurationText(Texts.Types.COOLDOWN, Duration.between(now, expire)));
-                    return;
-                }
+            if (stock.hasCooldown(plugin.getTradeCooldownDuration())) {
+                Instant expire = stock.getCooldownExpireTime(plugin.getTradeCooldownDuration());
+                player.sendMessage(texts.getDurationText(Texts.Types.COOLDOWN, Duration.between(Instant.now(), expire)));
+                return;
             }
 
             BigDecimal value = stock.getLatestPrice().multiply(BigDecimal.valueOf(shares)).setScale(2, RoundingMode.DOWN);

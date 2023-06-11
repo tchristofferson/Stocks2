@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -57,6 +58,12 @@ public class SellAllCommand extends BaseCommand {
                 player.sendMessage(texts.getText(Texts.Types.NOT_ENOUGH_SHARES));
                 return;
             }
+
+            Duration cooldownDuration = plugin.getTradeCooldownDuration();
+            //filter out stocks with cooldown
+            shareSummaries = shareSummaries.stream()
+                .filter(shareSummaryResponse -> !shareSummaryResponse.hasCooldown(cooldownDuration))
+                .collect(Collectors.toList());
 
             final BigInteger centsValue = shareSummaries.stream()
                 .map(ShareSummaryResponse::getCentsValue)

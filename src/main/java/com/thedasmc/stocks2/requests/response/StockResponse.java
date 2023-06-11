@@ -1,10 +1,12 @@
 package com.thedasmc.stocks2.requests.response;
 
+import com.thedasmc.stocks2.common.Cooldownable;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
 
-public class StockResponse extends StockDataResponse {
+public class StockResponse extends StockDataResponse implements Cooldownable {
 
     private final BigDecimal shares;
     private final BigInteger centsInvested;
@@ -31,6 +33,7 @@ public class StockResponse extends StockDataResponse {
         return centsValue;
     }
 
+    @Override
     public Long getLastPurchaseTime() {
         return lastPurchaseTime;
     }

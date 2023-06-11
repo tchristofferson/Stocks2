@@ -1,6 +1,9 @@
 package com.thedasmc.stocks2.common;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 
 import java.io.*;
 import java.math.BigDecimal;

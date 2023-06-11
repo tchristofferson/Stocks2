@@ -34,6 +34,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -132,10 +133,8 @@ public final class Stocks2 extends JavaPlugin {
         return economy;
     }
 
-    //Seconds
-    public long getTradeCooldown() {
-        //default 900 = 15 minutes
-        return getConfig().getLong("trade-cooldown", 900);
+    public Duration getTradeCooldownDuration() {
+        return Duration.ofSeconds(getConfig().getLong("trade-cooldown", 900));
     }
 
     private void initGson() {
