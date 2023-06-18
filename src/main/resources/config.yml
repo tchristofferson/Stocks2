@@ -4,3 +4,17 @@ money-symbol: '$'
 # 900 = 15 minutes
 # 15 minutes is recommended to prevent players from cheating by monitoring other sources
 trade-cooldown: 900
+whitelist:
+  enabled: false
+  stocks:
+    - AAPL
+    - MSFT
+    - AMZN
+    - NVDA
+    - GOOGL
+    - GOOG
+    - META
+    - TSLA
+blacklist:
+  enabled: false
+  stocks: []

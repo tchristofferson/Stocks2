@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -135,6 +136,23 @@ public final class Stocks2 extends JavaPlugin {
 
     public Duration getTradeCooldownDuration() {
         return Duration.ofSeconds(getConfig().getLong("trade-cooldown", 900));
+    }
+
+    public boolean isStockWhitelistEnabled() {
+        return getConfig().getBoolean("whitelist.enabled", false);
+    }
+
+    public boolean isStockBlacklistEnabled() {
+        //Whitelist takes precedent over blacklist
+        return getConfig().getBoolean("blacklist.enabled", false) && !isStockWhitelistEnabled();
+    }
+
+    public List<String> getWhitelist() {
+        return getConfig().getStringList("whitelist.stocks");
+    }
+
+    public List<String> getBlacklist() {
+        return getConfig().getStringList("blacklist.stocks");
     }
 
     private void initGson() {

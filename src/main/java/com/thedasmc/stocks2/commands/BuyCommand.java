@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -42,6 +43,24 @@ public class BuyCommand extends BaseCommand {
         final Texts texts = plugin.getTexts();
         final AbstractPlayerDataInteractor playerDataInteractor = plugin.getPlayerDataInteractor();
         final UUID uuid = player.getUniqueId();
+
+        if (plugin.isStockWhitelistEnabled()) {
+            boolean isWhitelisted = plugin.getWhitelist().stream()
+                .anyMatch(s -> s.trim().equalsIgnoreCase(symbol));
+
+            if (!isWhitelisted) {
+                player.sendMessage(texts.getText(Texts.Types.NOT_WHITELISTED));
+                return;
+            }
+        } else if (plugin.isStockBlacklistEnabled()) {
+            boolean isBlackListed = plugin.getBlacklist().stream()
+                .anyMatch(s -> s.trim().equalsIgnoreCase(symbol));
+
+            if (isBlackListed) {
+                player.sendMessage(texts.getText(Texts.Types.BLACKLISTED));
+                return;
+            }
+        }
 
         plugin.getExecutorService().execute(() -> {
             StockResponse stock;

@@ -64,6 +64,8 @@ public class Texts {
         STOCK_SYMBOL_NOT_FOUND("stock-symbol-not-found"),
         GIVE_SHARES_TOO_LOW("give-shares-too-low"),
         COOLDOWN("cooldown"),
+        NOT_WHITELISTED("not-whitelisted"),
+        BLACKLISTED("blacklisted"),
         DEPOSIT_FUNDS_ERROR("deposit-funds-error"),
         WITHDRAW_FUNDS_ERROR("withdraw-funds-error"),
         TRANSACTION_ERROR("transaction-error"),
