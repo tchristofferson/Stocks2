@@ -1,4 +1,4 @@
-package com.thedasmc.stocks2.core;
+package com.thedasmc.stocks2.gui;
 
 import java.util.HashMap;
 import java.util.Map;

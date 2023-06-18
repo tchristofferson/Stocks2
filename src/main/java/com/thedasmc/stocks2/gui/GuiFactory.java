@@ -1,4 +1,4 @@
-package com.thedasmc.stocks2.core;
+package com.thedasmc.stocks2.gui;
 
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;

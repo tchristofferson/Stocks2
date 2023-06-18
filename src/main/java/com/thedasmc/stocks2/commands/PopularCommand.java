@@ -4,7 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
-import com.thedasmc.stocks2.core.GuiFactory;
+import com.thedasmc.stocks2.gui.GuiFactory;
 import com.thedasmc.stocks2.requests.AbstractStockDataInteractor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import org.bukkit.Bukkit;

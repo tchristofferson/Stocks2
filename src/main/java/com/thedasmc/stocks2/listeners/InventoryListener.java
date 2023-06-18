@@ -2,9 +2,9 @@ package com.thedasmc.stocks2.listeners;
 
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
-import com.thedasmc.stocks2.core.GuiFactory;
-import com.thedasmc.stocks2.core.GuiTracker;
-import com.thedasmc.stocks2.core.PortfolioViewer;
+import com.thedasmc.stocks2.gui.GuiFactory;
+import com.thedasmc.stocks2.gui.GuiTracker;
+import com.thedasmc.stocks2.gui.PortfolioViewer;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
