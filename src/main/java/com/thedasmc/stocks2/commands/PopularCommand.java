@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiFactory;
-import com.thedasmc.stocks2.requests.AbstractStockDataInteractor;
+import com.thedasmc.stocks2.requests.interactors.AbstractStockDataInteractor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

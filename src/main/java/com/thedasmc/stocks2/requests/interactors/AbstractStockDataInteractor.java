@@ -1,10 +1,9 @@
-package com.thedasmc.stocks2.requests;
+package com.thedasmc.stocks2.requests.interactors;
 
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

@@ -8,7 +8,7 @@ import co.aikar.commands.annotation.Subcommand;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.common.Tools;
-import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
+import com.thedasmc.stocks2.requests.interactors.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.request.DeleteRecordsRequest;
 import com.thedasmc.stocks2.requests.response.ShareSummaryResponse;
 import net.milkbowl.vault.economy.EconomyResponse;

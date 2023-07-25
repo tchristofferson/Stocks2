@@ -1,10 +1,10 @@
-package com.thedasmc.stocks2.requests.impl;
+package com.thedasmc.stocks2.requests.interactors.impl;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Tools;
-import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
+import com.thedasmc.stocks2.requests.interactors.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.request.DeleteRecordsRequest;
 import com.thedasmc.stocks2.requests.request.PortfolioRequest;
 import com.thedasmc.stocks2.requests.request.RecordRequest;
@@ -29,9 +29,9 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
     private static final String SYMBOL_PLACEHOLDER = "%symbol%";
 
     private static final String PORTFOLIO_URI = "/v1/player/portfolio";
-    private static final String GET_STOCK_URI = "/v1/player/" + PLAYER_ID_PLACEHOLDER + "/" + SYMBOL_PLACEHOLDER + "?token=" + Constants.TOKEN_PLACEHOLDER;
+    private static final String GET_STOCK_URI = "/v1/player/" + PLAYER_ID_PLACEHOLDER + "/" + SYMBOL_PLACEHOLDER;
     private static final String TRANSACT_URI = "/v1/player/transact";
-    private static final String SHARE_SUMMARIES_URI = "/v1/player/" + PLAYER_ID_PLACEHOLDER + "/share-summaries?token=" + Constants.TOKEN_PLACEHOLDER;
+    private static final String SHARE_SUMMARIES_URI = "/v1/player/" + PLAYER_ID_PLACEHOLDER + "/share-summaries";
     private static final String DELETE_RECORDS_URI = "/v1/player/records/delete";
 
     public PlayerDataInteractor(String apiToken, Gson gson) {
@@ -41,9 +41,9 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
     @Override
     public PortfolioResponse getPortfolio(UUID uuid, int page) throws IOException {
         URL url = new URL(Constants.API_URL + PORTFOLIO_URI);
-        HttpURLConnection connection = Tools.getHttpPostConnection(url);
+        HttpURLConnection connection = Tools.getHttpPostConnection(url, this.apiToken);
 
-        PortfolioRequest request = new PortfolioRequest(this.apiToken, page, uuid);
+        PortfolioRequest request = new PortfolioRequest(page, uuid);
         String requestJson = this.gson.toJson(request);
         writeBody(connection, requestJson);
         String responseJson;
@@ -60,7 +60,7 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
     @Override
     public StockResponse getStock(UUID uuid, String symbol) throws IOException {
         URL url = new URL(getStockUrl(uuid, symbol));
-        HttpURLConnection connection = Tools.getHttpGetConnection(url);
+        HttpURLConnection connection = Tools.getHttpGetConnection(url, this.apiToken);
         String responseJson;
 
         try {
@@ -74,9 +74,8 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
 
     @Override
     public RecordResponse transact(RecordRequest recordRequest) throws IOException {
-        recordRequest.setApiToken(this.apiToken);
         URL url = new URL(Constants.API_URL + TRANSACT_URI);
-        HttpURLConnection connection = Tools.getHttpPostConnection(url);
+        HttpURLConnection connection = Tools.getHttpPostConnection(url, this.apiToken);
         writeBody(connection, this.gson.toJson(recordRequest));
         String responseJson;
 
@@ -93,7 +92,7 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
     @SuppressWarnings("UnstableApiUsage")
     public List<ShareSummaryResponse> getShareSummaries(UUID playerId) throws IOException {
         URL url = new URL(getShareSummariesUrl(playerId));
-        HttpURLConnection connection = Tools.getHttpGetConnection(url);
+        HttpURLConnection connection = Tools.getHttpGetConnection(url, this.apiToken);
         String responseJson;
 
         try {
@@ -108,9 +107,8 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
 
     @Override
     public boolean deleteRecords(DeleteRecordsRequest request) throws IOException {
-        request.setApiToken(this.apiToken);
         URL url = new URL(Constants.API_URL + DELETE_RECORDS_URI);
-        HttpURLConnection connection = Tools.getHttpPostConnection(url);
+        HttpURLConnection connection = Tools.getHttpPostConnection(url, this.apiToken);
         writeBody(connection, this.gson.toJson(request));
 
         int responseCode;
@@ -130,13 +128,11 @@ public class PlayerDataInteractor extends AbstractPlayerDataInteractor {
     private String getStockUrl(UUID uuid, String symbol) {
         return Constants.API_URL + GET_STOCK_URI
             .replace(PLAYER_ID_PLACEHOLDER, uuid.toString())
-            .replace(SYMBOL_PLACEHOLDER, symbol)
-            .replace(Constants.TOKEN_PLACEHOLDER, this.apiToken);
+            .replace(SYMBOL_PLACEHOLDER, symbol);
     }
 
     private String getShareSummariesUrl(UUID uuid) {
         return Constants.API_URL + SHARE_SUMMARIES_URI
-            .replace(PLAYER_ID_PLACEHOLDER, uuid.toString())
-            .replace(Constants.TOKEN_PLACEHOLDER, this.apiToken);
+            .replace(PLAYER_ID_PLACEHOLDER, uuid.toString());
     }
 }

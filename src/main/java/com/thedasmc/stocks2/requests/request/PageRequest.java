@@ -5,8 +5,7 @@ public class PageRequest extends BaseRequest {
     private final int page;
     private final int pageLimit;
 
-    public PageRequest(String apiToken, int page, int pageLimit) {
-        super(apiToken);
+    public PageRequest(int page, int pageLimit) {
         this.page = page;
         this.pageLimit = pageLimit;
     }

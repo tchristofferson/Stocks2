@@ -8,8 +8,8 @@ public class PortfolioRequest extends PageRequest {
 
     private final UUID playerId;
 
-    public PortfolioRequest(String apiToken, int page, UUID playerId) {
-        super(apiToken, page, STOCK_GUI_MAX);
+    public PortfolioRequest(int page, UUID playerId) {
+        super(page, STOCK_GUI_MAX);
         this.playerId = playerId;
     }
 

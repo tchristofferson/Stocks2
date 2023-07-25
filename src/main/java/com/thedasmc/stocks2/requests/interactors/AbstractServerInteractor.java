@@ -1,4 +1,4 @@
-package com.thedasmc.stocks2.requests;
+package com.thedasmc.stocks2.requests.interactors;
 
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.requests.request.AccountRequest;

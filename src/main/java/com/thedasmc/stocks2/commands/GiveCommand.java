@@ -6,7 +6,7 @@ import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
-import com.thedasmc.stocks2.requests.AbstractPlayerDataInteractor;
+import com.thedasmc.stocks2.requests.interactors.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.request.RecordRequest;
 import com.thedasmc.stocks2.requests.response.RecordResponse;
 import org.bukkit.Bukkit;

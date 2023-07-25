@@ -1,9 +1,9 @@
-package com.thedasmc.stocks2.requests.impl;
+package com.thedasmc.stocks2.requests.interactors.impl;
 
 import com.google.gson.Gson;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Tools;
-import com.thedasmc.stocks2.requests.AbstractServerInteractor;
+import com.thedasmc.stocks2.requests.interactors.AbstractServerInteractor;
 import com.thedasmc.stocks2.requests.request.AccountRequest;
 import com.thedasmc.stocks2.requests.response.ServerRegistrationResponse;
 
@@ -24,7 +24,7 @@ public class ServerInteractor extends AbstractServerInteractor {
     @Override
     public ServerRegistrationResponse registerServer(AccountRequest request) throws IOException {
         URL url = new URL(Constants.API_URL + REGISTER_URI);
-        HttpURLConnection connection = Tools.getHttpPostConnection(url);
+        HttpURLConnection connection = Tools.getHttpPostConnection(url, null);
         String requestJson = this.gson.toJson(request);
         writeBody(connection, requestJson);
         String responseJson;

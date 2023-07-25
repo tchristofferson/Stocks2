@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thedasmc.stocks2.json.InstantConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
-import com.thedasmc.stocks2.requests.AbstractStockDataInteractor;
+import com.thedasmc.stocks2.requests.interactors.AbstractStockDataInteractor;
+import com.thedasmc.stocks2.requests.interactors.impl.StockDataInteractor;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
 

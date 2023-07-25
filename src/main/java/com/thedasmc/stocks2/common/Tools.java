@@ -79,8 +79,12 @@ public class Tools {
         return jsonError;
     }
 
-    public static HttpURLConnection getHttpConnection(URL url) throws IOException {
+    public static HttpURLConnection getHttpConnection(URL url, String apiToken) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        if (apiToken != null)
+            connection.setRequestProperty("x-api-key", apiToken);
+
         connection.setRequestProperty("Accept", "application/json");
         connection.setConnectTimeout(3000);
         connection.setReadTimeout(5000);
@@ -88,24 +92,33 @@ public class Tools {
         return connection;
     }
 
-    public static HttpURLConnection getHttpDeleteConnection(URL url) throws IOException {
-        HttpURLConnection connection = getHttpConnection(url);
+    public static HttpURLConnection getHttpDeleteConnection(URL url, String apiToken) throws IOException {
+        HttpURLConnection connection = getHttpConnection(url, apiToken);
         connection.setRequestMethod("DELETE");
 
         return connection;
     }
 
-    public static HttpURLConnection getHttpGetConnection(URL url) throws IOException {
-        HttpURLConnection connection = getHttpConnection(url);
+    public static HttpURLConnection getHttpGetConnection(URL url, String apiToken) throws IOException {
+        HttpURLConnection connection = getHttpConnection(url, apiToken);
         connection.setRequestMethod("GET");
 
         return connection;
     }
 
-    public static HttpURLConnection getHttpPostConnection(URL url) throws IOException {
-        HttpURLConnection connection = getHttpConnection(url);
+    public static HttpURLConnection getHttpPostConnection(URL url, String apiToken) throws IOException {
+        HttpURLConnection connection = getHttpConnection(url, apiToken);
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        return connection;
+    }
+
+    public static HttpURLConnection getHttpPutConnection(URL url, String apiToken) throws IOException {
+        HttpURLConnection connection = getHttpConnection(url, apiToken);
+        connection.setDoOutput(true);
+        connection.setRequestMethod("PUT");
         connection.setRequestProperty("Content-Type", "application/json");
 
         return connection;
