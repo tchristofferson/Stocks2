@@ -13,14 +13,8 @@ import com.thedasmc.stocks2.json.InstantConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
 import com.thedasmc.stocks2.logging.Log4JFilter;
-import com.thedasmc.stocks2.requests.interactors.AbstractAccountInteractor;
-import com.thedasmc.stocks2.requests.interactors.AbstractPlayerDataInteractor;
-import com.thedasmc.stocks2.requests.interactors.AbstractServerInteractor;
-import com.thedasmc.stocks2.requests.interactors.AbstractStockDataInteractor;
-import com.thedasmc.stocks2.requests.interactors.impl.AccountInteractor;
-import com.thedasmc.stocks2.requests.interactors.impl.PlayerDataInteractor;
-import com.thedasmc.stocks2.requests.interactors.impl.ServerInteractor;
-import com.thedasmc.stocks2.requests.interactors.impl.StockDataInteractor;
+import com.thedasmc.stocks2.requests.interactors.*;
+import com.thedasmc.stocks2.requests.interactors.impl.*;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import net.milkbowl.vault.economy.Economy;
 import org.apache.logging.log4j.LogManager;
@@ -51,6 +45,7 @@ public final class Stocks2 extends JavaPlugin {
     private AbstractPlayerDataInteractor playerDataInteractor;
     private AbstractAccountInteractor accountInteractor;
     private AbstractServerInteractor serverInteractor;
+    private AbstractFundDataInteractor fundDataInteractor;
     private FileConfiguration textsConfig;
     private Texts texts;
     private Economy economy;
@@ -122,6 +117,10 @@ public final class Stocks2 extends JavaPlugin {
         return serverInteractor;
     }
 
+    public AbstractFundDataInteractor getFundDataInteractor() {
+        return fundDataInteractor;
+    }
+
     public FileConfiguration getTextsConfig() {
         return textsConfig;
     }
@@ -155,6 +154,18 @@ public final class Stocks2 extends JavaPlugin {
         return getConfig().getStringList("blacklist.stocks");
     }
 
+    //Use isStockBlacklistEnabled() in tandem
+    public boolean isBlacklisted(String symbol) {
+        return getBlacklist().stream()
+            .anyMatch(s -> s.trim().equalsIgnoreCase(symbol));
+    }
+
+    //use isStockWhitelistEnabled in tandem
+    public boolean isWhitelisted(String symbol) {
+        return getWhitelist().stream()
+            .anyMatch(s -> s.trim().equalsIgnoreCase(symbol));
+    }
+
     private void initGson() {
         gson = new GsonBuilder()
             .registerTypeAdapter(StockDataResponse.class, new StockDataConverter())
@@ -167,6 +178,7 @@ public final class Stocks2 extends JavaPlugin {
         playerDataInteractor = new PlayerDataInteractor(apiToken, gson);
         accountInteractor = new AccountInteractor(apiToken, gson);
         serverInteractor = new ServerInteractor(apiToken, gson);
+        fundDataInteractor = new FundDataInteractor(apiToken, gson);
     }
 
     private void initCommandManager() {
@@ -190,6 +202,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new GiveCommand(this));
         commandManager.registerCommand(new TakeCommand(this));
         commandManager.registerCommand(new PopularCommand(this));
+        commandManager.registerCommand(new CreateFundCommand(this));
     }
 
     private void initTextsConfig() {

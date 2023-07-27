@@ -1,12 +1,13 @@
 package com.thedasmc.stocks2.requests.interactors;
 
 import com.google.gson.Gson;
-import com.thedasmc.stocks2.requests.FundStock;
 import com.thedasmc.stocks2.requests.request.CreateFundRequest;
+import com.thedasmc.stocks2.requests.request.FundStockRequest;
 import com.thedasmc.stocks2.requests.request.FundTransactionRequest;
 import com.thedasmc.stocks2.requests.request.PageRequest;
 import com.thedasmc.stocks2.requests.response.FundRecordResponse;
 import com.thedasmc.stocks2.requests.response.FundResponse;
+import com.thedasmc.stocks2.requests.response.FundStockResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,10 +29,10 @@ public abstract class AbstractFundDataInteractor extends DataInteractor {
     /**
      * Adds a stock to a fund
      * @param request The request containing the stock details you want to add to the fund
-     * @return The {@link FundStock} containing the details of the stock added
+     * @return The {@link FundStockResponse} containing the details of the stock added
      * @throws IOException If an IO error occurs
      */
-    public abstract FundStock addStockToFund(FundStock request) throws IOException;
+    public abstract FundStockResponse addStockToFund(FundStockRequest request) throws IOException;
 
     /**
      * Removes a stock from a fund
@@ -67,5 +68,13 @@ public abstract class AbstractFundDataInteractor extends DataInteractor {
      * @throws IOException If an IO error occurs
      */
     public abstract List<FundResponse> getPopularFunds(PageRequest request) throws IOException;
+
+    /**
+     * Get a fund by its fundId
+     * @param fundId The id of the fund
+     * @return A {@link FundResponse} with the specified fundId
+     * @throws IOException If an IO error occurs
+     */
+    public abstract FundResponse getFund(long fundId) throws IOException;
 
 }

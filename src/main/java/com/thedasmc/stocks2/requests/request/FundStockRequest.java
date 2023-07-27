@@ -1,6 +1,6 @@
-package com.thedasmc.stocks2.requests;
+package com.thedasmc.stocks2.requests.request;
 
-public class FundStock {
+public class FundStockRequest {
 
     private Long fundId;
     private String symbol;
@@ -20,4 +20,5 @@ public class FundStock {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
 }

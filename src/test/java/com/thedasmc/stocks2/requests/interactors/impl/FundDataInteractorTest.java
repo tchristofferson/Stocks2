@@ -2,9 +2,9 @@ package com.thedasmc.stocks2.requests.interactors.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.thedasmc.stocks2.requests.FundStock;
 import com.thedasmc.stocks2.requests.interactors.AbstractFundDataInteractor;
 import com.thedasmc.stocks2.requests.request.CreateFundRequest;
+import com.thedasmc.stocks2.requests.request.FundStockRequest;
 import com.thedasmc.stocks2.requests.request.FundTransactionRequest;
 import com.thedasmc.stocks2.requests.request.PageRequest;
 import com.thedasmc.stocks2.requests.response.FundRecordResponse;
@@ -70,7 +70,7 @@ public class FundDataInteractorTest {
         FundResponse createFundResponse = createFund();
 
         for (String symbol : symbols) {
-            FundStock addStockRequest = new FundStock();
+            FundStockRequest addStockRequest = new FundStockRequest();
             addStockRequest.setFundId(createFundResponse.getFundId());
             addStockRequest.setSymbol(symbol);
 

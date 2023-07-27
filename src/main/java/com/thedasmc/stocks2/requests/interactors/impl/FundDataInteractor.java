@@ -4,13 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Tools;
-import com.thedasmc.stocks2.requests.FundStock;
 import com.thedasmc.stocks2.requests.interactors.AbstractFundDataInteractor;
 import com.thedasmc.stocks2.requests.request.CreateFundRequest;
+import com.thedasmc.stocks2.requests.request.FundStockRequest;
 import com.thedasmc.stocks2.requests.request.FundTransactionRequest;
 import com.thedasmc.stocks2.requests.request.PageRequest;
 import com.thedasmc.stocks2.requests.response.FundRecordResponse;
 import com.thedasmc.stocks2.requests.response.FundResponse;
+import com.thedasmc.stocks2.requests.response.FundStockResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -32,6 +33,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     private static final String UPDATE_FUND_STATUS_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER + "/" + FUND_STATUS_PLACEHOLDER;
     private static final String TRANSACT_FUND_URI = "/v1/fund/transact";
     private static final String POPULAR_FUNDS_URI = "/v1/fund/popular";
+    private static final String GET_FUND_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER;
 
     public FundDataInteractor(String apiToken, Gson gson) {
         super(apiToken, gson);
@@ -56,7 +58,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     }
 
     @Override
-    public FundStock addStockToFund(FundStock request) throws IOException {
+    public FundStockResponse addStockToFund(FundStockRequest request) throws IOException {
         URL url = new URL(Constants.API_URL + ADD_STOCK_TO_FUND_URI);
         HttpURLConnection connection = Tools.getHttpPostConnection(url, this.apiToken);
 
@@ -70,7 +72,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
             throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
         }
 
-        return this.gson.fromJson(responseJson, FundStock.class);
+        return this.gson.fromJson(responseJson, FundStockResponse.class);
     }
 
     @Override
@@ -145,5 +147,20 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
 
         Type type = new TypeToken<List<FundResponse>>() {}.getType();
         return this.gson.fromJson(responseJson, type);
+    }
+
+    @Override
+    public FundResponse getFund(long fundId) throws IOException {
+        URL url = new URL(Constants.API_URL + GET_FUND_URI.replace(FUND_ID_PLACEHOLDER, String.valueOf(fundId)));
+        HttpURLConnection connection = getHttpGetConnection(url, this.apiToken);
+        String responseJson;
+
+        try {
+            responseJson = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
+        }
+
+        return this.gson.fromJson(responseJson, FundResponse.class);
     }
 }
