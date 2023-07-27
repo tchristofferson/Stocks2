@@ -13,9 +13,4 @@ public class Constants {
     public static final int PORTFOLIO_NEXT_BUTTON = STOCK_GUI_INV_SLOTS - 1;
     public static final int STOCK_GUI_CLOSE_BUTTON = STOCK_GUI_INV_SLOTS - 5;
 
-    //Fund status
-    public static final char FUND_STATUS_OPEN = 'O';
-    public static final char FUND_STATUS_CLOSED = 'C';
-    public static final char FUND_STATUS_PENDING = 'P';
-
 }
