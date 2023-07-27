@@ -94,8 +94,8 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     public FundResponse updateFundStatus(long fundId, char status) throws IOException {
         URL url = new URL(Constants.API_URL +
             UPDATE_FUND_STATUS_URI
-                .replace(FUND_ID_PLACEHOLDER, String.valueOf(fundId)
-                    .replace(FUND_STATUS_PLACEHOLDER, String.valueOf(status)))
+                .replace(FUND_ID_PLACEHOLDER, String.valueOf(fundId))
+                .replace(FUND_STATUS_PLACEHOLDER, String.valueOf(status))
         );
 
         HttpURLConnection connection = getHttpPutConnection(url, this.apiToken);
