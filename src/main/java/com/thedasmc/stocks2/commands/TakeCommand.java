@@ -1,6 +1,5 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.thedasmc.stocks2.Stocks2;
@@ -18,14 +17,12 @@ import java.math.BigInteger;
 import java.util.UUID;
 
 @CommandAlias("stocks")
-public class TakeCommand extends BaseCommand {
+public class TakeCommand extends AbstractStocksCommand {
 
     private static final String TAKE_PERMISSION = "stocks.take";
 
-    private final Stocks2 plugin;
-
     public TakeCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand("take")

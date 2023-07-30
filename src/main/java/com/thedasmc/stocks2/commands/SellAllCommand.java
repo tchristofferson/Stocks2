@@ -1,6 +1,5 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Description;
@@ -28,12 +27,10 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @CommandAlias("stocks")
-public class SellAllCommand extends BaseCommand {
-
-    private final Stocks2 plugin;
+public class SellAllCommand extends AbstractStocksCommand {
 
     public SellAllCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand("sell all")

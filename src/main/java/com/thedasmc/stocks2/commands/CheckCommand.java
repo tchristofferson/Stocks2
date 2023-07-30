@@ -1,6 +1,5 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
@@ -12,14 +11,12 @@ import java.util.Collections;
 import java.util.Map;
 
 @CommandAlias("stocks")
-public class CheckCommand extends BaseCommand {
+public class CheckCommand extends AbstractStocksCommand {
 
     private static final String CHECK_PERMISSION = "stocks.check";
 
-    private final Stocks2 plugin;
-
     public CheckCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand("check")

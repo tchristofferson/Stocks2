@@ -1,6 +1,5 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Constants;
@@ -23,14 +22,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 @CommandAlias("stocks")
-public class SellCommand extends BaseCommand {
+public class SellCommand extends AbstractStocksCommand {
 
     public static final String SELL_PERMISSION = "stocks.sell";
 
-    private final Stocks2 plugin;
-
     public SellCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand("sell")

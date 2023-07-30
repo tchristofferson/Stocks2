@@ -1,6 +1,5 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
@@ -10,16 +9,14 @@ import org.bukkit.command.CommandSender;
 import java.io.IOException;
 
 @CommandAlias("stocks")
-public class RegisterAccountCommand extends BaseCommand {
+public class RegisterAccountCommand extends AbstractStocksCommand {
 
     public static final String COMMAND = "regacc";
     public static final String COMMAND_ALIAS = "ra";
     private static final String REGISTER_ACCOUNT_PERMISSION = "stocks.admin.account.register";
 
-    private final Stocks2 plugin;
-
     public RegisterAccountCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand(COMMAND + "|" + COMMAND_ALIAS)

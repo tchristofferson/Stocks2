@@ -1,6 +1,5 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.thedasmc.stocks2.Stocks2;
@@ -16,15 +15,13 @@ import org.bukkit.inventory.Inventory;
 import java.io.IOException;
 
 @CommandAlias("stocks")
-public class PortfolioCommand extends BaseCommand {
+public class PortfolioCommand extends AbstractStocksCommand {
 
     private static final String PORTFOLIO_PERMISSION = "stocks.portfolio";
     private static final String PORTFOLIO_OTHERS_PERMISSION = "stocks.portfolio.others";
 
-    private final Stocks2 plugin;
-
     public PortfolioCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand("portfolio")

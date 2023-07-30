@@ -191,7 +191,7 @@ public final class Stocks2 extends JavaPlugin {
                 throw new ConditionFailedException(texts.getText(Texts.Types.GIVE_SHARES_TOO_LOW));
         });
 
-        commandManager.registerCommand(new HelpCommand());
+        commandManager.registerCommand(new StocksHelpCommand());
         commandManager.registerCommand(new PortfolioCommand(this));
         commandManager.registerCommand(new SellCommand(this));
         commandManager.registerCommand(new SellAllCommand(this));
@@ -203,6 +203,9 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new TakeCommand(this));
         commandManager.registerCommand(new PopularCommand(this));
         commandManager.registerCommand(new CreateFundCommand(this));
+        commandManager.registerCommand(new AddStockToFundCommand(this));
+        commandManager.registerCommand(new RemoveStockFromFundCommand(this));
+        commandManager.registerCommand(new PublishFundCommand(this));
     }
 
     private void initTextsConfig() {

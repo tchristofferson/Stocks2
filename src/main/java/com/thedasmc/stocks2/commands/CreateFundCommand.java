@@ -1,6 +1,5 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
@@ -12,14 +11,12 @@ import java.io.IOException;
 import java.util.UUID;
 
 @CommandAlias("stocks")
-public class CreateFundCommand extends BaseCommand {
+public class CreateFundCommand extends AbstractStocksCommand {
 
     public static final String CREATE_FUND_PERMISSION = "stocks.fund.create";
 
-    private final Stocks2 plugin;
-
     public CreateFundCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand("fund create")

@@ -1,6 +1,5 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Constants;
@@ -24,14 +23,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 @CommandAlias("stocks")
-public class BuyCommand extends BaseCommand {
+public class BuyCommand extends AbstractStocksCommand {
 
     private static final String BUY_PERMISSION = "stocks.buy";
 
-    private final Stocks2 plugin;
-
     public BuyCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand("buy")

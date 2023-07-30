@@ -1,7 +1,9 @@
 package com.thedasmc.stocks2.commands;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.*;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.Subcommand;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiFactory;
@@ -17,14 +19,12 @@ import java.util.List;
 import java.util.UUID;
 
 @CommandAlias("stocks")
-public class PopularCommand extends BaseCommand {
+public class PopularCommand extends AbstractStocksCommand {
 
     private static final String POPULAR_PERMISSION = "stocks.popular";
 
-    private final Stocks2 plugin;
-
     public PopularCommand(Stocks2 plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Subcommand("popular|pop")

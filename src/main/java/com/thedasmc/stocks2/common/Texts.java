@@ -67,6 +67,7 @@ public class Texts {
         NOT_WHITELISTED("not-whitelisted"),
         BLACKLISTED("blacklisted"),
         NOT_FUND_CREATOR("not-fund-creator"),
+        FUND_OPEN_TO_PENDING_NOT_ALLOWED("fund-open-to-pending-not-allowed"),
         DEPOSIT_FUNDS_ERROR("deposit-funds-error"),
         WITHDRAW_FUNDS_ERROR("withdraw-funds-error"),
         TRANSACTION_ERROR("transaction-error"),
@@ -77,6 +78,8 @@ public class Texts {
         FUND_CREATION_ERROR("fund-creation-error"),
         FUND_FETCH_ERROR("fund-fetch-error"),
         ADD_STOCK_TO_FUND_ERROR("add-stock-to-fund-error"),
+        REMOVE_STOCK_FROM_FUND_ERROR("remove-stock-from-fund-error"),
+        FUND_STATUS_UPDATE_ERROR("fund-status-update-error"),
         SOLD_SHARES_SUCCESS("sold-shares-success"),
         SOLD_ALL_SHARES_SUCCESS("sold-all-shares-success"),
         BOUGHT_SHARES_SUCCESS("bought-shares-success"),
@@ -88,7 +91,9 @@ public class Texts {
         TOOK_SHARES("took-shares"),
         SHARES_TAKEN("shares-taken"),
         FUND_CREATED("fund-created"),
-        ADDED_STOCK_TO_FUND("stock-added-to-fund");
+        ADDED_STOCK_TO_FUND("stock-added-to-fund"),
+        REMOVED_STOCK_FROM_FUND("removed-stock-from-fund"),
+        PUBLISHED_FUND("published-fund");
 
         //The key in texts.yml
         private final String key;
