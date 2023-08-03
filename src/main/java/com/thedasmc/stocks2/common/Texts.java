@@ -80,6 +80,7 @@ public class Texts {
         ADD_STOCK_TO_FUND_ERROR("add-stock-to-fund-error"),
         REMOVE_STOCK_FROM_FUND_ERROR("remove-stock-from-fund-error"),
         FUND_STATUS_UPDATE_ERROR("fund-status-update-error"),
+        TRANSACT_FUND_ERROR("transact-fund-error"),
         SOLD_SHARES_SUCCESS("sold-shares-success"),
         SOLD_ALL_SHARES_SUCCESS("sold-all-shares-success"),
         BOUGHT_SHARES_SUCCESS("bought-shares-success"),
@@ -93,7 +94,8 @@ public class Texts {
         FUND_CREATED("fund-created"),
         ADDED_STOCK_TO_FUND("stock-added-to-fund"),
         REMOVED_STOCK_FROM_FUND("removed-stock-from-fund"),
-        PUBLISHED_FUND("published-fund");
+        PUBLISHED_FUND("published-fund"),
+        TRANSACTED_FUND("transacted-fund");
 
         //The key in texts.yml
         private final String key;

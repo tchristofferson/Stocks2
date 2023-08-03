@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.requests.interactors.AbstractFundDataInteractor;
+import com.thedasmc.stocks2.requests.request.FundTransactionRequest;
 import com.thedasmc.stocks2.requests.response.FundResponse;
 import org.bukkit.command.CommandSender;
 
@@ -78,6 +79,30 @@ public abstract class AbstractStocksCommand extends BaseCommand {
             plugin.getFundDataInteractor().updateFundStatus(fundId, status);
         } catch (IOException e) {
             sender.sendMessage(plugin.getTexts().getErrorText(Texts.Types.FUND_STATUS_UPDATE_ERROR, e.getMessage()));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Deposit/Withdraw money from a fund
+     * @param sender The command sender running the command
+     * @param transactorUuid The uuid of the player depositing/withdrawing
+     * @param fundId The fundId of the fund the player is depositing/withdrawing
+     * @param amount The amount to deposit/withdraw
+     * @return {@code true} if successful, otherwise {@code false}
+     */
+    protected boolean transactFund(CommandSender sender, UUID transactorUuid, long fundId, double amount) {
+        FundTransactionRequest request = new FundTransactionRequest();
+        request.setFundId(fundId);
+        request.setPlayerId(transactorUuid);
+        request.setCents(((long) (amount * 100)));
+
+        try {
+            plugin.getFundDataInteractor().transactFund(request);
+        } catch (IOException e) {
+            sender.sendMessage(plugin.getTexts().getErrorText(Texts.Types.TRANSACT_FUND_ERROR, e.getMessage()));
             return false;
         }
 
