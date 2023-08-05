@@ -95,6 +95,7 @@ public class Texts {
         ADDED_STOCK_TO_FUND("stock-added-to-fund"),
         REMOVED_STOCK_FROM_FUND("removed-stock-from-fund"),
         PUBLISHED_FUND("published-fund"),
+        CLOSED_FUND("closed-fund"),
         TRANSACTED_FUND("transacted-fund");
 
         //The key in texts.yml
