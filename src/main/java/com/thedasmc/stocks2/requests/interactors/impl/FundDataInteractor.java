@@ -38,6 +38,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     private static final String POPULAR_FUNDS_URI = "/v1/fund/popular";
     private static final String GET_FUND_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER;
     private static final String GET_PLAYER_FUND_INVESTMENT_VALUE_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER + "/" + PLAYER_ID_PLACEHOLDER + "/value";
+    private static final String GET_FUNDS_BY_CREATOR_URI = "/v1/" + PLAYER_ID_PLACEHOLDER + "/funds";
 
     public FundDataInteractor(String apiToken, Gson gson) {
         super(apiToken, gson);
@@ -149,7 +150,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
             throw new IOException(Tools.readErrorStream(connection.getErrorStream()));
         }
 
-        Type type = new TypeToken<List<FundResponse>>() {}.getType();
+        Type type = new TypeToken<List<FundResponse>>(){}.getType();
         return this.gson.fromJson(responseJson, type);
     }
 
@@ -185,5 +186,21 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
         }
 
         return this.gson.fromJson(responseJson, FundValueResponse.class);
+    }
+
+    @Override
+    public List<FundResponse> getFundsByCreator(UUID creatorId) throws IOException {
+        URL url = new URL(Constants.API_URL + GET_FUNDS_BY_CREATOR_URI.replace(PLAYER_ID_PLACEHOLDER, creatorId.toString()));
+        HttpURLConnection connection = getHttpGetConnection(url, this.apiToken);
+        String responseJson;
+
+        try {
+            responseJson = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(readErrorStream(connection.getErrorStream()));
+        }
+
+        Type type = new TypeToken<List<FundResponse>>(){}.getType();
+        return this.gson.fromJson(responseJson, type);
     }
 }
