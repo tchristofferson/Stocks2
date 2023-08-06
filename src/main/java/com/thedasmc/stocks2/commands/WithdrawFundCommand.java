@@ -8,24 +8,22 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 @CommandAlias("stocks")
-public class DepositFundCommand extends AbstractStocksCommand {
+public class WithdrawFundCommand extends AbstractStocksCommand {
 
-    public static final String DEPOSIT_FUND_PERMISSION = "stocks.fund.deposit";
-
-    public DepositFundCommand(Stocks2 plugin) {
+    public WithdrawFundCommand(Stocks2 plugin) {
         super(plugin);
     }
 
-    @Subcommand("fund deposit|dep")
-    @CommandPermission(DEPOSIT_FUND_PERMISSION)
-    @Description("Deposit money into a fund")
+    @Subcommand("fund withdraw|wd")
+    @CommandPermission(DepositFundCommand.DEPOSIT_FUND_PERMISSION)
+    @Description("Withdraw money from a fund")
     @Syntax("[fundId] [amount]")
-    public void onFundDeposit(Player player, long fundId, double amount) {
+    public void onWithdrawFund(Player player, long fundId, double amount) {
         final Texts texts = plugin.getTexts();
         final UUID uuid = player.getUniqueId();
 
         plugin.getExecutorService().execute(() -> {
-            if (transactFund(player, uuid, fundId, amount))
+            if (transactFund(player, uuid, fundId, amount * -1))
                 player.sendMessage(texts.getText(Texts.Types.TRANSACTED_FUND));
         });
     }

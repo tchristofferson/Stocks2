@@ -12,12 +12,14 @@ import com.thedasmc.stocks2.requests.request.PageRequest;
 import com.thedasmc.stocks2.requests.response.FundRecordResponse;
 import com.thedasmc.stocks2.requests.response.FundResponse;
 import com.thedasmc.stocks2.requests.response.FundStockResponse;
+import com.thedasmc.stocks2.requests.response.FundValueResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 
 import static com.thedasmc.stocks2.common.Tools.*;
 
@@ -26,6 +28,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     private static final String FUND_ID_PLACEHOLDER = "%fundId%";
     private static final String SYMBOL_PLACEHOLDER = "%symbol%";
     private static final String FUND_STATUS_PLACEHOLDER = "%status%";
+    private static final String PLAYER_ID_PLACEHOLDER = "%playerId%";
 
     private static final String CREATE_FUND_URI = "/v1/fund/create";
     private static final String ADD_STOCK_TO_FUND_URI = "/v1/fund/stocks/add";
@@ -34,6 +37,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     private static final String TRANSACT_FUND_URI = "/v1/fund/transact";
     private static final String POPULAR_FUNDS_URI = "/v1/fund/popular";
     private static final String GET_FUND_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER;
+    private static final String GET_PLAYER_FUND_INVESTMENT_VALUE_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER + "/" + PLAYER_ID_PLACEHOLDER + "/value";
 
     public FundDataInteractor(String apiToken, Gson gson) {
         super(apiToken, gson);
@@ -162,5 +166,24 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
         }
 
         return this.gson.fromJson(responseJson, FundResponse.class);
+    }
+
+    @Override
+    public FundValueResponse getPlayerFundInvestmentValue(long fundId, UUID playerId) throws IOException {
+        URL url = new URL(Constants.API_URL + GET_PLAYER_FUND_INVESTMENT_VALUE_URI
+            .replace(FUND_ID_PLACEHOLDER, String.valueOf(fundId))
+            .replace(PLAYER_ID_PLACEHOLDER, playerId.toString())
+        );
+
+        HttpURLConnection connection = getHttpGetConnection(url, this.apiToken);
+        String responseJson;
+
+        try {
+            responseJson = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(readErrorStream(connection.getErrorStream()));
+        }
+
+        return this.gson.fromJson(responseJson, FundValueResponse.class);
     }
 }

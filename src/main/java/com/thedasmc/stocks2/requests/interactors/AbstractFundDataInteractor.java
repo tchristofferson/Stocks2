@@ -8,9 +8,11 @@ import com.thedasmc.stocks2.requests.request.PageRequest;
 import com.thedasmc.stocks2.requests.response.FundRecordResponse;
 import com.thedasmc.stocks2.requests.response.FundResponse;
 import com.thedasmc.stocks2.requests.response.FundStockResponse;
+import com.thedasmc.stocks2.requests.response.FundValueResponse;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class AbstractFundDataInteractor extends DataInteractor {
 
@@ -76,5 +78,14 @@ public abstract class AbstractFundDataInteractor extends DataInteractor {
      * @throws IOException If an IO error occurs
      */
     public abstract FundResponse getFund(long fundId) throws IOException;
+
+
+    /**
+     * Get the value of a player's investment in a fund
+     * @param fundId The id of the fund
+     * @param playerId The player's uuid to get the investment value for
+     * @return a {@link FundResponse} containing the investment value
+     */
+    public abstract FundValueResponse getPlayerFundInvestmentValue(long fundId, UUID playerId) throws IOException;
 
 }
