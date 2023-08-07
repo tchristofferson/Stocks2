@@ -1,8 +1,9 @@
-package com.thedasmc.stocks2.commands;
+package com.thedasmc.stocks2.commands.stocks;
 
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.thedasmc.stocks2.Stocks2;
+import com.thedasmc.stocks2.commands.AbstractStocksCommand;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.requests.interactors.AbstractPlayerDataInteractor;

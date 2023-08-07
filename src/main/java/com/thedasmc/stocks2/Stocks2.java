@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import com.thedasmc.stocks2.commands.*;
+import com.thedasmc.stocks2.commands.funds.*;
+import com.thedasmc.stocks2.commands.stocks.*;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiTracker;

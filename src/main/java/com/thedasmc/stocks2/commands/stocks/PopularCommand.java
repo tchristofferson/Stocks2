@@ -1,10 +1,11 @@
-package com.thedasmc.stocks2.commands;
+package com.thedasmc.stocks2.commands.stocks;
 
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
 import com.thedasmc.stocks2.Stocks2;
+import com.thedasmc.stocks2.commands.AbstractStocksCommand;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiFactory;
 import com.thedasmc.stocks2.requests.interactors.AbstractStockDataInteractor;
