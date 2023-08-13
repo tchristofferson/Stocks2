@@ -1,14 +1,8 @@
 package com.thedasmc.stocks2.requests.interactors;
 
 import com.google.gson.Gson;
-import com.thedasmc.stocks2.requests.request.CreateFundRequest;
-import com.thedasmc.stocks2.requests.request.FundStockRequest;
-import com.thedasmc.stocks2.requests.request.FundTransactionRequest;
-import com.thedasmc.stocks2.requests.request.PageRequest;
-import com.thedasmc.stocks2.requests.response.FundRecordResponse;
-import com.thedasmc.stocks2.requests.response.FundResponse;
-import com.thedasmc.stocks2.requests.response.FundStockResponse;
-import com.thedasmc.stocks2.requests.response.FundValueResponse;
+import com.thedasmc.stocks2.requests.request.*;
+import com.thedasmc.stocks2.requests.response.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -96,5 +90,14 @@ public abstract class AbstractFundDataInteractor extends DataInteractor {
      * @throws IOException If an IO error occurs
      */
     public abstract List<FundResponse> getFundsByCreator(UUID creatorId) throws IOException;
+
+    /**
+     * Get a player's portfolio of funds
+     * @param playerId The player's uuid
+     * @param page The page to fetch. Starts at 0
+     * @return A {@link FundPortfolioResponse} containing the funds
+     * @throws IOException If an IO error occurs
+     */
+    public abstract FundPortfolioResponse getFundPortfolio(UUID playerId, int page) throws IOException;
 
 }

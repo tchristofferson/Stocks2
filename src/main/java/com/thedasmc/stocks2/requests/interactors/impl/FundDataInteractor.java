@@ -5,14 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Tools;
 import com.thedasmc.stocks2.requests.interactors.AbstractFundDataInteractor;
-import com.thedasmc.stocks2.requests.request.CreateFundRequest;
-import com.thedasmc.stocks2.requests.request.FundStockRequest;
-import com.thedasmc.stocks2.requests.request.FundTransactionRequest;
-import com.thedasmc.stocks2.requests.request.PageRequest;
-import com.thedasmc.stocks2.requests.response.FundRecordResponse;
-import com.thedasmc.stocks2.requests.response.FundResponse;
-import com.thedasmc.stocks2.requests.response.FundStockResponse;
-import com.thedasmc.stocks2.requests.response.FundValueResponse;
+import com.thedasmc.stocks2.requests.request.*;
+import com.thedasmc.stocks2.requests.response.*;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -39,6 +33,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     private static final String GET_FUND_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER;
     private static final String GET_PLAYER_FUND_INVESTMENT_VALUE_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER + "/" + PLAYER_ID_PLACEHOLDER + "/value";
     private static final String GET_FUNDS_BY_CREATOR_URI = "/v1/" + PLAYER_ID_PLACEHOLDER + "/funds";
+    private static final String GET_FUND_PORTFOLIO_URI = "/v1/fund/portfolio";
 
     public FundDataInteractor(String apiToken, Gson gson) {
         super(apiToken, gson);
@@ -202,5 +197,23 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
 
         Type type = new TypeToken<List<FundResponse>>(){}.getType();
         return this.gson.fromJson(responseJson, type);
+    }
+
+    @Override
+    public FundPortfolioResponse getFundPortfolio(UUID playerId, int page) throws IOException {
+        URL url = new URL(Constants.API_URL + GET_FUND_PORTFOLIO_URI);
+        HttpURLConnection connection = getHttpPostConnection(url, this.apiToken);
+        FundPortfolioRequest request = new FundPortfolioRequest(playerId, page);
+        String requestJson = this.gson.toJson(request);
+        writeBody(connection, requestJson);
+        String responseJson;
+
+        try {
+            responseJson = readInputStream(connection.getInputStream());
+        } catch (IOException e) {
+            throw new IOException(readErrorStream(connection.getErrorStream()));
+        }
+
+        return this.gson.fromJson(responseJson, FundPortfolioResponse.class);
     }
 }

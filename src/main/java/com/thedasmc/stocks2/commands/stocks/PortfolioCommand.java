@@ -10,10 +10,12 @@ import com.thedasmc.stocks2.gui.PortfolioViewer;
 import com.thedasmc.stocks2.requests.interactors.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 @CommandAlias("stocks")
 public class PortfolioCommand extends AbstractStocksCommand {
@@ -53,11 +55,17 @@ public class PortfolioCommand extends AbstractStocksCommand {
                 return;
             }
 
-            final Inventory portfolio = GuiFactory.createPortfolioPage(portfolioResponse, plugin.getTexts());
+            //TODO: Use texts for inventory title
+            final Inventory portfolio = GuiFactory.createStockPage(ChatColor.GOLD + "Stock Portfolio",
+                new ArrayList<>(portfolioResponse.getStocks()), portfolioResponse.getPage(), portfolioResponse.getPages(), plugin.getTexts());
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                plugin.getPortfolioTracker().track(viewer.getUniqueId(), new PortfolioViewer(viewer.getUniqueId(), owner.getUniqueId(), portfolio, 0, portfolioResponse.getPages()));
-                viewer.openInventory(portfolio);
+                if (viewer.isOnline()) {
+                    PortfolioViewer portfolioViewer = new PortfolioViewer(viewer.getUniqueId(), owner.getUniqueId(),
+                        portfolio, PortfolioViewer.InventoryType.PORTFOLIO, 0, portfolioResponse.getPages());
+                    plugin.getPortfolioTracker().track(viewer.getUniqueId(), portfolioViewer);
+                    viewer.openInventory(portfolio);
+                }
             });
         });
     }

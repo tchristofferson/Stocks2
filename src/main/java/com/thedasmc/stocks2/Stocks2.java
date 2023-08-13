@@ -22,6 +22,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
@@ -38,6 +39,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class Stocks2 extends JavaPlugin {
+
+    private static NamespacedKey fundIdKey;
 
     private Gson gson;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
@@ -71,6 +74,7 @@ public final class Stocks2 extends JavaPlugin {
             return;
         }
 
+        initNamespacedKeys();
         initLogFilter();
         initGson();
         initInteractors(apiToken);
@@ -168,6 +172,10 @@ public final class Stocks2 extends JavaPlugin {
             .anyMatch(s -> s.trim().equalsIgnoreCase(symbol));
     }
 
+    public static NamespacedKey getFundIdKey() {
+        return fundIdKey;
+    }
+
     private void initGson() {
         gson = new GsonBuilder()
             .registerTypeAdapter(StockDataResponse.class, new StockDataConverter())
@@ -211,6 +219,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new CloseFundCommand(this));
         commandManager.registerCommand(new DepositFundCommand(this));
         commandManager.registerCommand(new WithdrawFundCommand(this));
+        commandManager.registerCommand(new FundPortfolioCommand(this));
     }
 
     private void initTextsConfig() {
@@ -233,6 +242,10 @@ public final class Stocks2 extends JavaPlugin {
 
         economy = rsp.getProvider();
         return economy != null;
+    }
+
+    private void initNamespacedKeys() {
+        fundIdKey = new NamespacedKey(this, "fundId");
     }
 
     private void initLogFilter() {

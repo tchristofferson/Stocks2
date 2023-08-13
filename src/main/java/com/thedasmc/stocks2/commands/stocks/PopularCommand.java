@@ -46,7 +46,8 @@ public class PopularCommand extends AbstractStocksCommand {
                 return;
             }
 
-            final Inventory popularStocksInventory = GuiFactory.createStockPage(ChatColor.GOLD + "Popular Stocks", popularStocks, texts);
+            //TODO: Use texts for inventory title
+            final Inventory popularStocksInventory = GuiFactory.createStockPage(ChatColor.GOLD + "Popular Stocks", popularStocks, 0, 1, texts);
             Bukkit.getScheduler().runTask(plugin, () -> {
                 plugin.getPopularTracker().track(uuid, popularStocksInventory);
                 player.openInventory(popularStocksInventory);

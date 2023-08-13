@@ -1,5 +1,7 @@
 package com.thedasmc.stocks2.common;
 
+import org.bukkit.Material;
+
 public class Constants {
 
 //    public static final String API_URL = "https://api.thedasmc.com";
@@ -7,6 +9,7 @@ public class Constants {
 
     public static final String POSITIVE_SHARE_LIMITS_CONDITION = "share-limits";
 
+    public static final Material STOCK_ITEM_MATERIAL = Material.EMERALD;
     public static final int STOCK_GUI_MAX = 10;
     public static final int STOCK_GUI_INV_SLOTS = 45;
     public static final int PORTFOLIO_PREVIOUS_BUTTON = STOCK_GUI_INV_SLOTS - 9;

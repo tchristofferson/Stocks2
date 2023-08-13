@@ -1,12 +1,16 @@
 package com.thedasmc.stocks2.listeners;
 
 import com.thedasmc.stocks2.Stocks2;
+import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiFactory;
 import com.thedasmc.stocks2.gui.GuiTracker;
 import com.thedasmc.stocks2.gui.PortfolioViewer;
+import com.thedasmc.stocks2.requests.response.AbstractPageResponse;
+import com.thedasmc.stocks2.requests.response.FundPortfolioResponse;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,10 +21,12 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static com.thedasmc.stocks2.common.Constants.*;
 
+//TODO: TODO: Clean up code to better handle portfolio vs fund portfolio logic
 public class InventoryListener implements Listener {
 
     private final Stocks2 plugin;
@@ -51,38 +57,66 @@ public class InventoryListener implements Listener {
                 return;
 
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                PortfolioResponse portfolioResponse;
+                if (portfolioViewer.getInventoryType() == PortfolioViewer.InventoryType.PORTFOLIO) {
+                    PortfolioResponse portfolioResponse;
 
-                try {
-                    portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() - 1);
-                } catch (IOException e) {
-                    clicker.sendMessage(texts.getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
-                    closeInventory(clicker);
-                    return;
+                    try {
+                        portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() - 1);
+                    } catch (IOException e) {
+                        clicker.sendMessage(texts.getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
+                        closeInventory(clicker);
+                        return;
+                    }
+
+                    openFetchedPage(clicker, portfolioViewer, portfolioResponse);
+                } else if (portfolioViewer.getInventoryType() == PortfolioViewer.InventoryType.FUND_PORTFOLIO) {
+                    FundPortfolioResponse fundPortfolioResponse;
+
+                    try {
+                        fundPortfolioResponse = plugin.getFundDataInteractor().getFundPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() - 1);
+                    } catch (IOException e) {
+                        clicker.sendMessage(texts.getErrorText(Texts.Types.FUND_PORTFOLIO_ERROR, e.getMessage()));
+                        closeInventory(clicker);
+                        return;
+                    }
+
+                    openFetchedPage(clicker, portfolioViewer, fundPortfolioResponse);
                 }
-
-                openFetchedPortfolioPage(clicker, portfolioViewer, portfolioResponse);
             });
         } else if (slot == PORTFOLIO_NEXT_BUTTON) {//next button
             if (portfolioViewer.getPage() == portfolioViewer.getPages() - 1)
                 return;
 
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                PortfolioResponse portfolioResponse;
+                if (portfolioViewer.getInventoryType() == PortfolioViewer.InventoryType.PORTFOLIO) {
+                    PortfolioResponse portfolioResponse;
 
-                try {
-                    portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() + 1);
-                } catch (IOException e) {
-                    clicker.sendMessage(texts.getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
-                    closeInventory(clicker);
-                    return;
+                    try {
+                        portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() + 1);
+                    } catch (IOException e) {
+                        clicker.sendMessage(texts.getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
+                        closeInventory(clicker);
+                        return;
+                    }
+
+                    openFetchedPage(clicker, portfolioViewer, portfolioResponse);
+                } else if (portfolioViewer.getInventoryType() == PortfolioViewer.InventoryType.FUND_PORTFOLIO) {
+                    FundPortfolioResponse fundPortfolioResponse;
+
+                    try {
+                        fundPortfolioResponse = plugin.getFundDataInteractor().getFundPortfolio(clicker.getUniqueId(), portfolioViewer.getPage() + 1);
+                    } catch (IOException e) {
+                        clicker.sendMessage(texts.getErrorText(Texts.Types.FUND_PORTFOLIO_ERROR, e.getMessage()));
+                        closeInventory(clicker);
+                        return;
+                    }
+
+                    openFetchedPage(clicker, portfolioViewer, fundPortfolioResponse);
                 }
-
-                openFetchedPortfolioPage(clicker, portfolioViewer, portfolioResponse);
             });
         } else if (slot == STOCK_GUI_CLOSE_BUTTON) {//close button
             Bukkit.getScheduler().runTask(plugin, clicker::closeInventory);
-        } else if (event.getCursor().getType() == GuiFactory.STOCK_ITEM_MATERIAL) {
+        } else if (event.getCursor().getType() == Constants.STOCK_ITEM_MATERIAL) {
             //TODO: Handle stock item click
         }
     }
@@ -120,13 +154,33 @@ public class InventoryListener implements Listener {
         });
     }
 
-    private void openFetchedPortfolioPage(Player clicker, PortfolioViewer portfolioViewer, PortfolioResponse portfolioResponse) {
-        Inventory inventory = GuiFactory.createPortfolioPage(portfolioResponse, plugin.getTexts());
+    //TODO: Use texts for inventory title
+    private void openFetchedPage(Player clicker, PortfolioViewer portfolioViewer, AbstractPageResponse pageResponse) {
+        Inventory inventory;
+
+        if (pageResponse instanceof PortfolioResponse) {
+            PortfolioResponse portfolioResponse = (PortfolioResponse) pageResponse;
+
+            inventory = GuiFactory.createStockPage(ChatColor.GOLD + "Stock Portfolio",
+                new ArrayList<>(portfolioResponse.getStocks()), portfolioResponse.getPage(), portfolioResponse.getPages(), plugin.getTexts());
+        } else if (pageResponse instanceof FundPortfolioResponse) {
+            FundPortfolioResponse fundPortfolioResponse = (FundPortfolioResponse) pageResponse;
+
+            inventory = GuiFactory.createFundPage(ChatColor.GOLD + "Fund Portfolio",
+                fundPortfolioResponse.getFunds(), fundPortfolioResponse.getPage(), fundPortfolioResponse.getPages(), plugin.getTexts());
+        } else {
+            throw new UnsupportedOperationException("Unhandled page response logic for class " + pageResponse.getClass().getSimpleName());
+        }
+
+        updatePortfolioViewer(clicker, portfolioViewer, inventory, pageResponse.getPage(), pageResponse.getPages());
+    }
+
+    private void updatePortfolioViewer(Player clicker, PortfolioViewer portfolioViewer, Inventory inventory, Integer page, Integer pages) {
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (clicker.isOnline()) {
                 clicker.closeInventory();
-                portfolioViewer.setPage(portfolioResponse.getPage());
-                portfolioViewer.setPages(portfolioResponse.getPages());
+                portfolioViewer.setPage(page);
+                portfolioViewer.setPages(pages);
                 portfolioViewer.setOpenPortfolio(inventory);
                 plugin.getPortfolioTracker().track(portfolioViewer.getViewer(), portfolioViewer);
 

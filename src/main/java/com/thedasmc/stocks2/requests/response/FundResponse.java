@@ -9,6 +9,7 @@ public class FundResponse {
     private Long serverId;
     private String name;
     private Character status;
+    private Long created;
 
     public Long getFundId() {
         return fundId;
@@ -50,4 +51,11 @@ public class FundResponse {
         this.status = status;
     }
 
+    public Long getCreated() {
+        return created;
+    }
+
+    public void setCreated(Long created) {
+        this.created = created;
+    }
 }
