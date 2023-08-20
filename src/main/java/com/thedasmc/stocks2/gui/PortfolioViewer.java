@@ -71,7 +71,7 @@ public class PortfolioViewer {
     }
 
     public enum InventoryType {
-        PORTFOLIO,
+        STOCK_PORTFOLIO,
         FUND_PORTFOLIO
     }
 }

@@ -62,7 +62,7 @@ public class PortfolioCommand extends AbstractStocksCommand {
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (viewer.isOnline()) {
                     PortfolioViewer portfolioViewer = new PortfolioViewer(viewer.getUniqueId(), owner.getUniqueId(),
-                        portfolio, PortfolioViewer.InventoryType.PORTFOLIO, 0, portfolioResponse.getPages());
+                        portfolio, PortfolioViewer.InventoryType.STOCK_PORTFOLIO, 0, portfolioResponse.getPages());
                     plugin.getPortfolioTracker().track(viewer.getUniqueId(), portfolioViewer);
                     viewer.openInventory(portfolio);
                 }

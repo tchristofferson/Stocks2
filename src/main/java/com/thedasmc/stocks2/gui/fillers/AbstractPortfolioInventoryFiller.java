@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 
-public abstract class AbstractInventoryFiller<T> {
+public abstract class AbstractPortfolioInventoryFiller<T> {
 
     private static final int MIN_INV_SIZE = 36;
 
@@ -20,7 +20,7 @@ public abstract class AbstractInventoryFiller<T> {
     private final Collection<T> source;
     protected final Texts texts;
 
-    protected AbstractInventoryFiller(Inventory inventory, Collection<T> source, Texts texts) {
+    protected AbstractPortfolioInventoryFiller(Inventory inventory, Collection<T> source, Texts texts) {
         this.inventory = inventory;
         this.source = source;
         this.texts = texts;

@@ -1,7 +1,7 @@
 package com.thedasmc.stocks2.gui.fillers.impl;
 
 import com.thedasmc.stocks2.common.Texts;
-import com.thedasmc.stocks2.gui.fillers.AbstractInventoryFiller;
+import com.thedasmc.stocks2.gui.fillers.AbstractPortfolioInventoryFiller;
 import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import com.thedasmc.stocks2.requests.response.StockResponse;
 import org.bukkit.ChatColor;
@@ -16,9 +16,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.thedasmc.stocks2.common.Constants.STOCK_ITEM_MATERIAL;
+import static com.thedasmc.stocks2.common.Constants.PORTFOLIO_ITEM_MATERIAL;
 
-public class StockPortfolioInventoryFiller extends AbstractInventoryFiller<StockDataResponse> {
+public class StockPortfolioInventoryFiller extends AbstractPortfolioInventoryFiller<StockDataResponse> {
 
     public StockPortfolioInventoryFiller(Inventory inventory, Collection<StockDataResponse> source, Texts texts) {
         super(inventory, source, texts);
@@ -26,7 +26,7 @@ public class StockPortfolioInventoryFiller extends AbstractInventoryFiller<Stock
 
     @Override
     public ItemStack getSlotItem(StockDataResponse stock) {
-        ItemStack itemStack = new ItemStack(STOCK_ITEM_MATERIAL, 1);
+        ItemStack itemStack = new ItemStack(PORTFOLIO_ITEM_MATERIAL, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + stock.getSymbol());
 

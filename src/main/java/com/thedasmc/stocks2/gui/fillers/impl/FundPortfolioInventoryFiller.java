@@ -2,7 +2,7 @@ package com.thedasmc.stocks2.gui.fillers.impl;
 
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
-import com.thedasmc.stocks2.gui.fillers.AbstractInventoryFiller;
+import com.thedasmc.stocks2.gui.fillers.AbstractPortfolioInventoryFiller;
 import com.thedasmc.stocks2.requests.response.FundResponse;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
@@ -19,9 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.thedasmc.stocks2.common.Constants.STOCK_ITEM_MATERIAL;
+import static com.thedasmc.stocks2.common.Constants.PORTFOLIO_ITEM_MATERIAL;
 
-public class FundPortfolioInventoryFiller extends AbstractInventoryFiller<FundResponse> {
+public class FundPortfolioInventoryFiller extends AbstractPortfolioInventoryFiller<FundResponse> {
 
     public FundPortfolioInventoryFiller(Inventory inventory, Collection<FundResponse> source, Texts texts) {
         super(inventory, source, texts);
@@ -29,7 +29,7 @@ public class FundPortfolioInventoryFiller extends AbstractInventoryFiller<FundRe
 
     @Override
     protected ItemStack getSlotItem(FundResponse fund) {
-        ItemStack itemStack = new ItemStack(STOCK_ITEM_MATERIAL, 1);
+        ItemStack itemStack = new ItemStack(PORTFOLIO_ITEM_MATERIAL, 1);
         ItemMeta itemMeta = Objects.requireNonNull(itemStack.getItemMeta());
 
         PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
