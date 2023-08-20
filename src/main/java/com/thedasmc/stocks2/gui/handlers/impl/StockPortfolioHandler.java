@@ -25,14 +25,13 @@ public class StockPortfolioHandler extends AbstractPortfolioHandler {
             return;
 
         Player player = Objects.requireNonNull(Bukkit.getPlayer(portfolioViewer.getViewer()));
-        UUID uuid = player.getUniqueId();
         Texts texts = plugin.getTexts();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             PortfolioResponse portfolioResponse;
 
             try {
-                portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(uuid, portfolioViewer.getPage() - 1);
+                portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(portfolioViewer.getOwner(), portfolioViewer.getPage() - 1);
             } catch (IOException e) {
                 player.sendMessage(texts.getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
                 closeInventory(player);
@@ -49,14 +48,13 @@ public class StockPortfolioHandler extends AbstractPortfolioHandler {
             return;
 
         Player player = Objects.requireNonNull(Bukkit.getPlayer(portfolioViewer.getViewer()));
-        UUID uuid = player.getUniqueId();
         Texts texts = plugin.getTexts();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             PortfolioResponse portfolioResponse;
 
             try {
-                portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(uuid, portfolioViewer.getPage() + 1);
+                portfolioResponse = plugin.getPlayerDataInteractor().getPortfolio(portfolioViewer.getOwner(), portfolioViewer.getPage() + 1);
             } catch (IOException e) {
                 player.sendMessage(texts.getErrorText(Texts.Types.FETCH_PORTFOLIO_ERROR, e.getMessage()));
                 closeInventory(player);

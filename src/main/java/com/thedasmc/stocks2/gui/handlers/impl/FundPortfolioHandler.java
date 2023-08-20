@@ -25,14 +25,13 @@ public class FundPortfolioHandler extends AbstractPortfolioHandler {
             return;
 
         Player player = Objects.requireNonNull(Bukkit.getPlayer(portfolioViewer.getViewer()));
-        UUID uuid = player.getUniqueId();
         Texts texts = plugin.getTexts();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             FundPortfolioResponse fundPortfolioResponse;
 
             try {
-                fundPortfolioResponse = plugin.getFundDataInteractor().getFundPortfolio(uuid, portfolioViewer.getPage() - 1);
+                fundPortfolioResponse = plugin.getFundDataInteractor().getFundPortfolio(portfolioViewer.getOwner(), portfolioViewer.getPage() - 1);
             } catch (IOException e) {
                 player.sendMessage(texts.getErrorText(Texts.Types.FUND_PORTFOLIO_ERROR, e.getMessage()));
                 closeInventory(player);
@@ -49,14 +48,13 @@ public class FundPortfolioHandler extends AbstractPortfolioHandler {
             return;
 
         Player player = Objects.requireNonNull(Bukkit.getPlayer(portfolioViewer.getViewer()));
-        UUID uuid = player.getUniqueId();
         Texts texts = plugin.getTexts();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             FundPortfolioResponse fundPortfolioResponse;
 
             try {
-                fundPortfolioResponse = plugin.getFundDataInteractor().getFundPortfolio(uuid, portfolioViewer.getPage() + 1);
+                fundPortfolioResponse = plugin.getFundDataInteractor().getFundPortfolio(portfolioViewer.getOwner(), portfolioViewer.getPage() + 1);
             } catch (IOException e) {
                 player.sendMessage(texts.getErrorText(Texts.Types.FUND_PORTFOLIO_ERROR, e.getMessage()));
                 closeInventory(player);
