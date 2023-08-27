@@ -1,5 +1,6 @@
 package com.thedasmc.stocks2.requests.response;
 
+import java.util.List;
 import java.util.UUID;
 
 public class FundResponse {
@@ -10,6 +11,7 @@ public class FundResponse {
     private String name;
     private Character status;
     private Long created;
+    private List<StockDataResponse> stocks;
 
     public Long getFundId() {
         return fundId;
@@ -57,5 +59,13 @@ public class FundResponse {
 
     public void setCreated(Long created) {
         this.created = created;
+    }
+
+    public List<StockDataResponse> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(List<StockDataResponse> stocks) {
+        this.stocks = stocks;
     }
 }

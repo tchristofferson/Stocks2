@@ -4,6 +4,7 @@ import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.fillers.AbstractPortfolioInventoryFiller;
 import com.thedasmc.stocks2.requests.response.FundResponse;
+import com.thedasmc.stocks2.requests.response.StockDataResponse;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +42,14 @@ public class FundPortfolioInventoryFiller extends AbstractPortfolioInventoryFill
 
         Instant created = Instant.ofEpochMilli(fund.getCreated());
         LocalDate createdDate = created.atZone(ZoneId.of("America/New_York")).toLocalDate();
-        lore.add(ChatColor.GREEN + "Created On: " + createdDate);
+        lore.add(ChatColor.GREEN + "Created On: " + ChatColor.GRAY + createdDate);
+
+        List<StockDataResponse> stocks = fund.getStocks();
+
+        if (stocks != null && !stocks.isEmpty()) {
+            lore.add(ChatColor.GREEN + "Stocks:");
+            stocks.forEach(stock -> lore.add(ChatColor.GRAY + stock.getSymbol() + " - " + stock.getCompanyName()));
+        }
 
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);

@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.UUID;
 
 public class FundPortfolioHandler extends AbstractPortfolioHandler {
 
