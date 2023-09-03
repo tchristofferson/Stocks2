@@ -82,6 +82,7 @@ public class Texts {
         FUND_STATUS_UPDATE_ERROR("fund-status-update-error"),
         TRANSACT_FUND_ERROR("transact-fund-error"),
         FUND_PORTFOLIO_ERROR("fund-portfolio-error"),
+        FUNDS_CREATED_BY_ERROR("funds-created-by-error"),
         SOLD_SHARES_SUCCESS("sold-shares-success"),
         SOLD_ALL_SHARES_SUCCESS("sold-all-shares-success"),
         BOUGHT_SHARES_SUCCESS("bought-shares-success"),

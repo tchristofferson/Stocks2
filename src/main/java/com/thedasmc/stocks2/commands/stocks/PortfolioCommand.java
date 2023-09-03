@@ -6,7 +6,7 @@ import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.commands.AbstractStocksCommand;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiFactory;
-import com.thedasmc.stocks2.gui.PortfolioViewer;
+import com.thedasmc.stocks2.gui.PageViewer;
 import com.thedasmc.stocks2.requests.interactors.AbstractPlayerDataInteractor;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import org.bukkit.Bukkit;
@@ -61,9 +61,9 @@ public class PortfolioCommand extends AbstractStocksCommand {
 
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (viewer.isOnline()) {
-                    PortfolioViewer portfolioViewer = new PortfolioViewer(viewer.getUniqueId(), owner.getUniqueId(),
-                        portfolio, PortfolioViewer.InventoryType.STOCK_PORTFOLIO, 0, portfolioResponse.getPages());
-                    plugin.getPortfolioTracker().track(viewer.getUniqueId(), portfolioViewer);
+                    PageViewer portfolioViewer = new PageViewer(viewer.getUniqueId(), owner.getUniqueId(),
+                        portfolio, PageViewer.InventoryType.STOCK_PORTFOLIO, 0, portfolioResponse.getPages());
+                    plugin.getPageTracker().track(viewer.getUniqueId(), portfolioViewer);
                     viewer.openInventory(portfolio);
                 }
             });

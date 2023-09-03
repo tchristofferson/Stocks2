@@ -32,7 +32,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     private static final String POPULAR_FUNDS_URI = "/v1/fund/popular";
     private static final String GET_FUND_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER;
     private static final String GET_PLAYER_FUND_INVESTMENT_VALUE_URI = "/v1/fund/" + FUND_ID_PLACEHOLDER + "/" + PLAYER_ID_PLACEHOLDER + "/value";
-    private static final String GET_FUNDS_BY_CREATOR_URI = "/v1/" + PLAYER_ID_PLACEHOLDER + "/funds";
+    private static final String GET_FUNDS_BY_CREATOR_URI = "/v1/funds";
     private static final String GET_FUND_PORTFOLIO_URI = "/v1/fund/portfolio";
 
     public FundDataInteractor(String apiToken, Gson gson) {
@@ -184,9 +184,11 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
     }
 
     @Override
-    public List<FundResponse> getFundsByCreator(UUID creatorId) throws IOException {
-        URL url = new URL(Constants.API_URL + GET_FUNDS_BY_CREATOR_URI.replace(PLAYER_ID_PLACEHOLDER, creatorId.toString()));
-        HttpURLConnection connection = getHttpGetConnection(url, this.apiToken);
+    public FundsByCreatorResponse getFundsByCreator(FundsByCreatorRequest request) throws IOException {
+        URL url = new URL(Constants.API_URL + GET_FUNDS_BY_CREATOR_URI);
+        HttpURLConnection connection = getHttpPostConnection(url, this.apiToken);
+        String requestJson = this.gson.toJson(request);
+        writeBody(connection, requestJson);
         String responseJson;
 
         try {
@@ -195,8 +197,7 @@ public class FundDataInteractor extends AbstractFundDataInteractor {
             throw new IOException(readErrorStream(connection.getErrorStream()));
         }
 
-        Type type = new TypeToken<List<FundResponse>>(){}.getType();
-        return this.gson.fromJson(responseJson, type);
+        return this.gson.fromJson(responseJson, FundsByCreatorResponse.class);
     }
 
     @Override

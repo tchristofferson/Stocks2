@@ -2,7 +2,7 @@ package com.thedasmc.stocks2.listeners;
 
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.gui.GuiTracker;
-import com.thedasmc.stocks2.gui.PortfolioViewer;
+import com.thedasmc.stocks2.gui.PageViewer;
 import com.thedasmc.stocks2.gui.handlers.AbstractPortfolioHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,10 +29,10 @@ public class InventoryListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClickForPortfolio(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
-        GuiTracker<UUID, PortfolioViewer> tracker = plugin.getPortfolioTracker();
-        PortfolioViewer portfolioViewer = tracker.get(clicker.getUniqueId());
+        GuiTracker<UUID, PageViewer> tracker = plugin.getPageTracker();
+        PageViewer portfolioViewer = tracker.get(clicker.getUniqueId());
 
-        if (portfolioViewer == null || !portfolioViewer.getOpenPortfolio().equals(event.getClickedInventory()))
+        if (portfolioViewer == null || !portfolioViewer.getOpenPage().equals(event.getClickedInventory()))
             return;
 
         event.setCancelled(true);
@@ -67,7 +67,7 @@ public class InventoryListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onInventoryClose(InventoryCloseEvent event) {
-        plugin.getPortfolioTracker().untrack(event.getPlayer().getUniqueId());
+        plugin.getPageTracker().untrack(event.getPlayer().getUniqueId());
         plugin.getPopularTracker().untrack(event.getPlayer().getUniqueId());
     }
 }

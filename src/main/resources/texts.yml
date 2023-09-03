@@ -14,6 +14,7 @@ remove-stock-from-fund-error: '&c&l[Stocks]Failed to remove stock from fund: %er
 fund-status-update-error: '&c&l[Stocks]Failed to update status on fund: %error%'
 transact-fund-error: '&c&l[Stocks]Fund transaction failed: %error%'
 fund-portfolio-error: '&c&l[Stocks]Failed to fetch fund portfolio: %error%'
+funds-created-by-error: '&c&l[Stocks]Failed to fetch funds: %error%'
 
 not-enough-shares: '&c&l[Stocks]You don''t own enough shares!'
 not-enough-money: '&c&l[Stocks]You don''t have %money% to purchase the shares!'

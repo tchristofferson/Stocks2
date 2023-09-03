@@ -84,12 +84,12 @@ public abstract class AbstractFundDataInteractor extends DataInteractor {
     public abstract FundValueResponse getPlayerFundInvestmentValue(long fundId, UUID playerId) throws IOException;
 
     /**
-     * Get fund's created by the specified player
-     * @param creatorId The player's uuid that created the funds
-     * @return A list of fund's created by the specified player
+     * Get funds by the specified player
+     * @param request The request containing the creatorId and page info
+     * @return A {@link FundsByCreatorResponse}
      * @throws IOException If an IO error occurs
      */
-    public abstract List<FundResponse> getFundsByCreator(UUID creatorId) throws IOException;
+    public abstract FundsByCreatorResponse getFundsByCreator(FundsByCreatorRequest request) throws IOException;
 
     /**
      * Get a player's portfolio of funds

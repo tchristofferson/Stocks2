@@ -10,7 +10,7 @@ import com.thedasmc.stocks2.commands.stocks.*;
 import com.thedasmc.stocks2.common.Constants;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiTracker;
-import com.thedasmc.stocks2.gui.PortfolioViewer;
+import com.thedasmc.stocks2.gui.PageViewer;
 import com.thedasmc.stocks2.json.InstantConverter;
 import com.thedasmc.stocks2.json.StockDataConverter;
 import com.thedasmc.stocks2.listeners.InventoryListener;
@@ -44,7 +44,7 @@ public final class Stocks2 extends JavaPlugin {
 
     private Gson gson;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
-    private final GuiTracker<UUID, PortfolioViewer> portfolioTracker = new GuiTracker<>();
+    private final GuiTracker<UUID, PageViewer> pageTracker = new GuiTracker<>();
     private final GuiTracker<UUID, Inventory> popularTracker = new GuiTracker<>();
     private AbstractStockDataInteractor stockDataInteractor;
     private AbstractPlayerDataInteractor playerDataInteractor;
@@ -99,8 +99,8 @@ public final class Stocks2 extends JavaPlugin {
         return executorService;
     }
 
-    public GuiTracker<UUID, PortfolioViewer> getPortfolioTracker() {
-        return portfolioTracker;
+    public GuiTracker<UUID, PageViewer> getPageTracker() {
+        return pageTracker;
     }
 
     public GuiTracker<UUID, Inventory> getPopularTracker() {
@@ -220,6 +220,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new DepositFundCommand(this));
         commandManager.registerCommand(new WithdrawFundCommand(this));
         commandManager.registerCommand(new FundPortfolioCommand(this));
+        commandManager.registerCommand(new FundsCommand(this));
     }
 
     private void initTextsConfig() {

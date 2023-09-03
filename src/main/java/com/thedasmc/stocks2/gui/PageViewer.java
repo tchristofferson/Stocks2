@@ -4,19 +4,19 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.UUID;
 
-public class PortfolioViewer {
+public class PageViewer {
 
     private UUID viewer;
     private UUID owner;
-    private Inventory openPortfolio;
+    private Inventory openPage;
     private InventoryType inventoryType;
     private int page;
     private int pages;
 
-    public PortfolioViewer(UUID viewer, UUID owner, Inventory openPortfolio, InventoryType inventoryType, int page, int pages) {
+    public PageViewer(UUID viewer, UUID owner, Inventory openPage, InventoryType inventoryType, int page, int pages) {
         this.viewer = viewer;
         this.owner = owner;
-        this.openPortfolio = openPortfolio;
+        this.openPage = openPage;
         this.inventoryType = inventoryType;
         this.page = page;
         this.pages = pages;
@@ -38,12 +38,12 @@ public class PortfolioViewer {
         this.owner = owner;
     }
 
-    public Inventory getOpenPortfolio() {
-        return openPortfolio;
+    public Inventory getOpenPage() {
+        return openPage;
     }
 
-    public void setOpenPortfolio(Inventory openPortfolio) {
-        this.openPortfolio = openPortfolio;
+    public void setOpenPage(Inventory openPage) {
+        this.openPage = openPage;
     }
 
     public InventoryType getInventoryType() {
@@ -72,6 +72,7 @@ public class PortfolioViewer {
 
     public enum InventoryType {
         STOCK_PORTFOLIO,
-        FUND_PORTFOLIO
+        FUND_PORTFOLIO,
+        FUNDS_CREATED_BY
     }
 }

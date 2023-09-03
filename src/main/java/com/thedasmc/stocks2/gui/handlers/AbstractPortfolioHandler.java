@@ -3,11 +3,13 @@ package com.thedasmc.stocks2.gui.handlers;
 import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.gui.GuiFactory;
 import com.thedasmc.stocks2.gui.GuiTracker;
-import com.thedasmc.stocks2.gui.PortfolioViewer;
+import com.thedasmc.stocks2.gui.PageViewer;
 import com.thedasmc.stocks2.gui.handlers.impl.FundPortfolioHandler;
+import com.thedasmc.stocks2.gui.handlers.impl.FundsCreatedByHandler;
 import com.thedasmc.stocks2.gui.handlers.impl.StockPortfolioHandler;
 import com.thedasmc.stocks2.requests.response.AbstractPageResponse;
 import com.thedasmc.stocks2.requests.response.FundPortfolioResponse;
+import com.thedasmc.stocks2.requests.response.FundsByCreatorResponse;
 import com.thedasmc.stocks2.requests.response.PortfolioResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,8 +33,8 @@ public abstract class AbstractPortfolioHandler {
 
     public void handle(InventoryClickEvent event) {
         Player clicker = (Player) event.getWhoClicked();
-        GuiTracker<UUID, PortfolioViewer> tracker = plugin.getPortfolioTracker();
-        PortfolioViewer portfolioViewer = tracker.get(clicker.getUniqueId());
+        GuiTracker<UUID, PageViewer> tracker = plugin.getPageTracker();
+        PageViewer portfolioViewer = tracker.get(clicker.getUniqueId());
 
         int slot = event.getSlot();
 
@@ -47,9 +49,9 @@ public abstract class AbstractPortfolioHandler {
         }
     }
 
-    protected abstract void handlePreviousPageButtonClick(PortfolioViewer portfolioViewer);
+    protected abstract void handlePreviousPageButtonClick(PageViewer pageViewer);
 
-    protected abstract void handleNextPageButtonClick(PortfolioViewer portfolioViewer);
+    protected abstract void handleNextPageButtonClick(PageViewer pageViewer);
 
     protected abstract void handlePortfolioItemClick(ItemStack itemStack);
 
@@ -61,13 +63,13 @@ public abstract class AbstractPortfolioHandler {
     }
 
     /**
-     * Opens the fetched portfolio and updates the {@link PortfolioViewer}<br>
+     * Opens the fetched portfolio and updates the {@link PageViewer}<br>
      * Run Asynchronously
      * @param player The player opening the inventory
-     * @param portfolioViewer The portfolio viewer representing the player opening the inventory
+     * @param pageViewer The page viewer representing the player opening the inventory
      * @param pageResponse The {@link AbstractPageResponse} with the portfolio page details
      */
-    protected void openFetchedInventory(Player player, PortfolioViewer portfolioViewer, AbstractPageResponse pageResponse) {
+    protected void openFetchedInventory(Player player, PageViewer pageViewer, AbstractPageResponse pageResponse) {
         Inventory inventory;
 
         if (pageResponse instanceof PortfolioResponse) {
@@ -80,6 +82,11 @@ public abstract class AbstractPortfolioHandler {
 
             inventory = GuiFactory.createFundPage(ChatColor.GOLD + "Fund Portfolio",
                 fundPortfolioResponse.getFunds(), fundPortfolioResponse.getPage(), fundPortfolioResponse.getPages(), plugin.getTexts());
+        } else if (pageResponse instanceof FundsByCreatorResponse) {
+            FundsByCreatorResponse fundsByCreatorResponse = (FundsByCreatorResponse) pageResponse;
+
+            inventory = GuiFactory.createFundPage(ChatColor.GOLD + "Funds",
+                fundsByCreatorResponse.getFunds(), fundsByCreatorResponse.getPage(), fundsByCreatorResponse.getPages(), plugin.getTexts());
         } else {
             throw new UnsupportedOperationException("Unhandled page response logic for class " + pageResponse.getClass().getSimpleName());
         }
@@ -87,10 +94,10 @@ public abstract class AbstractPortfolioHandler {
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (player.isOnline()) {
                 player.closeInventory();
-                portfolioViewer.setPage(pageResponse.getPage());
-                portfolioViewer.setPages(pageResponse.getPages());
-                portfolioViewer.setOpenPortfolio(inventory);
-                plugin.getPortfolioTracker().track(portfolioViewer.getViewer(), portfolioViewer);
+                pageViewer.setPage(pageResponse.getPage());
+                pageViewer.setPages(pageResponse.getPages());
+                pageViewer.setOpenPage(inventory);
+                plugin.getPageTracker().track(pageViewer.getViewer(), pageViewer);
 
                 player.openInventory(inventory);
             }
@@ -98,17 +105,19 @@ public abstract class AbstractPortfolioHandler {
     }
 
     /**
-     * Get an instance of {@link AbstractPortfolioHandler} for the specified {@link com.thedasmc.stocks2.gui.PortfolioViewer.InventoryType}
+     * Get an instance of {@link AbstractPortfolioHandler} for the specified {@link PageViewer.InventoryType}
      * @param type The inventory type
      * @param plugin The plugin
      * @return An instance of {@link AbstractPortfolioHandler}
      */
-    public static AbstractPortfolioHandler getPortfolioHandler(PortfolioViewer.InventoryType type, Stocks2 plugin) {
+    public static AbstractPortfolioHandler getPortfolioHandler(PageViewer.InventoryType type, Stocks2 plugin) {
         switch (type) {
             case STOCK_PORTFOLIO:
                 return new StockPortfolioHandler(plugin);
             case FUND_PORTFOLIO:
                 return new FundPortfolioHandler(plugin);
+            case FUNDS_CREATED_BY:
+                return new FundsCreatedByHandler(plugin);
             default:
                 throw new UnsupportedOperationException("Unsupported InventoryType!");
         }

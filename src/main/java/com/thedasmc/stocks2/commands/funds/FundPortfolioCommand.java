@@ -5,7 +5,7 @@ import com.thedasmc.stocks2.Stocks2;
 import com.thedasmc.stocks2.commands.AbstractStocksCommand;
 import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiFactory;
-import com.thedasmc.stocks2.gui.PortfolioViewer;
+import com.thedasmc.stocks2.gui.PageViewer;
 import com.thedasmc.stocks2.requests.response.FundPortfolioResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -47,9 +47,9 @@ public class FundPortfolioCommand extends AbstractStocksCommand {
 
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (player.isOnline()) {
-                    PortfolioViewer portfolioViewer = new PortfolioViewer(player.getUniqueId(), player.getUniqueId(),
-                        inventory, PortfolioViewer.InventoryType.FUND_PORTFOLIO, safePage, response.getPages());
-                    plugin.getPortfolioTracker().track(player.getUniqueId(), portfolioViewer);
+                    PageViewer portfolioViewer = new PageViewer(player.getUniqueId(), player.getUniqueId(),
+                        inventory, PageViewer.InventoryType.FUND_PORTFOLIO, safePage, response.getPages());
+                    plugin.getPageTracker().track(player.getUniqueId(), portfolioViewer);
                     player.openInventory(inventory);
                 }
             });
