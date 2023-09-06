@@ -221,6 +221,7 @@ public final class Stocks2 extends JavaPlugin {
         commandManager.registerCommand(new WithdrawFundCommand(this));
         commandManager.registerCommand(new FundPortfolioCommand(this));
         commandManager.registerCommand(new FundsCommand(this));
+        commandManager.registerCommand(new ResetAccountPasswordCommand(this));
     }
 
     private void initTextsConfig() {

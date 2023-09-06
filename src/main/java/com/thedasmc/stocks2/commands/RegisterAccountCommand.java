@@ -13,7 +13,7 @@ public class RegisterAccountCommand extends AbstractStocksCommand {
 
     public static final String COMMAND = "regacc";
     public static final String COMMAND_ALIAS = "ra";
-    private static final String REGISTER_ACCOUNT_PERMISSION = "stocks.admin.account.register";
+    public static final String REGISTER_ACCOUNT_PERMISSION = "stocks.admin.account.register";
 
     public RegisterAccountCommand(Stocks2 plugin) {
         super(plugin);

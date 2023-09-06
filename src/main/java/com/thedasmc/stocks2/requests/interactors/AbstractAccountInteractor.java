@@ -20,4 +20,11 @@ public abstract class AbstractAccountInteractor extends DataInteractor {
      */
     public abstract AccountRegistrationResponse registerAccount(AccountRequest request) throws IOException;
 
+    /**
+     * Request email to be sent to reset account password
+     * @param email The email for the account to reset the password for
+     * @throws IOException If an error occurs
+     */
+    public abstract void requestAccountPasswordReset(String email) throws IOException;
+
 }

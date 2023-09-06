@@ -83,6 +83,7 @@ public class Texts {
         TRANSACT_FUND_ERROR("transact-fund-error"),
         FUND_PORTFOLIO_ERROR("fund-portfolio-error"),
         FUNDS_CREATED_BY_ERROR("funds-created-by-error"),
+        PASSWORD_RESET_ERROR("password-reset-error"),
         SOLD_SHARES_SUCCESS("sold-shares-success"),
         SOLD_ALL_SHARES_SUCCESS("sold-all-shares-success"),
         BOUGHT_SHARES_SUCCESS("bought-shares-success"),
@@ -98,7 +99,8 @@ public class Texts {
         REMOVED_STOCK_FROM_FUND("removed-stock-from-fund"),
         PUBLISHED_FUND("published-fund"),
         CLOSED_FUND("closed-fund"),
-        TRANSACTED_FUND("transacted-fund");
+        TRANSACTED_FUND("transacted-fund"),
+        RESET_PASSWORD_SUCCESS("reset-password-success");
 
         //The key in texts.yml
         private final String key;
