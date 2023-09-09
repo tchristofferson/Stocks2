@@ -9,8 +9,13 @@ The ThedasMC Stock Market plugin v2 is currently in the early stages of developm
 - stocks.buy
 - stocks.check
 - stocks.give
+- stocks.popular
 - stocks.portfolio
 - stocks.portfolio.others
 - stocks.admin.account.register
 - stocks.sell
 - stocks.take
+- stocks.fund.create
+- stocks.fund.deposit
+- stocks.fund.portfolio
+- stocks.funds
