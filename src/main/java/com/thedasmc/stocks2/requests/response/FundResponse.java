@@ -1,5 +1,6 @@
 package com.thedasmc.stocks2.requests.response;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,8 @@ public class FundResponse {
     private Character status;
     private Long created;
     private List<StockDataResponse> stocks;
+    //Used for fund portfolio, represents players investment value
+    private BigInteger valueCents;
 
     public Long getFundId() {
         return fundId;
@@ -67,5 +70,13 @@ public class FundResponse {
 
     public void setStocks(List<StockDataResponse> stocks) {
         this.stocks = stocks;
+    }
+
+    public BigInteger getValueCents() {
+        return valueCents;
+    }
+
+    public void setValueCents(BigInteger valueCents) {
+        this.valueCents = valueCents;
     }
 }

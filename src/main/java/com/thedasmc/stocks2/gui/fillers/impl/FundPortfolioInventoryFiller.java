@@ -12,6 +12,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -43,6 +45,11 @@ public class FundPortfolioInventoryFiller extends AbstractPortfolioInventoryFill
         Instant created = Instant.ofEpochMilli(fund.getCreated());
         LocalDate createdDate = created.atZone(ZoneId.of("America/New_York")).toLocalDate();
         lore.add(ChatColor.GREEN + "Created On: " + ChatColor.GRAY + createdDate);
+
+        if (fund.getValueCents() != null) {
+            BigDecimal dollarValue = new BigDecimal(fund.getValueCents()).divide(BigDecimal.valueOf(100), 2, RoundingMode.DOWN);
+            lore.add(ChatColor.GREEN + "Your Investment Value: " + ChatColor.GRAY + texts.getMoneySymbol() + dollarValue.toPlainString());
+        }
 
         List<StockDataResponse> stocks = fund.getStocks();
 

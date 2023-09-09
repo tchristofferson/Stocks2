@@ -8,13 +8,16 @@ import com.thedasmc.stocks2.common.Texts;
 import com.thedasmc.stocks2.gui.GuiFactory;
 import com.thedasmc.stocks2.gui.PageViewer;
 import com.thedasmc.stocks2.requests.request.FundsByCreatorRequest;
+import com.thedasmc.stocks2.requests.response.FundResponse;
 import com.thedasmc.stocks2.requests.response.FundsByCreatorResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @CommandAlias("stocks")
 public class FundsCommand extends AbstractStocksCommand {
@@ -45,7 +48,15 @@ public class FundsCommand extends AbstractStocksCommand {
                 return;
             }
 
-            Inventory inventory = GuiFactory.createFundPage(creatorName + "'s Funds", response.getFunds(), request.getPage(), response.getPages(), texts);
+            List<FundResponse> funds = response.getFunds();
+
+            if (otherPlayer != null && !otherPlayer.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+                funds = funds.stream()
+                    .filter(fundResponse -> fundResponse.getStatus().equals('O'))
+                    .collect(Collectors.toList());
+            }
+
+            Inventory inventory = GuiFactory.createFundPage(creatorName + "'s Funds", funds, request.getPage(), response.getPages(), texts);
 
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (player.isOnline()) {
