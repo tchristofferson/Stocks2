@@ -1,5 +1,6 @@
 package com.thedasmc.stocks2.requests.response;
 
+import javax.annotation.Nullable;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
@@ -72,6 +73,7 @@ public class FundResponse {
         this.stocks = stocks;
     }
 
+    @Nullable
     public BigInteger getValueCents() {
         return valueCents;
     }
